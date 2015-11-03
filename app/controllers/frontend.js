@@ -25,10 +25,6 @@ module.exports = function(app) {
         }
       }
       res.render('index', context);
-    },
-
-    page: function(req, res) {
-      res.render('page');
     }
 
   };
