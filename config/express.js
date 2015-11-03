@@ -31,6 +31,7 @@ module.exports = function() {
   app.engine('hbs', hbs.engine);
   app.set('view engine', 'hbs');
   app.set('views', './frontend');
+  app.use(express.static('./frontend'));
 
   //var admin = require('../admin');
   //app.use(admin);
@@ -48,6 +49,8 @@ module.exports = function() {
     .then('controllers')
     .then('routes')
     .into(app);
+
+  process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
   return app;
 };

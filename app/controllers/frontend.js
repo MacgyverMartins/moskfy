@@ -1,14 +1,28 @@
 'use strict';
+var fs = require('fs');
+
+var frontendDir = 'frontend/';
+
+function filePath(name, prefix) {
+  var arquivo;
+  if (prefix) {
+    return arquivo = frontendDir + prefix + '-' + name + '.hbs';
+  }
+  return arquivo = name + '.hbs';
+}
 
 module.exports = function(app) {
-  var controller = {};
+  var PageController = {
 
-  controller.page = function(req, res) {
-    var pageName = req.params.page;
-    var user = {name: 'joao', email: 'joal@teste.com'};
-    var context = {title: 'contato', content: 'entre em contato', user: user};
-    res.render('page-' + pageName, context);
+    index: function(req, res) {
+      res.render('index');
+    },
+
+    page: function(req, res) {
+      res.render('page');
+    }
+
   };
 
-  return controller;
+  return PageController;
 };
