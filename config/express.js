@@ -33,8 +33,8 @@ module.exports = function() {
   app.set('views', './frontend');
   app.use(express.static('./frontend'));
 
-  //var admin = require('../admin');
-  //app.use(admin);
+  var admin = require('../admin');
+  app.use(admin);
 
   app.use(bodyParser.urlencoded({
     extended: true
