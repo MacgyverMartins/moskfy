@@ -5,8 +5,8 @@ var Home = React.createClass({
   render: function() {
     return (
       <div className="hero-unit">
-        <h1>'Allo, 'Allo! I'm Macgyver</h1>
-        <p>You now have</p>
+        <h2>Bem-vindo ao Moskfy</h2>
+        <p>esse é o admin</p>
         <ul>
             <li>ReactJS Reflux Boilerplate</li>
             <li>Jest</li>

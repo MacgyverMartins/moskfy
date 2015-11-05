@@ -6,7 +6,5 @@ module.exports = function(app) {
 
   app.route('/')
     .get(frontend.index);
-  app.route('/teste')
-    .get(frontend.index);
 
 };
