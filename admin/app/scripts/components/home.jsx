@@ -1,20 +1,12 @@
 var React = require('react');
+var RaisedButton = require('material-ui/lib/raised-button');
 
 var Home = React.createClass({
-
-  render: function() {
+  render() {
     return (
-      <div className="hero-unit">
-        <h2>Bem-vindo ao Moskfy</h2>
-        <p>esse é o admin</p>
-        <ul>
-            <li>ReactJS Reflux Boilerplate</li>
-            <li>Jest</li>
-        </ul>
-      </div>
+        <RaisedButton label="Default" />
     );
-  }
-
+  },
 });
 
 module.exports = Home;

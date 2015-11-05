@@ -1,5 +1,6 @@
 var React = require('react');
 var Router = require('react-router');
+var ReactDOM = require('react-dom');
 var Route = Router.Route;
 var DefaultRoute = Router.DefaultRoute;
 
@@ -15,6 +16,6 @@ var routes = (
 exports.start = function() {
 
   Router.run(routes, function (Handler) {
-		React.render(<Handler />, document.getElementById('content'));
+		ReactDOM.render(<Handler />, document.getElementById('content'));
 	});
 }
