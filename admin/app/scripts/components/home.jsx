@@ -3,10 +3,9 @@ var React = require('react');
 var Home = React.createClass({
 
   render: function() {
-
     return (
       <div className="hero-unit">
-        <h1>'Allo, 'Allo!</h1>
+        <h1>'Allo, 'Allo! I'm Macgyver</h1>
         <p>You now have</p>
         <ul>
             <li>ReactJS Reflux Boilerplate</li>
@@ -15,6 +14,7 @@ var Home = React.createClass({
       </div>
     );
   }
+
 });
 
 module.exports = Home;

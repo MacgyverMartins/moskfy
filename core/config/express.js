@@ -7,6 +7,8 @@ var exphbs  = require('express-handlebars');
 //var session = require('express-session');
 //var passport = require('passport');
 
+var viewDirectory = './content/theme/';
+
 module.exports = function() {
   var app = express();
 
@@ -21,20 +23,19 @@ module.exports = function() {
   //saveUnitialized: true
   //}));
   //app.use(express.static('./public'));
+
+  //set middleware to frontend
   var hbs;
   hbs = exphbs.create({
     extname: '.hbs',
     defaultLayout: 'layout',
-    layoutsDir: './frontend/layouts',
-    partialsDir: './frontend/partials'
+    layoutsDir: viewDirectory + 'layouts',
+    partialsDir: viewDirectory + 'partials'
   });
   app.engine('hbs', hbs.engine);
   app.set('view engine', 'hbs');
-  app.set('views', './frontend');
-  app.use(express.static('./frontend'));
-
-  var admin = require('../admin');
-  app.use(admin);
+  app.set('views', viewDirectory);
+  app.use(express.static(viewDirectory));
 
   app.use(bodyParser.urlencoded({
     extended: true
@@ -42,9 +43,12 @@ module.exports = function() {
   app.use(bodyParser.json());
   app.use(require('method-override')());
 
+  var admin = require('../../admin');
+  app.use(admin);
+
   //mapeando diretórios para não precisar usar 'require'
   load('models', {
-      cwd: 'app'
+      cwd: 'core/api'
     })
     .then('controllers')
     .then('routes')

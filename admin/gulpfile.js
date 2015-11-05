@@ -23,7 +23,7 @@ log = function(task, start) {
 };
 
 gulp.task('clean:dev', function() {
-  return del(['.tmp']);
+  return del(['.macgyver']);
 });
 
 gulp.task('clean:dist', function() {
@@ -51,7 +51,7 @@ gulp.task('scripts', function() {
     })).transform('reactify')
     .bundle()
       .pipe(source('app.js'))
-      .pipe(gulp.dest('.tmp/scripts/bundle'))
+      .pipe(gulp.dest('.macgyver/scripts/bundle'))
       .pipe($.if(dev, $.tap(function() {
         log('scripts:bundle', start);
         if (!webserver) {
@@ -123,7 +123,7 @@ gulp.task('bundle', function () {
 });
 
 gulp.task('webserver', function() {
-  webserver = gulp.src(['.tmp', 'app'])
+  webserver = gulp.src(['.macgyver', 'app'])
     .pipe($.webserver({
       //host: '0.0.0.0', //change to 'localhost' to disable outside connections
       port: '3333',
