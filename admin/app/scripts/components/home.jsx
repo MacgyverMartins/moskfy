@@ -1,12 +1,14 @@
+'use strict';
 var React = require('react');
 var RaisedButton = require('material-ui/lib/raised-button');
 
-var Home = React.createClass({
+class Home extends React.Component {
   render() {
     return (
-        <RaisedButton label="Default" />
+      <RaisedButton label="macgyver" />
     );
-  },
-});
+  }
+}
+
 
 module.exports = Home;

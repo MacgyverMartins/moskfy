@@ -33,7 +33,7 @@ gulp.task('clean:dist', function() {
 gulp.task('scripts', function() {
   var dev = env === 'dev';
   var filePath = './app/scripts/app.js';
-  var extensions = ['.jsx'];
+  var extensions = ['.jsx', 'js'];
 
   var bundle = function() {
     if (dev) {
@@ -48,7 +48,7 @@ gulp.task('scripts', function() {
       env: env
     }, {
       includeExtensions: extensions
-    })).transform('reactify')
+    })).transform("babelify", {presets: ["es2015", "react"]})
     .bundle()
       .pipe(source('app.js'))
       .pipe(gulp.dest('.tmp/scripts/bundle'))
