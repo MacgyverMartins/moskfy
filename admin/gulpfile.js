@@ -1,15 +1,15 @@
-var gulp          = require('gulp');
+var gulp = require('gulp');
 
-var $             = require('gulp-load-plugins')();
-var del           = require('del');
-var source        = require('vinyl-source-stream');
-var browserify    = require('browserify');
+var $ = require('gulp-load-plugins')();
+var del = require('del');
+var source = require('vinyl-source-stream');
+var browserify = require('browserify');
 var preprocessify = require('preprocessify');
-var runSequence   = require('run-sequence');
-var domain        = require('domain');
+var runSequence = require('run-sequence');
+var domain = require('domain');
 
-var env           = 'dev';
-var webserver     = false;
+var env = 'dev';
+var webserver = false;
 
 log = function(task, start) {
   if (!start) {
@@ -41,15 +41,23 @@ gulp.task('scripts', function() {
       log('scripts:bundle');
     }
     browserify({
-      entries: [filePath],
-      extensions: extensions,
-      debug: env === 'dev'
-    }).transform(preprocessify({
-      env: env
-    }, {
-      includeExtensions: extensions
-    })).transform("babelify", {presets: ["es2015", "react"]})
-    .bundle()
+        entries: [filePath],
+        extensions: extensions,
+        debug: env === 'dev'
+      })
+      //.transform(preprocessify({
+      //env: env
+      //}, {
+      //includeExtensions: extensions
+      //}))
+      .transform("babelify", {
+        presets: [
+          //{ plugins: ["syntax-class-properties"] },
+          //"es2015",
+          "react"
+        ]
+      })
+      .bundle()
       .pipe(source('app.js'))
       .pipe(gulp.dest('.tmp/scripts/bundle'))
       .pipe($.if(dev, $.tap(function() {
@@ -83,7 +91,9 @@ gulp.task('imagemin', function() {
   return gulp.src('app/images/*')
     .pipe($.imagemin({
       progressive: true,
-      svgoPlugins: [{removeViewBox: false}]
+      svgoPlugins: [{
+        removeViewBox: false
+      }]
     }))
     .pipe(gulp.dest('dist/images'));
 });
@@ -93,9 +103,11 @@ gulp.task('copy', function() {
     .pipe(gulp.dest('dist'));
 })
 
-gulp.task('bundle', function () {
+gulp.task('bundle', function() {
   var assets = $.useref.assets();
-  var revAll = new $.revAll({dontRenameFile: [/^\/favicon.ico$/g, '.html']});
+  var revAll = new $.revAll({
+    dontRenameFile: [/^\/favicon.ico$/g, '.html']
+  });
   var jsFilter = $.filter(['**/*.js']);
   var cssFilter = $.filter(['**/*.css']);
   var htmlFilter = $.filter(['*.html']);
@@ -115,7 +127,9 @@ gulp.task('bundle', function () {
     .pipe($.minifyCss())
     .pipe(cssFilter.restore())
     .pipe(htmlFilter)
-    .pipe($.htmlmin({collapseWhitespace: true}))
+    .pipe($.htmlmin({
+      collapseWhitespace: true
+    }))
     .pipe(htmlFilter.restore())
     .pipe(revAll.revision())
     .pipe(gulp.dest('dist'))
@@ -151,9 +165,9 @@ gulp.task('serve', function() {
 
 gulp.task('build', function() {
   env = 'prod';
-  runSequence(['clean:dev', 'clean:dist'],
-              ['scripts', 'imagemin'],
-              'bundle', 'copy');
+  runSequence(['clean:dev', 'clean:dist'], ['scripts', 'imagemin'],
+    'bundle', 'copy');
 });
 
 gulp.task('default', ['build']);
+
