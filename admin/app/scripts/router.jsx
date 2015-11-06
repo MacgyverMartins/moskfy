@@ -53,6 +53,7 @@ exports.start = function() {
     <Router history={createBrowserHistory()}>
       <Route path="/" component={App}>
         <IndexRoute component={About} />
+        <Route path="about" component={About} />
         <Route path="inbox" component={Inbox}>
           <Route path="messages/:id" component={Message} />
         </Route>
