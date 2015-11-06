@@ -8,6 +8,9 @@ var preprocessify = require('preprocessify');
 var runSequence = require('run-sequence');
 var domain = require('domain');
 
+var historyApiFallback = require('connect-history-api-fallback');
+var connect = require('gulp-connect');
+
 var env = 'dev';
 var webserver = false;
 
@@ -62,9 +65,7 @@ gulp.task('scripts', function() {
       .pipe(gulp.dest('.tmp/scripts/bundle'))
       .pipe($.if(dev, $.tap(function() {
         log('scripts:bundle', start);
-        if (!webserver) {
-          runSequence('webserver');
-        }
+        connect.reload()
       })));
   }
 
@@ -136,28 +137,44 @@ gulp.task('bundle', function() {
     .pipe($.size());
 });
 
-gulp.task('webserver', function() {
-  webserver = gulp.src(['.tmp', 'app'])
-    .pipe($.webserver({
-      //host: '0.0.0.0', //change to 'localhost' to disable outside connections
-      port: '3333',
-      livereload: {
-        enable: true,
-        filter: function(filePath) {
-          if (/app\\(?=scripts)/.test(filePath)) {
-            $.util.log('Ignoring', $.util.colors.magenta(filePath));
-            return false;
-          } else {
-            return true;
-          }
-        }
-      },
-      open: true
-    }));
+gulp.task('connect', function() {
+  connect.server({
+    root: ['app', '.tmp'],
+    port: 3333,
+    //base: config.devBaseUrl,
+    livereload: true,
+    middleware: function(connect, opt) {
+      return [historyApiFallback({})];
+    }
+  });
 });
 
+gulp.task('watch', function () {
+gulp.watch(['./app/*.html', './app/scripts/**/*.js', './app/scripts/**/*.jsx'], ['scripts']);
+});
+
+//gulp.task('webserver', function() {
+//webserver = gulp.src(['.tmp', 'app'])
+//.pipe($.webserver({
+////host: '0.0.0.0', //change to 'localhost' to disable outside connections
+//port: '3333',
+//livereload: {
+//enable: true,
+//filter: function(filePath) {
+//if (/app\\(?=scripts)/.test(filePath)) {
+//$.util.log('Ignoring', $.util.colors.magenta(filePath));
+//return false;
+//} else {
+//return true;
+//}
+//}
+//},
+//open: true
+//}));
+//});
+
 gulp.task('serve', function() {
-  runSequence('clean:dev', ['scripts']);
+  runSequence('clean:dev', ['connect']);
   gulp.watch('app/*.html');
   gulp.watch('app/scripts/**/*.js', ['scripts']);
   gulp.watch('app/scripts/**/*.jsx', ['scripts']);
