@@ -1,21 +1,21 @@
 var React = require('react');
-var Router = require('react-router');
 var ReactDOM = require('react-dom');
-var Route = Router.Route;
-var DefaultRoute = Router.DefaultRoute;
+var createBrowserHistory = require('history/lib/createBrowserHistory');
+var ReactRouter = require('react-router');
+var Router = ReactRouter.Router;
+var Route = ReactRouter.Route;
+//var Router = require('react-router');
+//var Route = Router.Route;
 
 var Layout = require('./components/layout');
 var Home = require('./components/home');
 
-var routes = (
-	<Route name="layout" path="/" handler={Layout}>
-		<DefaultRoute handler={Home} />
-	</Route>
-);
-
 exports.start = function() {
-
-  Router.run(routes, function (Handler) {
-		ReactDOM.render(<Handler />, document.getElementById('content'));
-	});
+  ReactDOM.render((
+    <Router history={createBrowserHistory()}>
+      <Route path="/" component={Layout}>
+        <Route path="teste" component={Home} />
+      </Route>
+    </Router>
+  ),  document.getElementById('content'))
 }

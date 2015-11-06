@@ -10,29 +10,13 @@ var DropDownMenu = Ui.DropDownMenu;
 var DropDownIcon = Ui.DropDownIcon;
 var FontIcon = Ui.FontIcon;
 var RaisedButton = Ui.RaisedButton;
+var LeftNav = Ui.LeftNav;
+var MenuItem = Ui.MenuItem;
 
-var filterOptions = [{
-  payload: '1',
-  text: 'All Broadcasts'
-}, {
-  payload: '2',
-  text: 'All Voice'
-}, {
-  payload: '3',
-  text: 'All Text'
-}, {
-  payload: '4',
-  text: 'Complete Voice'
-}, {
-  payload: '5',
-  text: 'Complete Text'
-}, {
-  payload: '6',
-  text: 'Active Voice'
-}, {
-  payload: '7',
-  text: 'Active Text'
-}, ];
+
+var Router = require('react-router');
+var RouteHandler = Router.RouteHandler;
+
 var iconMenuItems = [{
   payload: '1',
   text: 'Download'
@@ -41,22 +25,40 @@ var iconMenuItems = [{
   text: 'More Info'
 }];
 
+
+var menuItems = [
+  { type: MenuItem.Types.SUBHEADER, text: 'Páginas' },
+  { route: 'home', text: 'Home' },
+  { type: MenuItem.Types.SUBHEADER, text: 'Links úteis' },
+  {
+     type: MenuItem.Types.LINK,
+     payload: 'http://google.com',
+     text: 'Manual do Admin'
+  },
+  {
+     type: MenuItem.Types.LINK,
+     payload: 'http://nurimba.com.br',
+     text: 'Suporte',
+  }
+];
+
 var Home = React.createClass({
   render: function() {
     return (
-      <div className="mk_toolbar">
-        <Toolbar>
+      <div className="main">
+        <Toolbar style={{ position: 'fixed', top: '0' }}>
           <ToolbarGroup key={0} float="left">
-            <DropDownMenu menuItems={filterOptions} />
+            <ToolbarTitle text="Moskfy" />
           </ToolbarGroup>
           <ToolbarGroup key={1} float="right">
-            <ToolbarTitle text="Options" />
             <FontIcon className="material-icons">menu</FontIcon>
             <DropDownIcon iconClassName="material-icons" iconLigature="expand_more" menuItems={iconMenuItems} />
             <ToolbarSeparator/>
             <RaisedButton label="Create Broadcast" primary={true} />
           </ToolbarGroup>
         </Toolbar>
+
+        <LeftNav ref="leftNav" menuItems={menuItems} style={{ position: 'fixed', top: '56' }} />
       </div>
     );
   }
