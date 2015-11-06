@@ -51,10 +51,9 @@ var Home = React.createClass({
             <ToolbarTitle text="Moskfy" />
           </ToolbarGroup>
           <ToolbarGroup key={1} float="right">
+            <ToolbarSeparator/>
             <FontIcon className="material-icons">menu</FontIcon>
             <DropDownIcon iconClassName="material-icons" iconLigature="expand_more" menuItems={iconMenuItems} />
-            <ToolbarSeparator/>
-            <RaisedButton label="Create Broadcast" primary={true} />
           </ToolbarGroup>
         </Toolbar>
 
