@@ -48,15 +48,10 @@ gulp.task('scripts', function() {
         extensions: extensions,
         debug: env === 'dev'
       })
-      //.transform(preprocessify({
-      //env: env
-      //}, {
-      //includeExtensions: extensions
-      //}))
       .transform("babelify", {
         presets: [
           //{ plugins: ["syntax-class-properties"] },
-          //"es2015",
+          "es2015",
           "react"
         ]
       })
@@ -104,38 +99,38 @@ gulp.task('copy', function() {
     .pipe(gulp.dest('dist'));
 })
 
-gulp.task('bundle', function() {
-  var assets = $.useref.assets();
-  var revAll = new $.revAll({
-    dontRenameFile: [/^\/favicon.ico$/g, '.html']
-  });
-  var jsFilter = $.filter(['**/*.js']);
-  var cssFilter = $.filter(['**/*.css']);
-  var htmlFilter = $.filter(['*.html']);
+//gulp.task('bundle', function() {
+  //var assets = $.useref.assets();
+  //var revAll = new $.revAll({
+    //dontRenameFile: [/^\/favicon.ico$/g, '.html']
+  //});
+  //var jsFilter = $.filter(['**/*.js']);
+  //var cssFilter = $.filter(['**/*.css']);
+  //var htmlFilter = $.filter(['*.html']);
 
-  return gulp.src('app/index.html')
-    .pipe($.preprocess())
-    .pipe(assets)
-    .pipe(assets.restore())
-    .pipe($.useref())
-    .pipe(jsFilter)
-    .pipe($.uglify())
-    .pipe(jsFilter.restore())
-    .pipe(cssFilter)
-    .pipe($.autoprefixer({
-      browsers: ['last 5 versions']
-    }))
-    .pipe($.minifyCss())
-    .pipe(cssFilter.restore())
-    .pipe(htmlFilter)
-    .pipe($.htmlmin({
-      collapseWhitespace: true
-    }))
-    .pipe(htmlFilter.restore())
-    .pipe(revAll.revision())
-    .pipe(gulp.dest('dist'))
-    .pipe($.size());
-});
+  //return gulp.src('app/index.html')
+    //.pipe($.preprocess())
+    //.pipe(assets)
+    //.pipe(assets.restore())
+    //.pipe($.useref())
+    //.pipe(jsFilter)
+    //.pipe($.uglify())
+    //.pipe(jsFilter.restore())
+    //.pipe(cssFilter)
+    //.pipe($.autoprefixer({
+      //browsers: ['last 5 versions']
+    //}))
+    //.pipe($.minifyCss())
+    //.pipe(cssFilter.restore())
+    //.pipe(htmlFilter)
+    //.pipe($.htmlmin({
+      //collapseWhitespace: true
+    //}))
+    //.pipe(htmlFilter.restore())
+    //.pipe(revAll.revision())
+    //.pipe(gulp.dest('dist'))
+    //.pipe($.size());
+//});
 
 gulp.task('connect', function() {
   connect.server({
@@ -150,30 +145,10 @@ gulp.task('connect', function() {
 });
 
 gulp.task('watch', function () {
-gulp.watch(['./app/*.html', './app/scripts/**/*.js', './app/scripts/**/*.jsx'], ['scripts']);
+  gulp.watch(['./app/*.html', './app/scripts/**/*.js', './app/scripts/**/*.jsx'], ['scripts']);
 });
 
-//gulp.task('webserver', function() {
-//webserver = gulp.src(['.tmp', 'app'])
-//.pipe($.webserver({
-////host: '0.0.0.0', //change to 'localhost' to disable outside connections
-//port: '3333',
-//livereload: {
-//enable: true,
-//filter: function(filePath) {
-//if (/app\\(?=scripts)/.test(filePath)) {
-//$.util.log('Ignoring', $.util.colors.magenta(filePath));
-//return false;
-//} else {
-//return true;
-//}
-//}
-//},
-//open: true
-//}));
-//});
-
-gulp.task('serve', function() {
+gulp.task('serve', ['scripts'], function() {
   runSequence('clean:dev', ['connect']);
   gulp.watch('app/*.html');
   gulp.watch('app/scripts/**/*.js', ['scripts']);

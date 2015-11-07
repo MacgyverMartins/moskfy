@@ -13,7 +13,6 @@ var RaisedButton = Ui.RaisedButton;
 var LeftNav = Ui.LeftNav;
 var MenuItem = Ui.MenuItem;
 
-
 var Router = require('react-router');
 var RouteHandler = Router.RouteHandler;
 
@@ -24,7 +23,6 @@ var iconMenuItems = [{
   payload: '2',
   text: 'More Info'
 }];
-
 
 var menuItems = [
   { type: MenuItem.Types.SUBHEADER, text: 'Páginas' },
