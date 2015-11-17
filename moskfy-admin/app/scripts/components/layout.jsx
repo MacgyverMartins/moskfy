@@ -40,7 +40,7 @@ var Layout = React.createClass({
 
   render: function() {
     return (
-      <div className="App">
+      <div className="layout-wrapper">
         <Toolbar style={{ position: 'fixed', top: '0' }}>
           <ToolbarGroup key={0} float="left">
             <ToolbarTitle text="Moskfy" />
@@ -53,7 +53,7 @@ var Layout = React.createClass({
         </Toolbar>
 
         <LeftNav ref="leftNav" menuItems={menuItems} style={{ position: 'fixed', top: '56' }} />
-        <div className="main_app">
+        <div>
           {this.props.children}
         </div>
       </div>

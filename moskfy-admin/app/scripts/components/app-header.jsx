@@ -1,9 +1,12 @@
 var React = require('react');
 
 var AppHeader = React.createClass({
+  propTypes: {
+    parentView: React.PropTypes.string,
+    currentlyView: React.PropTypes.string
+  },
 
   render: function() {
-
     var mainHeader_style = {
       header: {
         color: '#000',
@@ -19,12 +22,11 @@ var AppHeader = React.createClass({
     return (
       <div className="app_header">
         <h1 style={ mainHeader_style.header }>
-          Páginas<span style={ mainHeader_style.span }> - Nova página</span>
+          {this.props.parentView}<span style={ mainHeader_style.span }> - {this.props.currentlyView}</span>
         </h1>
       </div>
     );
   }
-
 });
 
 module.exports = AppHeader;

@@ -27,7 +27,7 @@ var Home = React.createClass({
 
     return (
       <div className="main_home" style={ main_style }>
-        <AppHeader />
+        <AppHeader parentView="Páginas" currentlyView="Nova página"/>
         <PageNew />
       </div>
     );
