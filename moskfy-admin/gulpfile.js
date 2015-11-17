@@ -43,12 +43,16 @@ gulp.task('scripts', function() {
       var start = new Date();
       log('scripts:bundle');
     }
-    browserify({
-        entries: [filePath],
-        extensions: extensions,
-        debug: env === 'dev'
-      })
-      .transform("babelify", {
+
+    var appBundle = browserify({
+      entries: [filePath],
+      extensions: extensions,
+      debug: env === 'dev'
+    })
+
+    appBundle.external(['react', 'react-router', 'material-ui'])
+
+    appBundle.transform("babelify", {
         presets: [
           //{ plugins: ["syntax-class-properties"] },
           "es2015",
@@ -64,22 +68,24 @@ gulp.task('scripts', function() {
       })));
   }
 
-  if (dev) {
-    gulp.src(filePath)
-      .pipe($.plumber())
-      .pipe($.tap(function(file) {
-        var d = domain.create();
+  bundle();
 
-        d.on('error', function(err) {
-          $.util.log($.util.colors.red('Browserify compile error:'), err.message, '\n\t', $.util.colors.cyan('in file'), file.path);
-          $.util.beep();
-        });
+  //if (dev) {
+  //gulp.src(filePath)
+  //.pipe($.plumber())
+  //.pipe($.tap(function(file) {
+  //var d = domain.create();
 
-        d.run(bundle);
-      }));
-  } else {
-    bundle();
-  }
+  //d.on('error', function(err) {
+  //$.util.log($.util.colors.red('Browserify compile error:'), err.message, '\n\t', $.util.colors.cyan('in file'), file.path);
+  //$.util.beep();
+  //});
+
+  //d.run(bundle);
+  //}));
+  //} else {
+  //bundle();
+  //}
 });
 
 
@@ -100,36 +106,36 @@ gulp.task('copy', function() {
 })
 
 //gulp.task('bundle', function() {
-  //var assets = $.useref.assets();
-  //var revAll = new $.revAll({
-    //dontRenameFile: [/^\/favicon.ico$/g, '.html']
-  //});
-  //var jsFilter = $.filter(['**/*.js']);
-  //var cssFilter = $.filter(['**/*.css']);
-  //var htmlFilter = $.filter(['*.html']);
+//var assets = $.useref.assets();
+//var revAll = new $.revAll({
+//dontRenameFile: [/^\/favicon.ico$/g, '.html']
+//});
+//var jsFilter = $.filter(['**/*.js']);
+//var cssFilter = $.filter(['**/*.css']);
+//var htmlFilter = $.filter(['*.html']);
 
-  //return gulp.src('app/index.html')
-    //.pipe($.preprocess())
-    //.pipe(assets)
-    //.pipe(assets.restore())
-    //.pipe($.useref())
-    //.pipe(jsFilter)
-    //.pipe($.uglify())
-    //.pipe(jsFilter.restore())
-    //.pipe(cssFilter)
-    //.pipe($.autoprefixer({
-      //browsers: ['last 5 versions']
-    //}))
-    //.pipe($.minifyCss())
-    //.pipe(cssFilter.restore())
-    //.pipe(htmlFilter)
-    //.pipe($.htmlmin({
-      //collapseWhitespace: true
-    //}))
-    //.pipe(htmlFilter.restore())
-    //.pipe(revAll.revision())
-    //.pipe(gulp.dest('dist'))
-    //.pipe($.size());
+//return gulp.src('app/index.html')
+//.pipe($.preprocess())
+//.pipe(assets)
+//.pipe(assets.restore())
+//.pipe($.useref())
+//.pipe(jsFilter)
+//.pipe($.uglify())
+//.pipe(jsFilter.restore())
+//.pipe(cssFilter)
+//.pipe($.autoprefixer({
+//browsers: ['last 5 versions']
+//}))
+//.pipe($.minifyCss())
+//.pipe(cssFilter.restore())
+//.pipe(htmlFilter)
+//.pipe($.htmlmin({
+//collapseWhitespace: true
+//}))
+//.pipe(htmlFilter.restore())
+//.pipe(revAll.revision())
+//.pipe(gulp.dest('dist'))
+//.pipe($.size());
 //});
 
 gulp.task('connect', function() {
@@ -144,7 +150,7 @@ gulp.task('connect', function() {
   });
 });
 
-gulp.task('watch', function () {
+gulp.task('watch', function() {
   gulp.watch(['./app/*.html', './app/scripts/**/*.js', './app/scripts/**/*.jsx'], ['scripts']);
 });
 
