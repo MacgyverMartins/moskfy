@@ -4,6 +4,7 @@ var fs = require('fs');
 var frontendDir = 'frontend/';
 
 module.exports = function(app) {
+
   var PageController = {
 
     index: function(req, res) {
@@ -25,7 +26,7 @@ module.exports = function(app) {
         }
       }
       res.render('index', context);
-    }
+    },
 
   };
 

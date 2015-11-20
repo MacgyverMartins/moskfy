@@ -17,6 +17,8 @@
     "method-override": "^2.3.5",
     "morgan": "~1.6.1",
     "react": "^0.14.2",
-    "serve-favicon": "~2.3.0"
+    "serve-favicon": "~2.3.0",
+    "mongodb": "^1.4.39",
+    "mongoose": "^3.8.35"
   }
 }

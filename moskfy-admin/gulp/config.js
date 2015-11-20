@@ -2,8 +2,8 @@
 
 const config = {
 
-  browserPort: 3000,
-  UIPort: 3001,
+  browserPort: 3333,
+  UIPort: 3331,
 
   scripts: {
     src: './app/js/**/*.js',

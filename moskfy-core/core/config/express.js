@@ -7,7 +7,7 @@ var exphbs  = require('express-handlebars');
 //var session = require('express-session');
 //var passport = require('passport');
 
-var viewDirectory = './content/theme/';
+var viewDirectory = '../theme/';
 
 module.exports = function() {
   var app = express();
@@ -41,10 +41,7 @@ module.exports = function() {
     extended: true
   }));
   app.use(bodyParser.json());
-  app.use(require('method-override')());
-
-  var admin = require('../../admin');
-  app.use(admin);
+  //app.use(require('method-override')());
 
   //mapeando diretórios para não precisar usar 'require'
   load('models', {
