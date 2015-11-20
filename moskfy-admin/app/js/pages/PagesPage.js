@@ -4,29 +4,32 @@ import React         from 'react';
 import {Link}        from 'react-router';
 import DocumentTitle from 'react-document-title';
 import AppHeader from '../components/app-header.js';
+import PagePost from '../components/page-post.js';
 
 const propTypes = {
   currentUser: React.PropTypes.object
 };
 
-class HomePage extends React.Component {
+class PagesPage extends React.Component {
 
   constructor(props) {
     super(props);
   }
 
+
   render() {
     return (
-      <DocumentTitle title="Moskfy | Home">
-        <div className="page_home">
-          <h1>Bem vindo ao Moskfy</h1>
-        </div>
+      <DocumentTitle title="Moskfy | Páginas">
+      <div>
+        <AppHeader parentView="Páginas" currentlyView="Nova página"/>
+        <PagePost />
+      </div>
       </DocumentTitle>
     );
   }
 
 }
 
-HomePage.propTypes = propTypes;
+PagesPage.propTypes = propTypes;
 
-export default HomePage;
+export default PagesPage;

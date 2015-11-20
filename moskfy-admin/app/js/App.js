@@ -1,14 +1,11 @@
 'use strict';
 
-import React              from 'react';
+import React from 'react';
+import { Link } from 'react-router';
 
 import CurrentUserActions from './actions/CurrentUserActions';
-import CurrentUserStore   from './stores/CurrentUserStore';
-import Header             from './components/Header';
-import Footer             from './components/Footer';
+import CurrentUserStore from './stores/CurrentUserStore';
 
-
-const Ui = require('material-ui');
 const RaisedButton = require('material-ui/lib/raised-button');
 const Toolbar = require('material-ui/lib/toolbar/toolbar');
 const ToolbarGroup = require('material-ui/lib/toolbar/toolbar-group');
@@ -17,7 +14,7 @@ const ToolbarTitle = require('material-ui/lib/toolbar/toolbar-title');
 const DropDownMenu = require('material-ui/lib/drop-down-menu');
 const DropDownIcon = require('material-ui/lib/drop-down-icon');
 const FontIcon = require('material-ui/lib/font-icon');
-const LeftNav =  require('material-ui/lib/left-nav');
+const LeftNav = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
 
 
@@ -30,43 +27,46 @@ const propTypes = {
   ])
 };
 
-const menuItems = [
-  { type: MenuItem.Types.SUBHEADER, text: 'Páginas' },
-  { route: 'home', text: 'Home' },
-  { type: MenuItem.Types.SUBHEADER, text: 'Links úteis' },
-  {
-     type: MenuItem.Types.LINK,
-     payload: 'http://google.com',
-     text: 'Manual do Admin'
-  },
-  {
-     type: MenuItem.Types.LINK,
-     payload: 'http://nurimba.com.br',
-     text: 'Suporte',
-  }
-];
+const menuItems = [{
+  route: '/',
+  text: 'Home'
+},{
+  type: MenuItem.Types.SUBHEADER,
+  text: 'Páginas'
+}, {
+  route: '/pages/page-new',
+  text: 'Nova Página'
+}, {
+  type: MenuItem.Types.SUBHEADER,
+  text: 'Links úteis'
+}, {
+  type: MenuItem.Types.LINK,
+  payload: 'http://google.com',
+  text: 'Manual do Admin'
+}, {
+  type: MenuItem.Types.LINK,
+  payload: 'http://nurimba.com.br',
+  text: 'Suporte',
+}];
 
-const iconMenuItems = [
-  { payload: '1', text: 'Download' },
-  { payload: '2', text: 'More Info' }
-];
+const iconMenuItems = [{
+  payload: '1',
+  text: 'Download'
+}, {
+  payload: '2',
+  text: 'More Info'
+}];
 
 class App extends React.Component {
 
-  constructor(props) {
+  constructor(props, context) {
     super(props);
     this.state = {
       currentUser: {}
     };
+    this._onLeftNavChange = this._onLeftNavChange.bind(this);
+    this._getSelectedIndex = this._getSelectedIndex.bind(this);
   }
-
-  //onUserChange(err, user) {
-    //if ( err ) {
-      //this.setState({ error: err });
-    //} else {
-      //this.setState({ currentUser: user || {}, error: null });
-    //}
-  //}
 
   componentWillMount() {
     console.log('About to mount App');
@@ -81,15 +81,14 @@ class App extends React.Component {
     //this.unsubscribe();
   }
 
-  renderChildren() {
-    return React.cloneElement(this.props.children, {
-      params: this.props.params,
-      query: this.props.query,
-      currentUser: this.state.currentUser
-    });
-  }
-
   render() {
+    let main_style = {
+      margin: '56px 0 0 256px',
+      padding: '20px'
+    };
+
+    console.log('this', this);
+
     return (
       <div className="layout-wrapper">
         <Toolbar style={{ position: 'fixed', top: '0' }}>
@@ -103,15 +102,42 @@ class App extends React.Component {
           </ToolbarGroup>
         </Toolbar>
 
-        <LeftNav ref="leftNav" menuItems={menuItems} style={{ position: 'fixed', top: '56' }} />
-        <div>
+        <LeftNav
+          ref="leftNav"
+          menuItems={menuItems}
+          onChange={this._onLeftNavChange}
+          selectedIndex={this._getSelectedIndex()}
+          style={{ position: 'fixed', top: '56' }} />
+
+        <div className="main-pages-container" style={ main_style }>
           {this.props.children}
         </div>
       </div>
     );
   }
 
+  _onLeftNavChange(e, key, payload) {
+    console.log('handle.this', this);
+    this.context.history.pushState(null, payload.route);
+  }
+
+  _getSelectedIndex() {
+    let currentItem;
+
+    for (let i = menuItems.length - 1; i >= 0; i--) {
+      currentItem = menuItems[i];
+      if (currentItem.route && this.context.history.isActive(currentItem.route)) {
+        return i;
+      }
+    }
+  }
+
 }
+
+App.contextTypes = {
+  location: React.PropTypes.object,
+  history: React.PropTypes.object
+};
 
 App.propTypes = propTypes;
 
