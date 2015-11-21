@@ -2,18 +2,34 @@
 
 import Reflux             from 'reflux';
 
-import CurrentUserActions from '../actions/CurrentUserActions';
-import AuthAPI            from '../utils/AuthAPI';
+import PageActions from '../actions/PageActions';
+import restful, { fetchBackend } from 'restful.js';
+import loader from '../utils/loader';
 
-const CurrentUserStore = Reflux.createStore({
+const api = restful('http://localhost:3000', fetchBackend(fetch));
+
+api.addRequestInterceptor(function(config){
+  loader.emit('loading', true);
+});
+api.addResponseInterceptor(function(config){
+  loader.emit('loading', false);
+});
+
+const PageStore = Reflux.createStore({
 
   init() {
-    this.user = null;
-    this.hasBeenChecked = false;
+    //this.user = null;
+    //this.hasBeenChecked = false;
 
-    this.listenTo(CurrentUserActions.checkLoginStatus, this.checkLoginStatus);
-    this.listenTo(CurrentUserActions.login, this.loginUser);
-    this.listenTo(CurrentUserActions.logout, this.logoutUser);
+    this.listenTo(PageActions.listPages, this.listPages);
+  },
+
+  listPages() {
+    var self = this;
+    api.all('pages').getAll().then(function(rs){
+      var pages = rs.body();
+      self.trigger(pages);
+    });
   },
 
   setUser(user) {
@@ -55,4 +71,4 @@ const CurrentUserStore = Reflux.createStore({
 
 });
 
-export default CurrentUserStore;
+export default PageStore;

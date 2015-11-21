@@ -3,8 +3,8 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-import CurrentUserActions from './actions/CurrentUserActions';
-import CurrentUserStore from './stores/CurrentUserStore';
+//import PageActions from './actions/PageActions';
+//import PageStore from './stores/PageStore';
 
 const RaisedButton = require('material-ui/lib/raised-button');
 const Toolbar = require('material-ui/lib/toolbar/toolbar');
@@ -16,7 +16,9 @@ const DropDownIcon = require('material-ui/lib/drop-down-icon');
 const FontIcon = require('material-ui/lib/font-icon');
 const LeftNav = require('material-ui/lib/left-nav');
 const MenuItem = require('material-ui/lib/menu/menu-item');
+const LinearProgress = require('material-ui/lib/linear-progress');
 
+import loader from './utils/loader.js';
 
 const propTypes = {
   params: React.PropTypes.object,
@@ -62,23 +64,41 @@ class App extends React.Component {
   constructor(props, context) {
     super(props);
     this.state = {
-      currentUser: {}
+      loading: false
     };
     this._onLeftNavChange = this._onLeftNavChange.bind(this);
     this._getSelectedIndex = this._getSelectedIndex.bind(this);
+    this._showProgress = this._showProgress.bind(this);
   }
 
   componentWillMount() {
-    console.log('About to mount App');
   }
 
   componentDidMount() {
-    //this.unsubscribe = CurrentUserStore.listen(this.onUserChange);
-    //CurrentUserActions.checkLoginStatus();
+    loader.on('loading', this._showProgress);
   }
 
   componentWillUnmount() {
     //this.unsubscribe();
+  }
+
+  _showProgress(data) {
+    this.setState({loading: data});
+  }
+
+  _onLeftNavChange(e, key, payload) {
+    this.context.history.pushState(null, payload.route);
+  }
+
+  _getSelectedIndex() {
+    let currentItem;
+
+    for (let i = menuItems.length - 1; i >= 0; i--) {
+      currentItem = menuItems[i];
+      if (currentItem.route && this.context.history.isActive(currentItem.route)) {
+        return i;
+      }
+    }
   }
 
   render() {
@@ -87,11 +107,20 @@ class App extends React.Component {
       padding: '20px'
     };
 
-    console.log('this', this);
+
+    let progressBar;
+    if(this.state.loading){
+      progressBar = <LinearProgress mode="indeterminate" style={{ position:'fixed', top:'56px', zIndex: '11' }} />;
+    }else{
+      progressBar = '';
+    }
+
+    console.log('stateApp', this.state);
 
     return (
       <div className="layout-wrapper">
-        <Toolbar style={{ position: 'fixed', top: '0' }}>
+        {progressBar}
+        <Toolbar style={{ position: 'fixed', top: '0', zIndex: '11' }}>
           <ToolbarGroup key={0} float="left">
             <ToolbarTitle text="Moskfy" />
           </ToolbarGroup>
@@ -114,22 +143,6 @@ class App extends React.Component {
         </div>
       </div>
     );
-  }
-
-  _onLeftNavChange(e, key, payload) {
-    console.log('handle.this', this);
-    this.context.history.pushState(null, payload.route);
-  }
-
-  _getSelectedIndex() {
-    let currentItem;
-
-    for (let i = menuItems.length - 1; i >= 0; i--) {
-      currentItem = menuItems[i];
-      if (currentItem.route && this.context.history.isActive(currentItem.route)) {
-        return i;
-      }
-    }
   }
 
 }

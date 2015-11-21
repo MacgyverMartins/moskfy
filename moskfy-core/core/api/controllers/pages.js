@@ -7,13 +7,15 @@ module.exports = function(app) {
   var pagesController = {
 
     listPages: function(req, res) {
-      Page.find({}, function(err, pages) {
-        if (err) {
-          console.error(err);
-          res.status(500).json(erro);
-        }
-        res.json(pages);
-      });
+      setTimeout(function() {
+        Page.find({}, function(err, pages) {
+          if (err) {
+            console.error(err);
+            res.status(500).json(erro);
+          }
+          res.json(pages);
+        });
+      }.bind(this), 5000);
     },
 
     getPage: function(req, res) {

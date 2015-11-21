@@ -62,7 +62,9 @@
     "yargs": "^3.27.0"
   },
   "dependencies": {
+    "eventemitter3": "^1.1.1",
     "material-ui": "^0.13.3",
-    "react-tap-event-plugin": "^0.2.1"
+    "react-tap-event-plugin": "^0.2.1",
+    "restful.js": "^0.9.3"
   }
 }
