@@ -7,6 +7,10 @@ module.exports = function(){
       type: String,
       required: true
     },
+    slug: {
+      type: String,
+      required: true
+    },
     content: {
       type: String,
       required: false,

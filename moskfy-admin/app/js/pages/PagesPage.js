@@ -20,8 +20,8 @@ class PagesPage extends React.Component {
     this.state = {
       currentPage: {}
     };
+
     this.onChange = this.onChange.bind(this);
-    this.clique = this.clique.bind(this);
   }
 
   componentWillMount() {
@@ -40,10 +40,6 @@ class PagesPage extends React.Component {
     this.setState({ currentPage: data });
   }
 
-  clique() {
-    PageActions.listPages();
-  }
-
   render() {
     console.log('state', this.state);
     return (
@@ -51,7 +47,6 @@ class PagesPage extends React.Component {
       <div>
         <AppHeader parentView="Páginas" currentlyView="Nova página"/>
         <PagePost />
-        <p onClick={this.clique}>clique aqui</p>
       </div>
       </DocumentTitle>
     );

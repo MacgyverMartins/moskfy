@@ -50,7 +50,7 @@ module.exports = function() {
 
   //mapeando diretórios para não precisar usar 'require'
   load('models', {
-      cwd: 'core/api'
+      cwd: 'core/server'
     })
     .then('controllers')
     .then('routes')

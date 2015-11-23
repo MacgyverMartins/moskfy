@@ -1,7 +1,8 @@
 'use strict';
 
-module.exports = function(app) {
+var slugify = require("underscore.string/slugify");
 
+module.exports = function(app) {
   var Page = app.models.page;
 
   var pagesController = {
@@ -33,6 +34,8 @@ module.exports = function(app) {
     },
 
     createPage: function(req, res) {
+      req.body.slug = req.body.slug || req.body.title;
+      req.body.slug = slugify(req.body.slug);
       Page.create(req.body)
         .then(
           function(contato) {
