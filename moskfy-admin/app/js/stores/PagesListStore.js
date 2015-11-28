@@ -16,17 +16,28 @@ api.addResponseInterceptor(function(config){
   loader.emit('loading', false);
 });
 
-const PageStore = Reflux.createStore({
+const PagesListStore = Reflux.createStore({
 
   init() {
-    this.listenTo(PageActions.savePage, this.savePage);
+    this.data = [];
+    this.pages = [];
+    this.listenTo(PageActions.listPages, this.listPages);
   },
 
-  savePage(data) {
+  listPages() {
     let self = this;
-    api.custom(endpoint).post(data).then(function(rs){
-      let page = rs.body().data();
-      self.trigger();
+    api.all(endpoint).getAll().then(function(rs){
+      let response = rs.body();
+      let pages = [];
+
+      let array = response.length;
+      for (let i=0; i < array; i++) {
+        pages[i] = response[i].data();
+      }
+
+      self.data = self.data.concat(response);
+      self.pages = self.pages.concat(pages);
+      self.trigger(self.pages);
     });
   },
 
@@ -36,4 +47,4 @@ const PageStore = Reflux.createStore({
 
 });
 
-export default PageStore;
+export default PagesListStore;

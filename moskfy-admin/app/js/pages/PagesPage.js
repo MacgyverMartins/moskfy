@@ -1,7 +1,6 @@
 'use strict';
 
 import React         from 'react';
-import {Link}        from 'react-router';
 import DocumentTitle from 'react-document-title';
 import AppHeader from '../components/app-header.js';
 import PagePost from '../components/page-post.js';
@@ -12,9 +11,9 @@ import PageActions from '../actions/PageActions';
 const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
 
-const propTypes = {
-  currentUser: React.PropTypes.object
-};
+//const propTypes = {
+  //currentUser: React.PropTypes.object
+//};
 
 class PagesPage extends React.Component {
 
@@ -26,10 +25,6 @@ class PagesPage extends React.Component {
 
     this.handleSave = this.handleSave.bind(this);
     this.onChange = this.onChange.bind(this);
-  }
-
-  componentWillMount() {
-    PageActions.listPages();
   }
 
   componentDidMount() {
@@ -66,6 +61,6 @@ class PagesPage extends React.Component {
 
 }
 
-PagesPage.propTypes = propTypes;
+//PagesPage.propTypes = propTypes;
 
 export default PagesPage;

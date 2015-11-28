@@ -8,6 +8,7 @@ import App                         from './App';
 
 import HomePage                    from './pages/HomePage';
 import PagesPage                    from './pages/PagesPage';
+import PagesList                    from './pages/PagesList';
 import SearchPage                  from './pages/SearchPage';
 import NotFoundPage                from './pages/NotFoundPage';
 
@@ -18,6 +19,7 @@ export default (
       <IndexRoute component={HomePage} />
       <Route path="/" component={HomePage} />
       <Route path="pages">
+        <Route path="all-pages" component={PagesList} />
         <Route path="page-new" component={PagesPage} />
       </Route>
       <Route path="search" component={SearchPage} />
