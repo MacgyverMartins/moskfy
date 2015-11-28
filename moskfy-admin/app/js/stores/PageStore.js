@@ -7,6 +7,7 @@ import restful, { fetchBackend } from 'restful.js';
 import loader from '../utils/loader';
 
 const api = restful('http://localhost:3000', fetchBackend(fetch));
+const endpoint = 'pages';
 
 api.addRequestInterceptor(function(config){
   loader.emit('loading', true);
@@ -27,7 +28,7 @@ const PageStore = Reflux.createStore({
 
   listPages() {
     var self = this;
-    api.all('pages').getAll().then(function(rs){
+    api.all(endpoint).getAll().then(function(rs){
       var pages = rs.body();
       self.trigger(pages);
     });
@@ -35,7 +36,7 @@ const PageStore = Reflux.createStore({
 
   savePage(data) {
     let self = this;
-    api.custom('pages').post(data).then(function(rs){
+    api.custom(endpoint).post(data).then(function(rs){
       let page = rs.body().data();
       self.trigger();
     });

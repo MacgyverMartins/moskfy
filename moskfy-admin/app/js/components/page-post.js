@@ -6,10 +6,6 @@ import DocumentTitle from 'react-document-title';
 
 const Paper = require('material-ui/lib/paper');
 const TextField = require('material-ui/lib/text-field');
-const RaisedButton = require('material-ui/lib/raised-button');
-
-const PageActions = require('../actions/PageActions');
-
 
 class PagePost extends React.Component {
   constructor(props) {
@@ -20,13 +16,8 @@ class PagePost extends React.Component {
       content: ''
     };
 
-    this.handleSave = this.handleSave.bind(this);
     this.changedTitle = this.changedTitle.bind(this);
     this.changedContent = this.changedContent.bind(this);
-  }
-
-  handleSave(event) {
-    PageActions.savePage(this.state);
   }
 
   changedTitle(event) {
@@ -59,10 +50,6 @@ class PagePost extends React.Component {
             hintText="Insira aqui o conteúdo da página"
             multiLine={true}
             onChange={this.changedContent} />
-
-          <div style={{textAlign:'right', paddingTop:'50px'}}>
-          <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
-          </div>
 
         </div>
       </Paper>
