@@ -3,9 +3,6 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-//import PageActions from './actions/PageActions';
-//import PageStore from './stores/PageStore';
-
 const RaisedButton = require('material-ui/lib/raised-button');
 const Toolbar = require('material-ui/lib/toolbar/toolbar');
 const ToolbarGroup = require('material-ui/lib/toolbar/toolbar-group');
@@ -114,8 +111,6 @@ class App extends React.Component {
     }else{
       progressBar = '';
     }
-
-    console.log('stateApp', this.state);
 
     return (
       <div className="layout-wrapper">

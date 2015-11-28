@@ -7,16 +7,14 @@ module.exports = function(app) {
 
   var pagesController = {
 
-    listPages: function(req, res) {
-      setTimeout(function() {
-        Page.find({}, function(err, pages) {
-          if (err) {
-            console.error(err);
-            res.status(500).json(erro);
-          }
-          res.json(pages);
-        });
-      }.bind(this), 5000);
+    getListPages: function(req, res) {
+      Page.find({}, function(err, pages) {
+        if (err) {
+          console.error(err);
+          res.status(500).json(erro);
+        }
+        res.json(pages);
+      });
     },
 
     getPage: function(req, res) {
@@ -34,6 +32,7 @@ module.exports = function(app) {
     },
 
     createPage: function(req, res) {
+      console.log('req,', req.body);
       req.body.slug = req.body.slug || req.body.title;
       req.body.slug = slugify(req.body.slug);
       Page.create(req.body)

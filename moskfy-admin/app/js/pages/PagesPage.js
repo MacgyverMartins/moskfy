@@ -41,7 +41,6 @@ class PagesPage extends React.Component {
   }
 
   render() {
-    console.log('state', this.state);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>

@@ -22,6 +22,7 @@ const PageStore = Reflux.createStore({
     //this.hasBeenChecked = false;
 
     this.listenTo(PageActions.listPages, this.listPages);
+    this.listenTo(PageActions.savePage, this.savePage);
   },
 
   listPages() {
@@ -32,42 +33,17 @@ const PageStore = Reflux.createStore({
     });
   },
 
-  setUser(user) {
-    this.user = user;
-    this.trigger(null, this.user);
+  savePage(data) {
+    let self = this;
+    api.custom('pages').post(data).then(function(rs){
+      let page = rs.body().data();
+      self.trigger();
+    });
   },
 
   throwError(err) {
     this.trigger(err);
   },
-
-  checkLoginStatus() {
-    if ( this.user ) {
-      this.setUser(this.user);
-    } else {
-      AuthAPI.checkLoginStatus().then(user => {
-        this.hasBeenChecked = true;
-        this.setUser(user);
-      }).catch(err => {
-        this.hasBeenChecked = true;
-        this.throwError(err);
-      });
-    }
-  },
-
-  loginUser(user) {
-    AuthAPI.login(user).then(user => {
-      this.setUser(user);
-    }).catch(err => {
-      this.throwError(err);
-    });
-  },
-
-  logoutUser() {
-    AuthAPI.logout(this.user).then(() => {
-      this.setUser(null);
-    });
-  }
 
 });
 
