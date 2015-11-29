@@ -9,7 +9,10 @@ module.exports = function(){
     },
     slug: {
       type: String,
-      required: true
+      required: true,
+      index: {
+        unique: true
+      }
     },
     content: {
       type: String,

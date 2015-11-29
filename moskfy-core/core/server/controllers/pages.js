@@ -35,15 +35,14 @@ module.exports = function(app) {
       req.body.slug = req.body.slug || req.body.title;
       req.body.slug = slugify(req.body.slug);
 
-      Page.create(req.body)
-        .then(
-          function(contato) {
-            res.status(201).json(contato);
-          },
-          function(err) {
-            console.error(err);
-            res.status(500).json(erro);
-          });
+      Page.create(req.body, function(err, page) {
+        if (err) {
+          console.error(err);
+          res.status(500).json(err);
+        }
+
+        res.status(201).json(page);
+      });
     },
 
     updatePage: function(req, res) {
