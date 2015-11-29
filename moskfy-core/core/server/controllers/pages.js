@@ -13,22 +13,20 @@ module.exports = function(app) {
           console.error(err);
           res.status(500).json(erro);
         }
-        res.json(pages);
+        res.status(200).json(pages);
       });
     },
 
     getPage: function(req, res) {
       var _id = req.params.id;
 
-      Page.findById(_id).exec()
-        .then(
-          function(page) {
-            res.json(page);
-          },
-          function(err) {
-            console.error(err);
-            res.status(404).json(err);
-          });
+      Page.findById(_id, function(err, page) {
+        if (err) {
+          console.error(err);
+          res.status(404).json(err);
+        }
+        res.status(200).json(page);
+      });
     },
 
     createPage: function(req, res) {
@@ -40,7 +38,6 @@ module.exports = function(app) {
           console.error(err);
           res.status(500).json(err);
         }
-
         res.status(201).json(page);
       });
     },
@@ -48,15 +45,13 @@ module.exports = function(app) {
     updatePage: function(req, res) {
       var _id = req.body._id;
 
-      Page.findByIdAndUpdate(_id, req.body).exec()
-        .then(
-          function(page) {
-            res.json(page);
-          },
-          function(err) {
-            console.error(err);
-            res.status(500).json(err);
-          });
+      Page.findByIdAndUpdate(_id, req.body, function(err, page) {
+        if (err) {
+          console.error(err);
+          res.status(500).json(err);
+        }
+        res.status(200).json(page);
+      });
     },
 
     deletePage: function(req, res) {
