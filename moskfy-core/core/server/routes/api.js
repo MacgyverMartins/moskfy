@@ -10,5 +10,7 @@ module.exports =  function(app) {
 
   app.route('/pages/:id')
     .get(pagesController.getPage)
+    .put(pagesController.updatePage)
+    .delete(pagesController.deletePage);
 
 };

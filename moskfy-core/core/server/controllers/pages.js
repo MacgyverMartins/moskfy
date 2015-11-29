@@ -32,9 +32,9 @@ module.exports = function(app) {
     },
 
     createPage: function(req, res) {
-      console.log('req,', req.body);
       req.body.slug = req.body.slug || req.body.title;
       req.body.slug = slugify(req.body.slug);
+
       Page.create(req.body)
         .then(
           function(contato) {
@@ -45,6 +45,36 @@ module.exports = function(app) {
             res.status(500).json(erro);
           });
     },
+
+    updatePage: function(req, res) {
+      var _id = req.body._id;
+
+      Page.findByIdAndUpdate(_id, req.body).exec()
+        .then(
+          function(page) {
+            res.json(page);
+          },
+          function(err) {
+            console.error(err);
+            res.status(500).json(err);
+          });
+    },
+
+    deletePage: function(req, res) {
+      var _id = req.params.id;
+
+      Page.remove({
+          '_id': _id
+        }).exec()
+        .then(
+          function() {
+            res.status(204).end();
+          },
+          function(err) {
+            return console.error(err);
+            res.status(500).json(err);
+          });
+    }
 
   }
 
