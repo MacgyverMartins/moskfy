@@ -12,6 +12,7 @@ const ListDivider = require('material-ui/lib/lists/list-divider');
 const ListItem = require('material-ui/lib/lists/list-item');
 const Avatar = require('material-ui/lib/avatar');
 const FontIcon = require('material-ui/lib/font-icon');
+const Paper = require('material-ui/lib/paper');
 const Colors = require('material-ui/lib/styles/colors');
 
 const Av = <Avatar icon={<FontIcon className="material-icons">insert_drive_file</FontIcon>} />;
@@ -44,18 +45,32 @@ class PagesList extends React.Component {
   }
 
   render() {
+    let listItems;
+    let array = this.state.pagesList.length;
+
+    for (let i=0; i < array; i++) {
+      listItems = array[i];
+    }
+
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
         <AppHeader parentView="Páginas" currentlyView="Todas as páginas"/>
 
+      <Paper zDepth={1}>
         <List subheader="Today">
-          <ListItem
-            leftAvatar={Av}
-            primaryText="Brendan Lim" />
-          <ListDivider inset={true} />
+          {this.state.pagesList.map(function(page, i){
+            return (
+              <div>
+                <ListItem
+                  leftAvatar={Av}
+                  primaryText={page.title} />
+                <ListDivider inset={true} />
+              </div>
+            );
+          })}
         </List>
-
+      </Paper>
       </div>
       </DocumentTitle>
     );
