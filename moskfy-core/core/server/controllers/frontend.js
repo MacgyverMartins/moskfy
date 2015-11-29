@@ -4,6 +4,7 @@ var fs = require('fs');
 var frontendDir = 'frontend/';
 
 module.exports = function(app) {
+  var Page = app.models.page;
 
   var PageController = {
 
@@ -15,18 +16,30 @@ module.exports = function(app) {
         },
         page: {
           title: 'Start Bootstrap',
-          content: '',
-          sections: [{
-            title: 'Your Favorite Source of Free Bootstrap Themes',
-            content: 'Start Bootstrap can help you build better websites using the Bootstrap CSS framework! Just download your template and start going, no strings attached!'
-          }, {
-            title: "We've got what you need!",
-            content: 'Start Bootstrap has everything you need to get your new website up and running in no time! All of the templates and themes on Start Bootstrap are open source, free to download, and easy to use. No strings attached!'
-          }, ]
+          content: 'algum texto aqui',
         }
       }
       res.render('index', context);
     },
+
+    getPage: function(req, res) {
+      Page.findOne({'slug': req.params.slug}).exec()
+        .then(
+          function(page) {
+            var context = {
+              page: {
+                title: page.title,
+                content: page.content,
+                permaLink: page.slug
+              }
+            }
+            res.render('index', context);
+          },
+          function(err) {
+            console.error(err);
+            res.status(404).json(err);
+          });
+    }
 
   };
 
