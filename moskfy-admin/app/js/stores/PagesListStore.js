@@ -22,6 +22,7 @@ const PagesListStore = Reflux.createStore({
     this.data = [];
     this.pages = [];
     this.listenTo(PageActions.listPages, this.listPages);
+    this.listenTo(PageActions.clearData, this.clearData);
   },
 
   listPages() {
@@ -39,6 +40,11 @@ const PagesListStore = Reflux.createStore({
       self.pages = self.pages.concat(pages);
       self.trigger(self.pages);
     });
+  },
+
+  clearData() {
+    this.data = [];
+    this.pages = [];
   },
 
   throwError(err) {

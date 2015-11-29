@@ -37,6 +37,7 @@ class PagesList extends React.Component {
   }
 
   componentWillUnmount() {
+    PageActions.clearData();
     this.unsubscribe();
   }
 
@@ -45,27 +46,22 @@ class PagesList extends React.Component {
   }
 
   render() {
-    let listItems;
-    let array = this.state.pagesList.length;
-
-    for (let i=0; i < array; i++) {
-      listItems = array[i];
-    }
-
+    let list = this.state.pagesList.length;
+    let mac = true;
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
-        <AppHeader parentView="Páginas" currentlyView="Todas as páginas"/>
+      <AppHeader parentView="Páginas" currentlyView="Todas as páginas"/>
 
       <Paper zDepth={1}>
-        <List subheader="Today">
+        <List subheader="Páginas">
           {this.state.pagesList.map(function(page, i){
             return (
               <div>
                 <ListItem
                   leftAvatar={Av}
                   primaryText={page.title} />
-                <ListDivider inset={true} />
+                  { i === list-1 ? '' : <ListDivider inset={true} /> }
               </div>
             );
           })}
