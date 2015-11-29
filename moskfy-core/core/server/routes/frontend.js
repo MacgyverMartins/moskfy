@@ -7,4 +7,7 @@ module.exports = function(app) {
   app.route('/')
     .get(frontend.index);
 
+  app.route('/:slug')
+    .get(frontend.getPage);
+
 };

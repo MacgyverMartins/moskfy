@@ -5,7 +5,7 @@ var slugify = require("underscore.string/slugify");
 module.exports = function(app) {
   var Page = app.models.page;
 
-  var pagesController = {
+  var PagesController = {
 
     getListPages: function(req, res) {
       Page.find({}, function(err, pages) {
@@ -78,5 +78,5 @@ module.exports = function(app) {
 
   }
 
-  return pagesController;
+  return PagesController;
 };
