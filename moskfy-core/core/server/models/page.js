@@ -18,6 +18,10 @@ module.exports = function(){
       type: String,
       required: false,
     },
+    //templateActive: {
+      //type: String,
+      //required: true
+    //}
   });
 
   return mongoose.model('Page', schema);

@@ -6,6 +6,7 @@ import DocumentTitle from 'react-document-title';
 
 const Paper = require('material-ui/lib/paper');
 const TextField = require('material-ui/lib/text-field');
+const DropDownMenu = require('material-ui/lib/drop-down-menu');
 
 class PagePost extends React.Component {
   constructor(props) {
@@ -29,6 +30,11 @@ class PagePost extends React.Component {
   }
 
   render() {
+
+    //let menuTemplates = this.props.current.map(function(template, index) {
+      //return {payload: index+1, text: template};
+    //})
+
     let main_style = {
       margin: '56px 0 0 256px',
       padding: '20px'

@@ -36,6 +36,7 @@ class PagesPage extends React.Component {
   }
 
   onChange(data) {
+    this.refs.snack.show();
     this.setState({ currentPage: data });
   }
 
@@ -54,6 +55,9 @@ class PagesPage extends React.Component {
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
       </div>
+
+      <Snackbar ref="snack" autoHideDuration={2000} message="Página salva com sucesso" />
+
       </div>
       </DocumentTitle>
     );

@@ -1,9 +1,26 @@
 'use strict';
 
 var slugify = require("underscore.string/slugify");
+var path = require('path');
+var fs = require("fs");
+var _ = require('lodash');
+
+var templates = [];
 
 module.exports = function(app) {
   var Page = app.models.page;
+
+  fs.readdir(app.get('views'), function(err, files) {
+    if (err) { console.error(err); }
+
+    templates = _.filter(files, function(file) {
+      return path.extname(file) == '.hbs';
+    });
+
+    templates = templates.map(function(file) {
+      return file.replace(/\.hbs/, '');
+    });
+  });
 
   var PagesController = {
 
@@ -20,11 +37,12 @@ module.exports = function(app) {
     getPage: function(req, res) {
       var _id = req.params.id;
 
-      Page.findById(_id, function(err, page) {
+      Page.findById(_id).lean().exec(function(err, page) {
         if (err) {
           console.error(err);
           res.status(404).json(err);
         }
+        //page['templates'] = templates;
         res.status(200).json(page);
       });
     },
