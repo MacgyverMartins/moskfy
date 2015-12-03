@@ -1,16 +1,16 @@
 'use strict';
 
-import React                       from 'react';
+import React from 'react';
 import {Router, Route, IndexRoute, RoutingContext} from 'react-router';
 import CreateBrowserHistory        from 'history/lib/createBrowserHistory';
 
-import App                         from './App';
+import App from './App';
 
-import HomePage                    from './pages/HomePage';
-import PagesPage                    from './pages/PagesPage';
-import PagesList                    from './pages/PagesList';
-import SearchPage                  from './pages/SearchPage';
-import NotFoundPage                from './pages/NotFoundPage';
+import HomePage from './pages/HomePage';
+import PagesPage from './pages/PagesPage';
+import PagesList from './pages/PagesList';
+import SearchPage from './pages/SearchPage';
+import NotFoundPage from './pages/NotFoundPage';
 
 export default (
   <Router history={CreateBrowserHistory()}>
@@ -19,8 +19,9 @@ export default (
       <IndexRoute component={HomePage} />
       <Route path="/" component={HomePage} />
       <Route path="pages">
-        <Route path="all-pages" component={PagesList} />
+        <Route path="all" component={PagesList} />
         <Route path="page-new" component={PagesPage} />
+        <Route path=":id" component={PagesPage} macgyver="testando" />
       </Route>
       <Route path="search" component={SearchPage} />
 

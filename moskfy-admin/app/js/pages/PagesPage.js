@@ -1,6 +1,6 @@
 'use strict';
 
-import React         from 'react';
+import React from 'react';
 import DocumentTitle from 'react-document-title';
 import AppHeader from '../components/app-header.js';
 import PagePost from '../components/page-post.js';
@@ -11,20 +11,27 @@ import PageActions from '../actions/PageActions';
 const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
 
-//const propTypes = {
-  //currentUser: React.PropTypes.object
-//};
+const propTypes = {
+  currentId: React.PropTypes.string
+};
 
 class PagesPage extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      currentPage: {}
+      page: {}
     };
 
     this.handleSave = this.handleSave.bind(this);
     this.onChange = this.onChange.bind(this);
+  }
+
+  componentWillMount() {
+    var id = this.props.params.id;
+    if (id) {
+      PageActions.getPage(id);
+    }
   }
 
   componentDidMount() {
@@ -35,9 +42,21 @@ class PagesPage extends React.Component {
     this.unsubscribe();
   }
 
-  onChange(data) {
-    this.refs.snack.show();
-    this.setState({ currentPage: data });
+  componentWillUpdate(nextProps, nextState) {
+    if (!this.props.params.id) {
+      this.setState({page: {}});
+    }
+  }
+
+  onChange(event) {
+    switch (event.payload) {
+      case 'onGetPage':
+        this.setState({ page: event.data });
+        break;
+      case 'onPageSave':
+        this.refs.snack.show();
+        break;
+    }
   }
 
   handleSave(event) {
@@ -46,11 +65,12 @@ class PagesPage extends React.Component {
   }
 
   render() {
+    console.log('state', this.state);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
         <AppHeader parentView="Páginas" currentlyView="Nova página"/>
-        <PagePost ref="pagePost" />
+        <PagePost ref="pagePost" post={this.state.page}/>
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
@@ -65,6 +85,12 @@ class PagesPage extends React.Component {
 
 }
 
-//PagesPage.propTypes = propTypes;
+PagesPage.propTypes = propTypes;
 
-export default PagesPage;
+PagesPage.contextTypes = {
+  location: React.PropTypes.object,
+  history: React.PropTypes.object
+};
+
+export
+default PagesPage;

@@ -30,11 +30,6 @@ class PagePost extends React.Component {
   }
 
   render() {
-
-    //let menuTemplates = this.props.current.map(function(template, index) {
-      //return {payload: index+1, text: template};
-    //})
-
     let main_style = {
       margin: '56px 0 0 256px',
       padding: '20px'
@@ -48,12 +43,14 @@ class PagePost extends React.Component {
             fullWidth={true}
             hintText="Nome da página"
             floatingLabelText="Nome da página"
+            value={this.props.post.title}
             onChange={this.changedTitle} />
 
           <TextField
             style={{marginTop:'50px'}}
             fullWidth={ true }
             hintText="Insira aqui o conteúdo da página"
+            value={this.props.post.content}
             multiLine={true}
             onChange={this.changedContent} />
 
