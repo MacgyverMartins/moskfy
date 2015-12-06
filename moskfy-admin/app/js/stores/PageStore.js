@@ -21,6 +21,7 @@ const PageStore = Reflux.createStore({
   init() {
     this.listenTo(PageActions.savePage, this.savePage);
     this.listenTo(PageActions.getPage, this.getPage);
+    this.listenTo(PageActions.getNewPage, this.getNewPage);
   },
 
   savePage(data) {
@@ -31,12 +32,18 @@ const PageStore = Reflux.createStore({
     });
   },
 
-  getPage(id) {
+  getPage(data) {
+    let id = data.params.id;
     let self = this;
     api.one(endpoint, id).get().then(function(rs) {
       let page = rs.body().data();
       self.trigger({payload:'onGetPage', data: page});
     });
+  },
+
+  getNewPage() {
+    let page = {}
+    this.trigger({payload:'onGetNewPage', data: page});
   },
 
   throwError(err) {

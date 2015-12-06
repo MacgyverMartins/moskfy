@@ -51,7 +51,6 @@ class PagePost extends React.Component {
             fullWidth={ true }
             hintText="Insira aqui o conteúdo da página"
             value={this.props.post.content}
-            multiLine={true}
             onChange={this.changedContent} />
 
         </div>

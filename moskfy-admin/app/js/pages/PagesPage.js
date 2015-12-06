@@ -27,13 +27,6 @@ class PagesPage extends React.Component {
     this.onChange = this.onChange.bind(this);
   }
 
-  componentWillMount() {
-    var id = this.props.params.id;
-    if (id) {
-      PageActions.getPage(id);
-    }
-  }
-
   componentDidMount() {
     this.unsubscribe = PageStore.listen(this.onChange);
   }
@@ -42,15 +35,12 @@ class PagesPage extends React.Component {
     this.unsubscribe();
   }
 
-  componentWillUpdate(nextProps, nextState) {
-    if (!this.props.params.id) {
-      this.setState({page: {}});
-    }
-  }
-
   onChange(event) {
     switch (event.payload) {
       case 'onGetPage':
+        this.setState({ page: event.data });
+        break;
+      case 'onGetNewPage':
         this.setState({ page: event.data });
         break;
       case 'onPageSave':
@@ -65,7 +55,6 @@ class PagesPage extends React.Component {
   }
 
   render() {
-    console.log('state', this.state);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>

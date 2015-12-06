@@ -23,22 +23,15 @@ module.exports = function(app) {
     },
 
     getPage: function(req, res) {
-      Page.findOne({'slug': req.params.slug}).exec()
-        .then(
-          function(page) {
-            var context = {
-              page: {
-                title: page.title,
-                content: page.content,
-                permaLink: page.slug
-              }
-            }
-            res.render('index', context);
-          },
-          function(err) {
-            console.error(err);
-            res.status(404).json(err);
-          });
+      Page.findOne({'slug': req.params.slug}, function(err, page) {
+        if (err) {
+          console.error(err);
+          return res.status(404).json(err);
+        } else if (!page || page === null) {
+          return res.status(404).json(page);
+        }
+        res.render('index', page);
+      });
     }
 
   };
