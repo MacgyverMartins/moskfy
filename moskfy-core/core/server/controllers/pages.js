@@ -11,7 +11,9 @@ module.exports = function(app) {
   var Page = app.models.page;
 
   fs.readdir(app.get('views'), function(err, files) {
-    if (err) { console.error(err); }
+    if (err) {
+      console.error(err);
+    }
 
     templates = _.filter(files, function(file) {
       return path.extname(file) == '.hbs';
@@ -37,14 +39,19 @@ module.exports = function(app) {
     getPage: function(req, res) {
       var _id = req.params.id;
 
-      Page.findById(_id).lean().exec(function(err, page) {
-        if (err) {
-          console.error(err);
-          res.status(404).json(err);
-        }
-        //page['templates'] = templates;
-        res.status(200).json(page);
-      });
+      Page.findById(_id).lean().exec()
+        .then(
+          function(page) {
+            if (!page) {
+              return res.status(404).json({});
+            }
+            //page['templates'] = templates;
+            return res.status(200).json(page);
+          },
+          function(err) {
+            console.error(err);
+            res.status(500).json(err);
+          });
     },
 
     createPage: function(req, res) {

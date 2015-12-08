@@ -50,16 +50,18 @@ class PagesPage extends React.Component {
   }
 
   handleSave(event) {
-    let page = this.refs.pagePost.state;
-    PageActions.savePage(page);
+    let post = this.refs.pagePost.state;
+    this.setState({page: {title: 'macgyver'}})
+    //PageActions.savePage(this.state.page);
   }
 
   render() {
+    console.log('pageStatus', this.state.page);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
         <AppHeader parentView="Páginas" currentlyView="Nova página"/>
-        <PagePost ref="pagePost" post={this.state.page}/>
+        <PagePost ref="pagePost" post={this.state.page} />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
