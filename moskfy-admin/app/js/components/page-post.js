@@ -8,6 +8,10 @@ const Paper = require('material-ui/lib/paper');
 const TextField = require('material-ui/lib/text-field');
 const DropDownMenu = require('material-ui/lib/drop-down-menu');
 
+const propTypes = {
+  onChangeTitle: React.PropTypes.func
+};
+
 class PagePost extends React.Component {
   constructor(props) {
     super(props);
@@ -21,10 +25,20 @@ class PagePost extends React.Component {
     this.changedContent = this.changedContent.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.title && nextProps.content) {
+      this.setState({
+        title: nextProps.title,
+        content: nextProps.content
+      });
+    } else {
+      this.setState({title: '', content: ''});
+    }
+  }
+
   changedTitle(event) {
-    //this.titleTmp = this.state.title;
     this.setState({ title: event.target.value });
-    //if (this.props.onChangeTitle) this.props.onChangeTitle(event);
+    if (this.props.onChangeTitle) this.props.onChangeTitle(event);
   }
 
   changedContent(event) {
@@ -38,9 +52,6 @@ class PagePost extends React.Component {
       padding: '20px'
     };
 
-    this.titleTmp = this.props.post.title;
-    console.log('this.titleTmp', this.titleTmp);
-
     return (
       <Paper zDepth={1}>
         <div style={{padding: '25px'}}>
@@ -49,14 +60,14 @@ class PagePost extends React.Component {
             fullWidth={true}
             hintText="Nome da página"
             floatingLabelText="Nome da página"
-            defaultValue={this.state.title}
+            value={this.state.title}
             onChange={this.changedTitle} />
 
           <TextField
             style={{marginTop:'50px'}}
             fullWidth={ true }
             hintText="Insira aqui o conteúdo da página"
-            defaultValue={this.state.content}
+            value={this.state.content}
             onChange={this.changedContent} />
 
         </div>
@@ -65,6 +76,6 @@ class PagePost extends React.Component {
   }
 }
 
-//PagePost.propTypes = propTypes;
+PagePost.propTypes = propTypes;
 
 export default PagePost;

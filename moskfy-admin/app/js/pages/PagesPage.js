@@ -11,20 +11,14 @@ import PageActions from '../actions/PageActions';
 const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
 
-const propTypes = {
-  currentId: React.PropTypes.string
-};
-
 class PagesPage extends React.Component {
-
   constructor(props) {
     super(props);
-    this.state = {
-      page: {}
-    };
+    this.state = {};
 
     this.handleSave = this.handleSave.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.teste = this.teste.bind(this);
   }
 
   componentDidMount() {
@@ -38,10 +32,12 @@ class PagesPage extends React.Component {
   onChange(event) {
     switch (event.payload) {
       case 'onGetPage':
-        this.setState({ page: event.data });
+        this.setState(event.data);
         break;
       case 'onGetNewPage':
-        this.setState({ page: event.data });
+        //TODO
+        this.state = {};
+        this.setState({});
         break;
       case 'onPageSave':
         this.refs.snack.show();
@@ -50,18 +46,23 @@ class PagesPage extends React.Component {
   }
 
   handleSave(event) {
+    //TODO
     let post = this.refs.pagePost.state;
-    this.setState({page: {title: 'macgyver'}})
-    //PageActions.savePage(this.state.page);
+    this.state.title = 'sobre a peste';
+    PageActions.savePage(this.state);
+  }
+
+  teste(event) {
+    this.setState({title: event.target.value});
   }
 
   render() {
-    console.log('pageStatus', this.state.page);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
         <AppHeader parentView="Páginas" currentlyView="Nova página"/>
-        <PagePost ref="pagePost" post={this.state.page} />
+
+        <PagePost ref="pagePost" title={this.state.title} content={this.state.content} onChangeTitle={this.teste}/>
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
@@ -73,10 +74,7 @@ class PagesPage extends React.Component {
       </DocumentTitle>
     );
   }
-
 }
-
-PagesPage.propTypes = propTypes;
 
 PagesPage.contextTypes = {
   location: React.PropTypes.object,

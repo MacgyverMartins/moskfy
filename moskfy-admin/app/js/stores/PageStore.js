@@ -32,9 +32,10 @@ const PageStore = Reflux.createStore({
     savePage(data) {
       let self = this;
       if (data._id) {
-        console.log('oi');
+        let mac = this.page.data();
+        mac = data;
+        this.page.save();
       } else {
-        debugger;
         api.custom(endpoint).post(data).then(function(rs) {
           let page = rs.body().data();
           self.trigger({
