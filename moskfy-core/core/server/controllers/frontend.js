@@ -30,7 +30,7 @@ module.exports = function(app) {
         } else if (!page || page === null) {
           return res.status(404).json(page);
         }
-        res.render('index', page);
+        res.render('index', {page: page});
       });
     }
 

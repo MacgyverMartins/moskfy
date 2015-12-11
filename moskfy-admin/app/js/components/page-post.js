@@ -38,7 +38,7 @@ class PagePost extends React.Component {
 
   changedTitle(event) {
     this.setState({ title: event.target.value });
-    if (this.props.onChangeTitle) this.props.onChangeTitle(event);
+    //if (this.props.onChangeTitle) this.props.onChangeTitle(event);
   }
 
   changedContent(event) {
