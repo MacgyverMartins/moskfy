@@ -14,7 +14,9 @@ const Snackbar = require('material-ui/lib/snackbar');
 class PagesPage extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      page: {}
+    };
 
     this.handleSave = this.handleSave.bind(this);
     this.onChange = this.onChange.bind(this);
@@ -32,12 +34,10 @@ class PagesPage extends React.Component {
   onChange(event) {
     switch (event.payload) {
       case 'onGetPage':
-        this.setState(event.data);
+        this.setState({page: event.data});
         break;
       case 'onGetNewPage':
-        //TODO
-        this.state = {};
-        this.setState({});
+        this.setState({page: event.data});
         break;
       case 'onPageSave':
         this.refs.snack.show();
@@ -62,7 +62,7 @@ class PagesPage extends React.Component {
       <div>
         <AppHeader parentView="Páginas" currentlyView="Nova página"/>
 
-        <PagePost ref="pagePost" title={this.state.title} content={this.state.content} onChangeTitle={this.teste}/>
+        <PagePost ref="pagePost" title={this.state.page.title} content={this.state.page.content} onChangeTitle={this.teste}/>
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
