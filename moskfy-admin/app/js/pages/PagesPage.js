@@ -42,7 +42,7 @@ class PagesPage extends React.Component {
         this.refs.snack.show();
         break;
       case 'onDeletePage':
-        var url = `/pages/all`;
+        var url = '/pages/all';
         this.context.history.pushState(null, url);
         break;
     }
@@ -62,16 +62,15 @@ class PagesPage extends React.Component {
   }
 
   render() {
-    console.log('statepage', this.state);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
-        <AppHeader parentView="Páginas" currentlyView="Nova página"/>
+        <AppHeader parentView="Páginas" currentlyView={this.state.title} />
 
         <PagePost ref="pagePost" title={this.state.title} content={this.state.content}/>
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
-        <RaisedButton label="Primary" primary={true} onTouchTap={this.handleDelete}/>
+        <RaisedButton label="Excluir" primary={true} onTouchTap={this.handleDelete}/>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
       </div>
 

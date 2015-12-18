@@ -75,7 +75,7 @@ const PageStore = Reflux.createStore({
     deletePage(id) {
       let self = this;
       api.one(endpoint, id).delete().then(function(rs) {
-        self.trigger('onDeletePage');
+        self.trigger({payload: 'onDeletePage'});
       });
     },
 
