@@ -20,6 +20,7 @@ class PagesPage extends React.Component {
     };
 
     this.handleSave = this.handleSave.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -40,17 +41,28 @@ class PagesPage extends React.Component {
         this.setState(event.data);
         this.refs.snack.show();
         break;
+      case 'onDeletePage':
+        var url = `/pages/all`;
+        this.context.history.pushState(null, url);
+        break;
     }
   }
 
+  handleDelete(event) {
+    PageActions.deletePage(this.state._id);
+  }
+
   handleSave(event) {
-    var page = {_id: this.state._id};
+    var page = {
+      _id: this.state._id
+    };
     var post = this.refs.pagePost.state;
     _.assign(page, post);
     PageActions.savePage(page);
   }
 
   render() {
+    console.log('statepage', this.state);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
@@ -59,6 +71,7 @@ class PagesPage extends React.Component {
         <PagePost ref="pagePost" title={this.state.title} content={this.state.content}/>
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
+        <RaisedButton label="Primary" primary={true} onTouchTap={this.handleDelete}/>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
       </div>
 

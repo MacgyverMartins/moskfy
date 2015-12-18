@@ -27,6 +27,7 @@ const PageStore = Reflux.createStore({
       this.listenTo(PageActions.savePage, this.savePage);
       this.listenTo(PageActions.getPage, this.getPage);
       this.listenTo(PageActions.getNewPage, this.getNewPage);
+      this.listenTo(PageActions.deletePage, this.deletePage);
     },
 
     savePage(data) {
@@ -68,6 +69,13 @@ const PageStore = Reflux.createStore({
       this.trigger({
         payload: 'onGetNewPage',
         data: this.page
+      });
+    },
+
+    deletePage(id) {
+      let self = this;
+      api.one(endpoint, id).delete().then(function(rs) {
+        self.trigger('onDeletePage');
       });
     },
 
