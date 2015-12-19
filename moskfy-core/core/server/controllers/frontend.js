@@ -26,11 +26,11 @@ module.exports = function(app) {
       Page.findOne({'slug': req.params.slug}, function(err, page) {
         if (err) {
           console.error(err);
-          return res.status(404).json(err);
+          return res.status(500).json(err);
         } else if (!page || page === null) {
           return res.status(404).json(page);
         }
-        res.render('index', {page: page});
+        res.render('empresa.hbs', {page: page});
       });
     }
 
