@@ -28,6 +28,7 @@ const PageStore = Reflux.createStore({
       this.listenTo(PageActions.getPage, this.getPage);
       this.listenTo(PageActions.getNewPage, this.getNewPage);
       this.listenTo(PageActions.deletePage, this.deletePage);
+      this.listenTo(PageActions.getTemplates, this.getTemplates);
     },
 
     savePage(data) {
@@ -76,6 +77,23 @@ const PageStore = Reflux.createStore({
       let self = this;
       api.one(endpoint, id).delete().then(function(rs) {
         self.trigger({payload: 'onDeletePage'});
+      });
+    },
+
+    getTemplates() {
+      let self = this;
+      api.all('newPage').getAll().then(function(rs) {
+        let templates = rs.body();
+
+        let array = templates.length;
+        for (let i=0; i < array; i++) {
+          templates[i] = templates[i].data();
+        }
+
+        self.trigger({
+          payload: 'onGetTemplates',
+          data: templates
+        })
       });
     },
 

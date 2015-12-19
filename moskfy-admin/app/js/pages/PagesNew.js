@@ -17,7 +17,8 @@ class PagesNew extends React.Component {
     super(props);
     this.state = {
       title: '',
-      content: ''
+      content: '',
+      templates: [{name: 'default'}]
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -40,6 +41,9 @@ class PagesNew extends React.Component {
     switch (event.payload) {
       case 'onGetNewPage':
         break;
+      case 'onGetTemplates':
+        this.setState({templates: event.data});
+        break
       case 'onPageSave':
         this.refs.snack.show();
         setTimeout(function() {
@@ -61,7 +65,7 @@ class PagesNew extends React.Component {
       <div>
         <AppHeader parentView="Páginas" currentlyView="Nova página"/>
 
-        <PagePost ref="pagePost" title={this.state.title} content={this.state.content} />
+        <PagePost ref="pagePost" title={this.state.title} content={this.state.content} templates={this.state.templates} />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />

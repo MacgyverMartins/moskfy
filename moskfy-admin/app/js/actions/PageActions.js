@@ -9,6 +9,7 @@ const PageActions = Reflux.createActions([
   'getNewPage',
   'savePage',
   'deletePage',
+  'getTemplates',
   'clearData'
 
 ]);
