@@ -22,11 +22,12 @@ class PagePost extends React.Component {
     this.state = {
       title: '',
       content: '',
-      templates: [{name: 'default'}]
+      templates: []
     };
 
     this.changedTitle = this.changedTitle.bind(this);
     this.changedContent = this.changedContent.bind(this);
+    this.changeTemplate = this.changeTemplate.bind(this);
     this.handle = this.handle.bind(this);
   }
 
@@ -34,25 +35,27 @@ class PagePost extends React.Component {
     if (nextProps.title && nextProps.content) {
       this.setState({
         title: nextProps.title,
-        content: nextProps.content
+        content: nextProps.content,
       });
     } else if(nextProps.templates) {
       this.setState({
         templates: nextProps.templates
       });
     } else {
-      this.setState({title: '', content: '', templates: [{name: 'default'}]});
+      this.setState({title: '', content: '', templates: []});
     }
   }
 
   changedTitle(event) {
     this.setState({ title: event.target.value });
-    //if (this.props.onChangeTitle) this.props.onChangeTitle(event);
   }
 
   changedContent(event) {
     this.setState({ content: event.target.value });
-    //if (this.props.onChangeContent) this.props.onChangeContent(event);
+  }
+
+  changeTemplate(event, selectedIndex, menuItem) {
+    this.setState({ template: menuItem.text });
   }
 
   handle(event) {
@@ -82,6 +85,8 @@ class PagePost extends React.Component {
       return {text: item.name};
     });
 
+    let indexTplActive = _.indexOf(menuItems, _.findWhere(menuItems, { 'text': this.state.template}));
+
     return (
       <Paper zDepth={1}>
         <div style={{padding: '25px'}}>
@@ -100,13 +105,15 @@ class PagePost extends React.Component {
             value={this.state.content}
             onChange={this.changedContent} />
 
-            <DropDownMenu
-              ref='dropdownTemplates'
-              onTouchTap={this.handle}
-              autoWidth={false}
-              style={{ width: '400px' }}
-              menuItemStyle={menuItemStyle}
-              menuItems={menuItems} />
+          <DropDownMenu
+            ref='dropdownTemplates'
+            onTouchTap={this.handle}
+            autoWidth={false}
+            style={{ width: '400px' }}
+            menuItemStyle={menuItemStyle}
+            onChange={this.changeTemplate}
+            selectedIndex={indexTplActive}
+            menuItems={menuItems} />
 
         </div>
       </Paper>

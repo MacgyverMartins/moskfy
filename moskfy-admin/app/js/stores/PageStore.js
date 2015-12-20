@@ -82,7 +82,7 @@ const PageStore = Reflux.createStore({
 
     getTemplates() {
       let self = this;
-      api.all('newPage').getAll().then(function(rs) {
+      api.all('templates').getAll().then(function(rs) {
         let templates = rs.body();
 
         let array = templates.length;

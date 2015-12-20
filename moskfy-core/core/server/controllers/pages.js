@@ -17,6 +17,7 @@ module.exports = function(app) {
 
       var pagesFiles = _.filter(files, justHbs);
       async.map(pagesFiles, getTemplateName, function(err, results){
+        results.push({name: 'Default', file: 'index.hbs'});
         if (callback && typeof(callback) === 'function') {
           return callback(_.remove(results, null));
         }
@@ -76,7 +77,7 @@ module.exports = function(app) {
           });
     },
 
-    newPage: function(req, res) {
+    getTemplatesList: function(req, res) {
       getListTemplates(function(templates) {
         return res.json(templates);
       });
@@ -85,6 +86,10 @@ module.exports = function(app) {
     createPage: function(req, res) {
       req.body.slug = req.body.slug || req.body.title;
       req.body.slug = slugify(req.body.slug);
+
+      if (!req.body.template) {
+        req.body.template = 'Default';
+      }
 
       Page.create(req.body, function(err, page) {
         if (err) {

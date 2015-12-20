@@ -84,5 +84,4 @@ PagesNew.contextTypes = {
   history: React.PropTypes.object
 };
 
-export
-default PagesNew;
+export default PagesNew;
