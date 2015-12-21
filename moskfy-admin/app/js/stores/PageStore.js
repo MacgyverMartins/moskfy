@@ -55,6 +55,7 @@ const PageStore = Reflux.createStore({
     getPage(data) {
       let id = data.params.id;
       let self = this;
+      PageActions.getTemplates();
       api.one(endpoint, id).get().then(function(rs) {
         self.page = rs.body();
         let page = self.page.data();

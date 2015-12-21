@@ -32,17 +32,25 @@ class PagePost extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.title && nextProps.content) {
+    if (nextProps.title) {
       this.setState({
-        title: nextProps.title,
-        content: nextProps.content,
+        title: nextProps.title
       });
-    } else if(nextProps.templates) {
+    }
+    if(nextProps.content) {
+      this.setState({
+        content: nextProps.content
+      });
+    }
+    if(nextProps.templates) {
       this.setState({
         templates: nextProps.templates
       });
-    } else {
-      this.setState({title: '', content: '', templates: []});
+    }
+    if(nextProps.template) {
+      this.setState({
+        template: nextProps.template
+      });
     }
   }
 
@@ -85,7 +93,10 @@ class PagePost extends React.Component {
       return {text: item.name};
     });
 
+    console.log('post-page', this.state);
+
     let indexTplActive = _.indexOf(menuItems, _.findWhere(menuItems, { 'text': this.state.template}));
+
 
     return (
       <Paper zDepth={1}>

@@ -16,7 +16,9 @@ class PagesPage extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      page: {}
+      title: '',
+      content: '',
+      templates: [{name: 'default'}]
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -45,6 +47,9 @@ class PagesPage extends React.Component {
         var url = '/pages/all';
         this.context.history.pushState(null, url);
         break;
+      case 'onGetTemplates':
+        this.setState({templates: event.data});
+        break
     }
   }
 
@@ -62,12 +67,17 @@ class PagesPage extends React.Component {
   }
 
   render() {
+    console.log('pagepages', this.state.templates);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
         <AppHeader parentView="Páginas" currentlyView={this.state.title} />
 
-        <PagePost ref="pagePost" title={this.state.title} content={this.state.content}/>
+        <PagePost ref="pagePost"
+        title={this.state.title}
+        content={this.state.content}
+        template={this.state.template}
+        templates={this.state.templates}/>
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Excluir" primary={true} onTouchTap={this.handleDelete}/>

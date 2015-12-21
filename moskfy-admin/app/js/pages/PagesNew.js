@@ -18,7 +18,7 @@ class PagesNew extends React.Component {
     this.state = {
       title: '',
       content: '',
-      templates: [{name: 'default'}]
+      templates: [{name: 'Default'}]
     };
 
     this.handleSave = this.handleSave.bind(this);

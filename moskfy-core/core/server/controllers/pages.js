@@ -17,6 +17,10 @@ module.exports = function(app) {
 
       var pagesFiles = _.filter(files, justHbs);
       async.map(pagesFiles, getTemplateName, function(err, results){
+        if (err) {
+          res.status(500);
+          return console.error(err);
+        }
         results.push({name: 'Default', file: 'index.hbs'});
         if (callback && typeof(callback) === 'function') {
           return callback(_.remove(results, null));
