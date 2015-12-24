@@ -9,12 +9,19 @@ module.exports = function(){
     },
     slug: {
       type: String,
-      required: true
+      required: true,
+      index: {
+        unique: true
+      }
     },
     content: {
       type: String,
       required: false,
     },
+    template: {
+      type: String,
+      required: true
+    }
   });
 
   return mongoose.model('Page', schema);

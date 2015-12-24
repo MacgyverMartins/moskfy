@@ -1,10 +1,15 @@
 'use strict';
+//TODO
+var path = require('path');
 var fs = require('fs');
+var async = require('async');
+var _ = require('lodash');
 
 var frontendDir = 'frontend/';
 
 module.exports = function(app) {
   var Page = app.models.page;
+  var Utils = app.utils;
 
   var PageController = {
 
@@ -23,22 +28,30 @@ module.exports = function(app) {
     },
 
     getPage: function(req, res) {
-      Page.findOne({'slug': req.params.slug}).exec()
-        .then(
-          function(page) {
-            var context = {
-              page: {
-                title: page.title,
-                content: page.content,
-                permaLink: page.slug
-              }
+      Page.findOne({'slug': req.params.slug}, function(err, page) {
+        if (err) {
+          console.error(err);
+          return res.status(500).json(err);
+        } else if (!page || page === null) {
+          return fs.stat(path.join(app.get('views'), '404.hbs'), function(err, stats) {
+            if (err && err.code == 'ENOENT') {
+              return res.status(404).send('<div class="notfound-page">'
+                + '<h1>404</h1>'
+                + '<p>Page Not Found</p>'
+                + '</div>');
             }
-            res.render('index', context);
-          },
-          function(err) {
-            console.error(err);
-            res.status(404).json(err);
+            console.log('stats', stats);
+            return res.status(404).render('404.hbs');
           });
+        }
+        Utils.templates.getListTemplates(function(templates) {
+          var template = _.findWhere(templates, {'name': page.template});
+          if (template) {
+            return res.render(template.file, {page: page});
+          }
+          return res.render('index.hbs', {page: page});
+        });
+      });
     }
 
   };

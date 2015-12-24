@@ -12,7 +12,7 @@ const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
 const _ = require('lodash');
 
-class PagesPage extends React.Component {
+class PagesNew extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -23,7 +23,6 @@ class PagesPage extends React.Component {
     };
 
     this.handleSave = this.handleSave.bind(this);
-    this.handleDelete = this.handleDelete.bind(this);
     this.onChange = this.onChange.bind(this);
     this.onChangeTitle = this.onChangeTitle.bind(this);
     this.onChangeContent = this.onChangeContent.bind(this);
@@ -38,25 +37,6 @@ class PagesPage extends React.Component {
     this.unsubscribe();
   }
 
-  onChange(event) {
-    switch (event.payload) {
-      case 'onGetPage':
-        this.setState(event.data);
-        break;
-      case 'onPageSave':
-        this.setState(event.data);
-        this.refs.snack.show();
-        break;
-      case 'onDeletePage':
-        var url = '/pages/all';
-        this.context.history.pushState(null, url);
-        break;
-      case 'onGetTemplates':
-        this.setState({templates: event.data});
-        break
-    }
-  }
-
   onChangeTemplate(value) {
     this.setState({template: value});
   }
@@ -69,20 +49,33 @@ class PagesPage extends React.Component {
     this.setState({content: value});
   }
 
-  handleDelete(event) {
-    PageActions.deletePage(this.state._id);
+  onChange(event) {
+    switch (event.payload) {
+      case 'onGetNewPage':
+        break;
+      case 'onGetTemplates':
+        this.setState({templates: event.data});
+        break
+      case 'onPageSave':
+        this.refs.snack.show();
+        setTimeout(function() {
+          var url = `/pages/${event.data._id}`;
+          this.context.history.pushState(null, url);
+        }.bind(this), 1001);
+        break;
+    }
   }
 
   handleSave(event) {
-    let page = this.state;
+    var page = this.state;
     PageActions.savePage(page);
   }
 
   render() {
     return (
-      <DocumentTitle title="Moskfy | Páginas">
+      <DocumentTitle title="Moskfy | Nova páginas">
       <div>
-        <AppHeader parentView="Páginas" currentlyView={this.state.title} />
+        <AppHeader parentView="Páginas" currentlyView="Nova página"/>
 
         <PagePost ref="pagePost"
         title={this.state.title}
@@ -94,11 +87,10 @@ class PagesPage extends React.Component {
         onChangeTemplate={this.onChangeTemplate} />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
-        <RaisedButton label="Excluir" primary={true} onTouchTap={this.handleDelete}/>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
       </div>
 
-      <Snackbar ref="snack" autoHideDuration={2000} message="Página salva com sucesso" />
+      <Snackbar ref="snack" onDismiss={this.teste} autoHideDuration={1000} message="Página salva com sucesso" />
 
       </div>
       </DocumentTitle>
@@ -106,10 +98,9 @@ class PagesPage extends React.Component {
   }
 }
 
-PagesPage.contextTypes = {
+PagesNew.contextTypes = {
   location: React.PropTypes.object,
   history: React.PropTypes.object
 };
 
-export
-default PagesPage;
+export default PagesNew;

@@ -15,10 +15,10 @@ const FontIcon = require('material-ui/lib/font-icon');
 const Paper = require('material-ui/lib/paper');
 const Colors = require('material-ui/lib/styles/colors');
 
-const Av = <Avatar icon={<FontIcon className="material-icons">insert_drive_file</FontIcon>} />;
+const Icon = <Avatar icon={<FontIcon className="material-icons">insert_drive_file</FontIcon>} />;
 
 class PagesList extends React.Component {
-  constructor(props) {
+  constructor(props, context) {
     super(props);
 
     this.state = {
@@ -26,6 +26,7 @@ class PagesList extends React.Component {
     };
 
     this.onChange = this.onChange.bind(this);
+    this.handleTouch = this.handleTouch.bind(this);
   }
 
   componentWillMount() {
@@ -45,6 +46,11 @@ class PagesList extends React.Component {
     this.setState({ pagesList: data });
   }
 
+  handleTouch(page) {
+    var url = `/pages/${page._id}`;
+    this.context.history.pushState(null, url);
+  }
+
   render() {
     let list = this.state.pagesList.length;
     let mac = true;
@@ -57,14 +63,15 @@ class PagesList extends React.Component {
         <List subheader="Páginas">
           {this.state.pagesList.map(function(page, i){
             return (
-              <div>
+              <div key={page.title + Math.random()}>
                 <ListItem
-                  leftAvatar={Av}
-                  primaryText={page.title} />
+                  leftAvatar={Icon}
+                  primaryText={page.title}
+                  onTouchTap={this.handleTouch.bind(this, page)} />
                   { i === list-1 ? '' : <ListDivider inset={true} /> }
               </div>
             );
-          })}
+          }, this)}
         </List>
       </Paper>
       </div>
@@ -72,5 +79,10 @@ class PagesList extends React.Component {
     );
   }
 }
+
+PagesList.contextTypes = {
+  location: React.PropTypes.object,
+  history: React.PropTypes.object
+};
 
 export default PagesList;
