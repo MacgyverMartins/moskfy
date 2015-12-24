@@ -72,8 +72,13 @@ module.exports = function(app) {
             if (!page) {
               return res.status(404).json({});
             }
-            //page['templates'] = templates;
-            return res.status(200).json(page);
+            getListTemplates(function(templates) {
+              var template = _.findWhere(templates, {'name': page.template});
+              if (!template) {
+                page.template = 'Default';
+              }
+              return res.status(200).json(page);
+            });
           },
           function(err) {
             console.error(err);
