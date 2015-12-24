@@ -3,9 +3,17 @@
 import React         from 'react';
 import {Link}        from 'react-router';
 import DocumentTitle from 'react-document-title';
+const _ = require( 'lodash' );
 
 const Paper = require('material-ui/lib/paper');
 const TextField = require('material-ui/lib/text-field');
+const DropDownMenu = require('material-ui/lib/drop-down-menu');
+
+import PageActions from '../actions/PageActions';
+
+const propTypes = {
+  onChangeTitle: React.PropTypes.func
+};
 
 class PagePost extends React.Component {
   constructor(props) {
@@ -13,19 +21,71 @@ class PagePost extends React.Component {
 
     this.state = {
       title: '',
-      content: ''
+      content: '',
+      templates: []
     };
 
     this.changedTitle = this.changedTitle.bind(this);
     this.changedContent = this.changedContent.bind(this);
+    this.changeTemplate = this.changeTemplate.bind(this);
+    this.handle = this.handle.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    _.forEach(nextProps, function(value, key){
+      if (this.state[key] !== value) {
+        let newState = {}
+        newState[key] = value;
+        this.setState(newState);
+      }
+    }, this);
+    //if (nextProps.title) {
+      //this.setState({
+        //title: nextProps.title
+      //});
+    //}
+    //if(nextProps.content) {
+      //this.setState({
+        //content: nextProps.content
+      //});
+    //}
+    //if(nextProps.templates) {
+      //this.setState({
+        //templates: nextProps.templates
+      //});
+    //}
+    //if(nextProps.template) {
+      //this.setState({
+        //template: nextProps.template
+      //});
+    //}
   }
 
   changedTitle(event) {
+    if (this.props.onChangeTitle) {
+      return this.props.onChangeTitle(event.target.value);
+    }
     this.setState({ title: event.target.value });
   }
 
   changedContent(event) {
+    if (this.props.onChangeContent) {
+      return this.props.onChangeContent(event.target.value);
+    }
     this.setState({ content: event.target.value });
+  }
+
+  changeTemplate(event, selectedIndex, menuItem) {
+    if (this.props.onChangeTemplate) {
+      return this.props.onChangeTemplate(menuItem.text);
+    }
+    this.setState({ template: menuItem.text });
+  }
+
+  handle(event) {
+    if (!this.refs.dropdownTemplates.state.open){
+      PageActions.getTemplates();
+    };
   }
 
   render() {
@@ -33,6 +93,24 @@ class PagePost extends React.Component {
       margin: '56px 0 0 256px',
       padding: '20px'
     };
+
+    let menuItemStyle = {
+      cursor: 'pointer',
+      lineHeight: '32px',
+      paddingLeft: '24px',
+      paddingRight: '48px',
+      color: 'rgba(0, 0, 0, 0.870588)',
+      height: '32px',
+      whiteSpace: 'nowrap',
+      WebkitUserSelect: 'none'
+    }
+
+    let menuItems = _.map(this.state.templates, function(item) {
+      return {text: item.name};
+    });
+
+    let indexTplActive = _.indexOf(menuItems, _.findWhere(menuItems, { 'text': this.state.template}));
+    indexTplActive = (indexTplActive == -1) ? 0 : indexTplActive;
 
     return (
       <Paper zDepth={1}>
@@ -42,14 +120,25 @@ class PagePost extends React.Component {
             fullWidth={true}
             hintText="Nome da página"
             floatingLabelText="Nome da página"
+            value={this.state.title}
             onChange={this.changedTitle} />
 
           <TextField
             style={{marginTop:'50px'}}
             fullWidth={ true }
             hintText="Insira aqui o conteúdo da página"
-            multiLine={true}
+            value={this.state.content}
             onChange={this.changedContent} />
+
+          <DropDownMenu
+            ref='dropdownTemplates'
+            onTouchTap={this.handle}
+            autoWidth={false}
+            style={{ width: '400px' }}
+            menuItemStyle={menuItemStyle}
+            onChange={this.changeTemplate}
+            selectedIndex={indexTplActive}
+            menuItems={menuItems} />
 
         </div>
       </Paper>
@@ -57,6 +146,6 @@ class PagePost extends React.Component {
   }
 }
 
-//PagePost.propTypes = propTypes;
+PagePost.propTypes = propTypes;
 
 export default PagePost;

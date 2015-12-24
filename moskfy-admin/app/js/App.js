@@ -33,7 +33,7 @@ const menuItems = [{
   type: MenuItem.Types.SUBHEADER,
   text: 'Páginas'
 }, {
-  route: '/pages/all-pages',
+  route: '/pages/all',
   text: 'Todas as Páginas'
 }, {
   route: '/pages/page-new',
