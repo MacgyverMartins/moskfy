@@ -1,7 +1,7 @@
 'use strict';
 //TODO
 var path = require('path');
-var fs = require("fs");
+var fs = require('fs');
 var async = require('async');
 var _ = require('lodash');
 
@@ -33,7 +33,16 @@ module.exports = function(app) {
           console.error(err);
           return res.status(500).json(err);
         } else if (!page || page === null) {
-          return res.status(404).json(page);
+          return fs.stat(path.join(app.get('views'), '404.hbs'), function(err, stats) {
+            if (err && err.code == 'ENOENT') {
+              return res.status(404).send('<div class="notfound-page">'
+                + '<h1>404</h1>'
+                + '<p>Page Not Found</p>'
+                + '</div>');
+            }
+            console.log('stats', stats);
+            return res.status(404).render('404.hbs');
+          });
         }
         Utils.templates.getListTemplates(function(templates) {
           var template = _.findWhere(templates, {'name': page.template});
