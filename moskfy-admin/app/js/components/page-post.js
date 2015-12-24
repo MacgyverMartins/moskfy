@@ -32,37 +32,53 @@ class PagePost extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.title) {
-      this.setState({
-        title: nextProps.title
-      });
-    }
-    if(nextProps.content) {
-      this.setState({
-        content: nextProps.content
-      });
-    }
-    if(nextProps.templates) {
-      this.setState({
-        templates: nextProps.templates
-      });
-    }
-    if(nextProps.template) {
-      this.setState({
-        template: nextProps.template
-      });
-    }
+    _.forEach(nextProps, function(value, key){
+      if (this.state[key] !== value) {
+        let newState = {}
+        newState[key] = value;
+        this.setState(newState);
+      }
+    }, this);
+    //if (nextProps.title) {
+      //this.setState({
+        //title: nextProps.title
+      //});
+    //}
+    //if(nextProps.content) {
+      //this.setState({
+        //content: nextProps.content
+      //});
+    //}
+    //if(nextProps.templates) {
+      //this.setState({
+        //templates: nextProps.templates
+      //});
+    //}
+    //if(nextProps.template) {
+      //this.setState({
+        //template: nextProps.template
+      //});
+    //}
   }
 
   changedTitle(event) {
+    if (this.props.onChangeTitle) {
+      return this.props.onChangeTitle(event.target.value);
+    }
     this.setState({ title: event.target.value });
   }
 
   changedContent(event) {
+    if (this.props.onChangeContent) {
+      return this.props.onChangeContent(event.target.value);
+    }
     this.setState({ content: event.target.value });
   }
 
   changeTemplate(event, selectedIndex, menuItem) {
+    if (this.props.onChangeTemplate) {
+      return this.props.onChangeTemplate(menuItem.text);
+    }
     this.setState({ template: menuItem.text });
   }
 
@@ -93,10 +109,8 @@ class PagePost extends React.Component {
       return {text: item.name};
     });
 
-    console.log('post-page', this.state);
-
     let indexTplActive = _.indexOf(menuItems, _.findWhere(menuItems, { 'text': this.state.template}));
-
+    indexTplActive = (indexTplActive == -1) ? 0 : indexTplActive;
 
     return (
       <Paper zDepth={1}>

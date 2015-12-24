@@ -18,15 +18,15 @@ class PagesNew extends React.Component {
     this.state = {
       title: '',
       content: '',
+      template: 'Default',
       templates: [{name: 'Default'}]
     };
 
     this.handleSave = this.handleSave.bind(this);
     this.onChange = this.onChange.bind(this);
-    this.redirectToPage = this.redirectToPage.bind(this);
-  }
-
-  redirectToPage() {
+    this.onChangeTitle = this.onChangeTitle.bind(this);
+    this.onChangeContent = this.onChangeContent.bind(this);
+    this.onChangeTemplate = this.onChangeTemplate.bind(this);
   }
 
   componentDidMount() {
@@ -35,6 +35,18 @@ class PagesNew extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribe();
+  }
+
+  onChangeTemplate(value) {
+    this.setState({template: value});
+  }
+
+  onChangeTitle(value) {
+    this.setState({title: value});
+  }
+
+  onChangeContent(value) {
+    this.setState({content: value});
   }
 
   onChange(event) {
@@ -55,7 +67,7 @@ class PagesNew extends React.Component {
   }
 
   handleSave(event) {
-    var page = this.refs.pagePost.state;
+    var page = this.state;
     PageActions.savePage(page);
   }
 
@@ -65,7 +77,14 @@ class PagesNew extends React.Component {
       <div>
         <AppHeader parentView="Páginas" currentlyView="Nova página"/>
 
-        <PagePost ref="pagePost" title={this.state.title} content={this.state.content} templates={this.state.templates} />
+        <PagePost ref="pagePost"
+        title={this.state.title}
+        content={this.state.content}
+        template={this.state.template}
+        templates={this.state.templates}
+        onChangeTitle={this.onChangeTitle}
+        onChangeContent={this.onChangeContent}
+        onChangeTemplate={this.onChangeTemplate} />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />

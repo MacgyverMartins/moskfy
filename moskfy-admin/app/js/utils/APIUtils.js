@@ -30,7 +30,6 @@ const APIUtils = {
       request.post(this.root + path, body)
       .withCredentials()
       .end((err, res) => {
-        console.log(err, res);
         if ( err || !res.ok ) {
           reject(this.normalizeResponse(err || res));
         } else {

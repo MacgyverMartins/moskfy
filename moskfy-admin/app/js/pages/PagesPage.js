@@ -18,12 +18,16 @@ class PagesPage extends React.Component {
     this.state = {
       title: '',
       content: '',
-      templates: [{name: 'default'}]
+      template: 'Default',
+      templates: [{name: 'Default'}]
     };
 
     this.handleSave = this.handleSave.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
     this.onChange = this.onChange.bind(this);
+    this.onChangeTitle = this.onChangeTitle.bind(this);
+    this.onChangeContent = this.onChangeContent.bind(this);
+    this.onChangeTemplate = this.onChangeTemplate.bind(this);
   }
 
   componentDidMount() {
@@ -53,21 +57,28 @@ class PagesPage extends React.Component {
     }
   }
 
+  onChangeTemplate(value) {
+    this.setState({template: value});
+  }
+
+  onChangeTitle(value) {
+    this.setState({title: value});
+  }
+
+  onChangeContent(value) {
+    this.setState({content: value});
+  }
+
   handleDelete(event) {
     PageActions.deletePage(this.state._id);
   }
 
   handleSave(event) {
-    var page = {
-      _id: this.state._id
-    };
-    var post = this.refs.pagePost.state;
-    _.assign(page, post);
+    let page = this.state;
     PageActions.savePage(page);
   }
 
   render() {
-    console.log('pagepages', this.state.templates);
     return (
       <DocumentTitle title="Moskfy | Páginas">
       <div>
@@ -77,7 +88,10 @@ class PagesPage extends React.Component {
         title={this.state.title}
         content={this.state.content}
         template={this.state.template}
-        templates={this.state.templates}/>
+        templates={this.state.templates}
+        onChangeTitle={this.onChangeTitle}
+        onChangeContent={this.onChangeContent}
+        onChangeTemplate={this.onChangeTemplate} />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Excluir" primary={true} onTouchTap={this.handleDelete}/>
