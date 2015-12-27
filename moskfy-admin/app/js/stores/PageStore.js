@@ -9,7 +9,7 @@ import restful, {
 from 'restful.js';
 import loader from '../utils/loader';
 
-const api = restful('http://localhost:3000', fetchBackend(fetch));
+const api = restful('http://localhost:3000/api', fetchBackend(fetch));
 const endpoint = 'pages';
 
 api.addRequestInterceptor(function(config) {
@@ -23,15 +23,11 @@ const PageStore = Reflux.createStore({
 
   init() {
       this.page = {};
-
-      this.listenTo(PageActions.savePage, this.savePage);
-      this.listenTo(PageActions.getPage, this.getPage);
-      this.listenTo(PageActions.getNewPage, this.getNewPage);
-      this.listenTo(PageActions.deletePage, this.deletePage);
-      this.listenTo(PageActions.getTemplates, this.getTemplates);
     },
 
-    savePage(data) {
+    listenables: PageActions,
+
+    onSavePage(data) {
       let self = this;
       if (data._id) {
         api.one(endpoint, data._id).put(data).then(function(rs){
@@ -52,7 +48,7 @@ const PageStore = Reflux.createStore({
       }
     },
 
-    getPage(data) {
+    onGetPage(data) {
       let id = data.params.id;
       let self = this;
       PageActions.getTemplates();
@@ -66,7 +62,7 @@ const PageStore = Reflux.createStore({
       });
     },
 
-    getNewPage() {
+    onGetNewPage() {
       this.page = {}
       this.trigger({
         payload: 'onGetNewPage',
@@ -74,14 +70,14 @@ const PageStore = Reflux.createStore({
       });
     },
 
-    deletePage(id) {
+    onDeletePage(id) {
       let self = this;
       api.one(endpoint, id).delete().then(function(rs) {
         self.trigger({payload: 'onDeletePage'});
       });
     },
 
-    getTemplates() {
+    onGetTemplates() {
       let self = this;
       api.all('templates').getAll().then(function(rs) {
         let templates = rs.body();

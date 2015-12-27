@@ -9,7 +9,7 @@ import restful, {
 from 'restful.js';
 import loader from '../utils/loader';
 
-const api = restful('http://localhost:3000', fetchBackend(fetch));
+const api = restful('http://localhost:3000/api', fetchBackend(fetch));
 const endpoint = 'pages';
 
 api.addRequestInterceptor(function(config) {
@@ -24,11 +24,11 @@ const PagesListStore = Reflux.createStore({
   init() {
       this.data = [];
       this.pages = [];
-      this.listenTo(PageActions.listPages, this.listPages);
-      this.listenTo(PageActions.clearData, this.clearData);
     },
 
-    listPages() {
+    listenables: PageActions,
+
+    onListPages() {
       let self = this;
       api.all(endpoint).getAll().then(function(rs) {
         let response = rs.body();
@@ -45,7 +45,7 @@ const PagesListStore = Reflux.createStore({
       });
     },
 
-    clearData() {
+    onClearData() {
       this.data = [];
       this.pages = [];
     },
