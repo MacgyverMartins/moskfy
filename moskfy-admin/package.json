@@ -66,6 +66,8 @@
     "material-ui": "^0.13.3",
     "react-tap-event-plugin": "^0.2.1",
     "restful.js": "^0.9.3",
-    "superagent": "^1.6.1"
+    "superagent": "^1.6.1",
+    "superagent-no-cache": "^0.1.0",
+    "superagent-prefix": "0.0.2"
   }
 }
