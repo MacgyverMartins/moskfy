@@ -1,0 +1,28 @@
+{
+  "name": "moskfy",
+  "description": "CMS with Node.js for websites",
+  "main": "",
+  "authors": [
+    "Macgyver Martins <macgyver.martins@gmail.com>"
+  ],
+  "license": "MIT",
+  "keywords": [
+    "gulp",
+    "browserify",
+    "react",
+    "sass",
+    "boilerplate"
+  ],
+  "homepage": "http://localhost",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "material-design-icons": "~2.1.1"
+  }
+}
