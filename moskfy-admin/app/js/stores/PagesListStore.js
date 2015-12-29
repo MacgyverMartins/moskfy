@@ -32,35 +32,39 @@ const PagesListStore = Reflux.createStore({
 
     listenables: PageActions,
 
-    onListPages() {
-      //let self = this;
-      //api.all(endpoint).getAll().then(function(rs) {
-        //let response = rs.body();
-        //let pages = [];
+    //onListPages() {
+      ////let self = this;
+      ////api.all(endpoint).getAll().then(function(rs) {
+        ////let response = rs.body();
+        ////let pages = [];
 
-        //let array = response.length;
-        //for (let i = 0; i < array; i++) {
-          //pages[i] = response[i].data();
-        //}
+        ////let array = response.length;
+        ////for (let i = 0; i < array; i++) {
+          ////pages[i] = response[i].data();
+        ////}
 
-        //self.data = self.data.concat(response);
-        //self.pages = self.pages.concat(pages);
-        //self.trigger(self.pages);
-      //});
+        ////self.data = self.data.concat(response);
+        ////self.pages = self.pages.concat(pages);
+        ////self.trigger(self.pages);
+      ////});
 
-      loader.emit('loading', true);
-      setTimeout(function() {
-        request.get('/pages')
-        .use(prefix)
-        //.use(nocache)
-        .end(function(err, res){
-          loader.emit('loading', false);
-        });
-      }.bind(this), 5000);
+      //loader.emit('loading', true);
+      //setTimeout(function() {
+        //request.get('/pages')
+        //.use(prefix)
+        ////.use(nocache)
+        //.end(function(err, res){
+          //loader.emit('loading', false);
+        //});
+      //}.bind(this), 5000);
+    //},
+
+    onListPagesCompleted(pages) {
+      console.log('pages ==>', pages);
     },
 
-    onListPagesCompleted() {
-      alert('value');
+    onListPagesFailed(err) {
+      console.log('ERRO ', err);
     },
 
     onClearData() {

@@ -1,25 +1,26 @@
 'use strict';
 
-import {camelizeKeys} from 'humps';
+//import {camelizeKeys} from 'humps';
 import request        from 'superagent';
+const prefix = require('superagent-prefix')('http://localhost:3000/api');
 
 const APIUtils = {
 
   root: '//localhost:3000/api/',
 
-  normalizeResponse(response) {
-    return camelizeKeys(response.body);
-  },
+  //normalizeResponse(response) {
+    //return camelizeKeys(response.body);
+  //},
 
   get(path) {
     return new Promise((resolve, reject) => {
-      request.get(this.root + path)
-      .withCredentials()
+      request.get(path)
+      .use(prefix)
       .end((err, res) => {
         if ( err || !res.ok ) {
-          reject(this.normalizeResponse(err || res));
+          reject(err);
         } else {
-          resolve(this.normalizeResponse(res));
+          resolve(res);
         }
       });
     });
