@@ -38,7 +38,6 @@ class PagesList extends React.Component {
   }
 
   componentWillUnmount() {
-    PageActions.clearData();
     this.unsubscribe();
   }
 

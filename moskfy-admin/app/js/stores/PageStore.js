@@ -27,54 +27,33 @@ const PageStore = Reflux.createStore({
 
     listenables: PageActions,
 
-    onSavePage(data) {
-      let self = this;
-      if (data._id) {
-        api.one(endpoint, data._id).put(data).then(function(rs){
-          let page = rs.body().data();
-          self.trigger({
-            payload: 'onPageSave',
-            data: page
-          });
-        });
-      } else {
-        api.custom(endpoint).post(data).then(function(rs) {
-          let page = rs.body().data();
-          self.trigger({
-            payload: 'onPageSave',
-            data: page
-          });
-        });
-      }
-    },
-
-    onGetPage(data) {
-      let id = data.params.id;
-      let self = this;
-      PageActions.getTemplates();
-      api.one(endpoint, id).get().then(function(rs) {
-        self.page = rs.body();
-        let page = self.page.data();
-        self.trigger({
-          payload: 'onGetPage',
-          data: page
-        });
-      });
-    },
-
-    onGetNewPage() {
-      this.page = {}
+    onGetPageCompleted(data) {
+      let page = data.body;
       this.trigger({
-        payload: 'onGetNewPage',
-        data: this.page
-      });
+        payload: 'onGetPage',
+        data: page
+      })
     },
 
-    onDeletePage(id) {
-      let self = this;
-      api.one(endpoint, id).delete().then(function(rs) {
-        self.trigger({payload: 'onDeletePage'});
-      });
+    onGetPageFailed(err) {
+      console.error(err);
+    },
+
+    onSavePageCompleted(res) {
+      let page = res.body;
+      this.trigger({ payload: 'onPageSave', data: page });
+    },
+
+    onSavePageFailed(err) {
+      console.error(err);
+    },
+
+    onDeletePageCompleted(id) {
+      this.trigger({payload: 'onDeletePage'});
+    },
+
+    onDeletePageFailed(err) {
+      console.error('err', err);
     },
 
     onGetTemplates() {

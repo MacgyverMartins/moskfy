@@ -28,13 +28,14 @@ const APIUtils = {
 
   post(path, body) {
     return new Promise((resolve, reject) => {
-      request.post(this.root + path, body)
-      .withCredentials()
+      request.post(path)
+      .send(body)
+      .use(prefix)
       .end((err, res) => {
         if ( err || !res.ok ) {
-          reject(this.normalizeResponse(err || res));
+          reject(err);
         } else {
-          resolve(this.normalizeResponse(res));
+          resolve(res);
         }
       });
     });
@@ -56,13 +57,14 @@ const APIUtils = {
 
   put(path, body) {
     return new Promise((resolve, reject) => {
-      request.put(this.root + path, body)
-      .withCredentials()
+      request.put(path)
+      .use(prefix)
+      .send(body)
       .end((err, res) => {
         if ( err || !res.ok ) {
-          reject(this.normalizeResponse(err || res));
+          reject(err);
         } else {
-          resolve(this.normalizeResponse(res));
+          resolve(res);
         }
       });
     });
@@ -71,12 +73,11 @@ const APIUtils = {
   del(path) {
     return new Promise((resolve, reject) => {
       request.del(this.root + path)
-      .withCredentials()
       .end((err, res) => {
         if ( err || !res.ok ) {
-          reject(this.normalizeResponse(err || res));
+          reject(err);
         } else {
-          resolve(this.normalizeResponse(res));
+          resolve(res);
         }
       });
     });
