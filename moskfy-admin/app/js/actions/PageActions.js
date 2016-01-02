@@ -5,11 +5,9 @@ import APIUtils from '../utils/APIUtils';
 const PageActions = Reflux.createActions({
   'listPages': { asyncResult: true },
   'getPage': { asyncResult: true },
-  'getNewPage': {},
   'savePage': { asyncResult: true },
-  'deletePage': { asyncResult: true }
-  //'getTemplates',
-  //'clearData'
+  'deletePage': { asyncResult: true },
+  'getTemplates': { asyncResult: true }
 });
 
 PageActions.listPages.listen(function() {
@@ -21,6 +19,8 @@ PageActions.listPages.listen(function() {
 });
 
 PageActions.getPage.listen(function(route) {
+  PageActions.getTemplates();
+
   let url = '/pages/' + route.params.id;
   APIUtils.get(url).then(page => {
     this.completed(page);
@@ -49,6 +49,14 @@ PageActions.deletePage.listen(function(id) {
   let url = '/pages/' + id;
   APIUtils.del(url).then(data => {
     this.completed(data);
+  }).catch(err => {
+    this.failed(err)
+  });
+});
+
+PageActions.getTemplates.listen(function(id) {
+  APIUtils.get('/templates').then(res => {
+    this.completed(res);
   }).catch(err => {
     this.failed(err)
   });

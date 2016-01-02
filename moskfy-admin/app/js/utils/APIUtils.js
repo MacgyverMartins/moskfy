@@ -6,7 +6,7 @@ const prefix = require('superagent-prefix')('http://localhost:3000/api');
 
 const APIUtils = {
 
-  root: '//localhost:3000/api/',
+  root: '//localhost:3000/api',
 
   //normalizeResponse(response) {
     //return camelizeKeys(response.body);
