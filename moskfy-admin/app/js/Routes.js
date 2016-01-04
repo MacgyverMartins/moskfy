@@ -23,7 +23,7 @@ export default (
       <Route path="/" component={HomePage} />
       <Route path="pages">
         <Route path="all" component={PagesList} />
-        <Route path="page-new" component={PagesNew} onEnter={PageActions.getNewPage} />
+        <Route path="page-new" component={PagesNew} />
         <Route path=":id" component={PagesPage} onEnter={PageActions.getPage} />
       </Route>
       <Route path="search" component={SearchPage} />

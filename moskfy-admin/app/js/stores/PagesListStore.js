@@ -1,53 +1,36 @@
 'use strict';
-
 import Reflux from 'reflux';
-
 import PageActions from '../actions/PageActions';
-import restful, {
-  fetchBackend
-}
-from 'restful.js';
+
+//const nocache = require('superagent-no-cache');
+const request = require('superagent');
+const prefix = require('superagent-prefix')('http://localhost:3000/api');
+
+
 import loader from '../utils/loader';
 
-const api = restful('http://localhost:3000', fetchBackend(fetch));
-const endpoint = 'pages';
-
-api.addRequestInterceptor(function(config) {
-  loader.emit('loading', true);
-});
-api.addResponseInterceptor(function(config) {
-  loader.emit('loading', false);
-});
+//api.addRequestInterceptor(function(config) {
+  //loader.emit('loading', true);
+//});
+//api.addResponseInterceptor(function(config) {
+  //loader.emit('loading', false);
+//});
 
 const PagesListStore = Reflux.createStore({
 
   init() {
       this.data = [];
       this.pages = [];
-      this.listenTo(PageActions.listPages, this.listPages);
-      this.listenTo(PageActions.clearData, this.clearData);
     },
 
-    listPages() {
-      let self = this;
-      api.all(endpoint).getAll().then(function(rs) {
-        let response = rs.body();
-        let pages = [];
+    listenables: PageActions,
 
-        let array = response.length;
-        for (let i = 0; i < array; i++) {
-          pages[i] = response[i].data();
-        }
-
-        self.data = self.data.concat(response);
-        self.pages = self.pages.concat(pages);
-        self.trigger(self.pages);
-      });
+    onListPagesCompleted(res) {
+      this.trigger(res.body);
     },
 
-    clearData() {
-      this.data = [];
-      this.pages = [];
+    onListPagesFailed(err) {
+      console.error('ERRO no request', err);
     },
 
     throwError(err) {
@@ -56,5 +39,4 @@ const PagesListStore = Reflux.createStore({
 
 });
 
-export
-default PagesListStore;
+export default PagesListStore;

@@ -1,19 +1,24 @@
 'use strict';
 
+var express = require('express');
+var router = express.Router();
+
 module.exports =  function(app) {
 
   var pagesController = app.controllers.pages;
 
-  app.route('/pages')
+  app.use('/api', router);
+
+  router.route('/pages')
     .get(pagesController.getListPages)
     .post(pagesController.createPage);
 
-  app.route('/pages/:id')
+  router.route('/pages/:id')
     .get(pagesController.getPage)
     .put(pagesController.updatePage)
     .delete(pagesController.deletePage);
 
-  app.route('/templates')
+  router.route('/templates')
     .get(pagesController.getTemplatesList);
 
 };

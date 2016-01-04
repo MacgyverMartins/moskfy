@@ -1,6 +1,6 @@
 'use strict';
 var express = require('express');
-var load = require('express-load');
+var consign = require('consign');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var exphbs  = require('express-handlebars');
@@ -50,9 +50,10 @@ module.exports = function() {
   //app.use(require('method-override')());
 
   //mapeando diretórios para não precisar usar 'require'
-  load('models', {
+  consign({
       cwd: 'core/server'
     })
+    .include('models')
     .then('utils')
     .then('controllers')
     .then('routes')
