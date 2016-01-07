@@ -51,15 +51,13 @@ class PagesNew extends React.Component {
 
   onChange(event) {
     switch (event.payload) {
-      case 'onGetNewPage':
-        break;
       case 'onGetTemplates':
         this.setState({templates: event.data});
         break
       case 'onPageSave':
         this.refs.snack.show();
         setTimeout(function() {
-          var url = `/pages/${event.data._id}`;
+          var url = `/admin/pages/${event.data._id}`;
           this.context.history.pushState(null, url);
         }.bind(this), 1001);
         break;

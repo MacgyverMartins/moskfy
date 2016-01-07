@@ -46,7 +46,7 @@ class PagesList extends React.Component {
   }
 
   handleTouch(page) {
-    var url = `/pages/${page._id}`;
+    var url = `/admin/pages/${page._id}`;
     this.context.history.pushState(null, url);
   }
 
