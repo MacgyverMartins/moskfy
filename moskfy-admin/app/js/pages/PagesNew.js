@@ -59,7 +59,7 @@ class PagesNew extends React.Component {
       case 'onPageSave':
         this.refs.snack.show();
         setTimeout(function() {
-          var url = `/pages/${event.data._id}`;
+          var url = `/admin/pages/${event.data._id}`;
           this.context.history.pushState(null, url);
         }.bind(this), 1001);
         break;
