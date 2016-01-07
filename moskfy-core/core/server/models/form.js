@@ -9,7 +9,11 @@ module.exports = function(){
     },
     description: {
       type: String,
-      required: false,
+      required: false
+    },
+    inputs: {
+      type: Array,
+      required: true
     }
   });
 

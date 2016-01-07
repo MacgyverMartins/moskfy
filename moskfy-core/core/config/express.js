@@ -70,6 +70,7 @@ module.exports = function() {
 
   app.use('/js', express.static('../moskfy-admin/build/js'));
   app.use('/css', express.static('../moskfy-admin/build/css'));
+  app.use('/fonts', express.static('../moskfy-admin/build/fonts'));
 
   app.get('/admin', function(req, res) {
     sendToAdmin(req, res);
