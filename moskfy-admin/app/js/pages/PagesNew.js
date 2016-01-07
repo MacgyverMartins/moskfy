@@ -51,8 +51,6 @@ class PagesNew extends React.Component {
 
   onChange(event) {
     switch (event.payload) {
-      case 'onGetNewPage':
-        break;
       case 'onGetTemplates':
         this.setState({templates: event.data});
         break
