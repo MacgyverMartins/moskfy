@@ -2,7 +2,7 @@
 
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import AppHeader from '../components/app-header.js';
+import AppHeader from '../components/app-header';
 
 import PageActions from '../actions/PageActions';
 import PagesListStore from '../stores/PagesListStore';
