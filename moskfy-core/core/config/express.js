@@ -52,6 +52,14 @@ module.exports = function() {
   //app.use(require('method-override')());
 
   function sendToAdmin (req, res) {
+    if (process.env.NODE_ENV === 'development') {
+      return res.send('<div class="admin-redirect">'
+        + '<h1>Ops..</h1>'
+        + '</br><h3>Parece que você está querendo acessar a versão de devenvolvimento do <i>Admin</i></h3>'
+        + '<p>A versão de dev fica na porta <strong>:3333</strong>. '
+        + '<a href="http://localhost:3333/admin">Clique aqui</a> para se redirecionado</p>'
+        + '</div>');
+    }
     fs.stat('../moskfy-admin/build/index.html', function(err, stat){
       if (err) {
         return console.log('err', err);
