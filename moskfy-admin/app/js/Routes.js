@@ -14,13 +14,12 @@ import NotFoundPage from './pages/NotFoundPage';
 
 import PageActions from './actions/PageActions';
 
-
 export default (
   <Router history={CreateBrowserHistory()}>
-    <Route path="/" component={App}>
+    <Route path="/admin" component={App}>
 
-      <IndexRoute component={HomePage} />
-      <Route path="/" component={HomePage} />
+      //<IndexRoute component={HomePage} />
+      //<Route path="/" component={HomePage} />
       <Route path="pages">
         <Route path="all" component={PagesList} />
         <Route path="page-new" component={PagesNew} />

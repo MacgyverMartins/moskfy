@@ -27,16 +27,16 @@ const propTypes = {
 };
 
 const menuItems = [{
-  route: '/',
+  route: '/admin',
   text: 'Home'
 },{
   type: MenuItem.Types.SUBHEADER,
   text: 'Páginas'
 }, {
-  route: '/pages/all',
+  route: '/admin/pages/all',
   text: 'Todas as Páginas'
 }, {
-  route: '/pages/page-new',
+  route: '/admin/pages/page-new',
   text: 'Nova Página'
 }, {
   type: MenuItem.Types.SUBHEADER,
