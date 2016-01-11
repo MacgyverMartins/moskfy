@@ -1,5 +1,4 @@
 'use strict';
-//TODO
 var path = require('path');
 var fs = require('fs');
 var async = require('async');
@@ -56,7 +55,11 @@ module.exports = function(app) {
     saveContact: function(req, res) {
       console.log('contact', req.body.contact);
       var backUrl = req.headers.referer;
-      return res.status(200).redirect(backUrl);
+             res.writeHead(200, {
+            'content-type': 'text/plain'
+        });
+        res.write('data received');
+        res.end();
     }
 
   };

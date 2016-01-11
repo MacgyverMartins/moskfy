@@ -2,8 +2,9 @@
 
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import AppHeader from '../components/app-header.js';
-import PagePost from '../components/page-post.js';
+import AppHeader from '../components/app-header';
+import PagePost from '../components/page-post';
+import Form from '../components/form';
 
 import PageStore from '../stores/PageStore';
 import PageActions from '../actions/PageActions';
@@ -84,12 +85,12 @@ class PagesNew extends React.Component {
         onChangeContent={this.onChangeContent}
         onChangeTemplate={this.onChangeTemplate} />
 
+        <Form />
         <div style={{textAlign:'right', paddingTop:'50px'}}>
-        <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
-      </div>
+          <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
+        </div>
 
-      <Snackbar ref="snack" onDismiss={this.teste} autoHideDuration={1000} message="Página salva com sucesso" />
-
+        <Snackbar ref="snack" onDismiss={this.teste} autoHideDuration={1000} message="Página salva com sucesso" />
       </div>
       </DocumentTitle>
     );
