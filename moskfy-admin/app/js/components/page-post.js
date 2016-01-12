@@ -24,7 +24,7 @@ class PagePost extends React.Component {
       title: '',
       content: '',
       templates: [{name: 'Default'}],
-      templateIndex: 0
+      template: 'Default'
     };
 
     this.changedTitle = this.changedTitle.bind(this);
@@ -61,7 +61,7 @@ class PagePost extends React.Component {
     if (this.props.onChangeTemplate) {
       return this.props.onChangeTemplate(value);
     }
-    this.setState({ templateIndex: value });
+    this.setState({ template: value });
   }
 
   handle(event) {
@@ -86,8 +86,11 @@ class PagePost extends React.Component {
       whiteSpace: 'nowrap',
       WebkitUserSelect: 'none'
     }
-    console.log('tempalte', this.state.templateIndex);
 
+    //let tplIndex = _.indexOf(this.state.templates, _.findWhere(this.state.templates, { 'name': this.state.template}));
+    //tplIndex = (tplIndex == -1) ? 0 : tplIndex;
+
+    console.log('template', this.state.template);
     return (
       <Paper zDepth={1}>
         <div style={{padding: '25px'}}>
@@ -107,7 +110,7 @@ class PagePost extends React.Component {
             onChange={this.changedContent} />
 
             <DropDownMenu ref='dropdownTemplates'
-            value={this.state.templateIndex}
+            value={this.state.template}
             onChange={this.handleChange}
             onTouchTap={this.handle}
             autoWidth={false}
@@ -117,7 +120,7 @@ class PagePost extends React.Component {
               return (
                 <MenuItem key={item.name}
                 style={menuItemStyle}
-                value={i}
+                value={item.name}
                 labe={item.name}
                 primaryText={item.name} />
               );

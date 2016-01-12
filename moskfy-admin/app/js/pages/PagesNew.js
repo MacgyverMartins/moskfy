@@ -22,7 +22,6 @@ class PagesNew extends React.Component {
       openSnackbar: false,
       title: '',
       content: '',
-      templateIndex: 0,
       template: 'Default',
       templates: [{name: 'Default'}],
       adds: []
@@ -44,7 +43,7 @@ class PagesNew extends React.Component {
   }
 
   onChangeTemplate(value) {
-    this.setState({templateIndex: value});
+    this.setState({template: value});
   }
 
   onChangeTitle(value) {
@@ -84,7 +83,7 @@ class PagesNew extends React.Component {
         <PagePost ref="pagePost"
         title={this.state.title}
         content={this.state.content}
-        templateIndex={this.state.templateIndex}
+        template={this.state.template}
         templates={this.state.templates}
         onChangeTitle={this.onChangeTitle}
         onChangeContent={this.onChangeContent}
