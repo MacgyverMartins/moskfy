@@ -63,7 +63,11 @@
   },
   "dependencies": {
     "eventemitter3": "^1.1.1",
+    "immutable": "^3.7.6",
     "material-ui": "^0.14.2",
+    "react": "^0.14.6",
+    "react-addons-test-utils": "^0.14.6",
+    "react-dom": "^0.14.6",
     "react-tap-event-plugin": "^0.2.1",
     "restful.js": "^0.9.3",
     "superagent": "^1.6.1",

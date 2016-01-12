@@ -11,6 +11,7 @@ import PageActions from '../actions/PageActions';
 
 const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
+import NavigationAdd from 'material-ui/lib/svg-icons/navigation/close';
 const _ = require('lodash');
 
 class PagesNew extends React.Component {
@@ -20,7 +21,8 @@ class PagesNew extends React.Component {
       title: '',
       content: '',
       template: 'Default',
-      templates: [{name: 'Default'}]
+      templates: [{name: 'Default'}],
+      adds: []
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -85,12 +87,20 @@ class PagesNew extends React.Component {
         onChangeContent={this.onChangeContent}
         onChangeTemplate={this.onChangeTemplate} />
 
+        <FloatingActionButton disabled={true}>
+          <NavigationAdd />
+        </FloatingActionButton>
+
         <Form />
+
         <div style={{textAlign:'right', paddingTop:'50px'}}>
           <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
         </div>
 
-        <Snackbar ref="snack" onDismiss={this.teste} autoHideDuration={1000} message="Página salva com sucesso" />
+        <Snackbar ref="snack"
+        onDismiss={this.teste}
+        autoHideDuration={1000}
+        message="Página salva com sucesso" />
       </div>
       </DocumentTitle>
     );

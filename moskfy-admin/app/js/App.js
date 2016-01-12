@@ -3,17 +3,19 @@
 import React from 'react';
 import { Link } from 'react-router';
 
-const RaisedButton = require('material-ui/lib/raised-button');
-const Toolbar = require('material-ui/lib/toolbar/toolbar');
-const ToolbarGroup = require('material-ui/lib/toolbar/toolbar-group');
-const ToolbarSeparator = require('material-ui/lib/toolbar/toolbar-separator');
-const ToolbarTitle = require('material-ui/lib/toolbar/toolbar-title');
-const DropDownMenu = require('material-ui/lib/drop-down-menu');
-const DropDownIcon = require('material-ui/lib/drop-down-icon');
-const FontIcon = require('material-ui/lib/font-icon');
-const LeftNav = require('material-ui/lib/left-nav');
-const MenuItem = require('material-ui/lib/menu/menu-item');
-const LinearProgress = require('material-ui/lib/linear-progress');
+import RaisedButton from 'material-ui/lib/raised-button';
+import Toolbar from 'material-ui/lib/toolbar/toolbar';
+import ToolbarGroup from 'material-ui/lib/toolbar/toolbar-group';
+import ToolbarSeparator from 'material-ui/lib/toolbar/toolbar-separator';
+import ToolbarTitle from 'material-ui/lib/toolbar/toolbar-title';
+import DropDownMenu from 'material-ui/lib/drop-down-menu';
+import DropDownIcon from 'material-ui/lib/drop-down-icon';
+import FontIcon from 'material-ui/lib/font-icon';
+import LeftNav from 'material-ui/lib/left-nav';
+import Menu from 'material-ui/lib/menus/menu';
+import MenuItem from 'material-ui/lib/menus/menu-item';
+import SubheaderMenuItem from 'material-ui/lib/menu/subheader-menu-item';
+import LinearProgress from 'material-ui/lib/linear-progress';
 
 import loader from './utils/loader.js';
 
@@ -30,7 +32,7 @@ const menuItems = [{
   route: '/admin',
   text: 'Home'
 },{
-  type: MenuItem.Types.SUBHEADER,
+  //type: MenuItem.Types.SUBHEADER,
   text: 'Páginas'
 }, {
   route: '/admin/pages/all',
@@ -38,17 +40,6 @@ const menuItems = [{
 }, {
   route: '/admin/pages/page-new',
   text: 'Nova Página'
-}, {
-  type: MenuItem.Types.SUBHEADER,
-  text: 'Links úteis'
-}, {
-  type: MenuItem.Types.LINK,
-  payload: 'http://google.com',
-  text: 'Manual do Admin'
-}, {
-  type: MenuItem.Types.LINK,
-  payload: 'http://nurimba.com.br',
-  text: 'Suporte',
 }];
 
 const iconMenuItems = [{
@@ -66,28 +57,21 @@ class App extends React.Component {
     this.state = {
       loading: false
     };
-    this._onLeftNavChange = this._onLeftNavChange.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
     this._getSelectedIndex = this._getSelectedIndex.bind(this);
     this._showProgress = this._showProgress.bind(this);
-  }
-
-  componentWillMount() {
   }
 
   componentDidMount() {
     loader.on('loading', this._showProgress);
   }
 
-  componentWillUnmount() {
-    //this.unsubscribe();
-  }
-
   _showProgress(data) {
     this.setState({loading: data});
   }
 
-  _onLeftNavChange(e, key, payload) {
-    this.context.history.pushState(null, payload.route);
+  handleSelect(route, e) {
+    this.context.history.pushState(null, route);
   }
 
   _getSelectedIndex() {
@@ -117,24 +101,24 @@ class App extends React.Component {
 
     return (
       <div className="layout-wrapper">
-        {progressBar}
         <Toolbar style={{ position: 'fixed', top: '0', zIndex: '11' }}>
           <ToolbarGroup key={0} float="left">
             <ToolbarTitle text="Moskfy" />
           </ToolbarGroup>
-          <ToolbarGroup key={1} float="right">
-            <ToolbarSeparator/>
-            <FontIcon className="material-icons">menu</FontIcon>
-            <DropDownIcon iconClassName="material-icons" iconLigature="expand_more" menuItems={iconMenuItems} />
-          </ToolbarGroup>
         </Toolbar>
 
-        <LeftNav
-          ref="leftNav"
-          menuItems={menuItems}
-          onChange={this._onLeftNavChange}
-          selectedIndex={this._getSelectedIndex()}
-          style={{ position: 'fixed', top: '56' }} />
+
+        <LeftNav style={{ position: 'fixed', top: '56' }}>
+            {menuItems.map(function(item, i) {
+              return (
+                <MenuItem ref={item.text}
+                key={item.text}
+                onTouchTap={this.handleSelect.bind(this, item.route)}>{item.text}</MenuItem>
+              );
+            }, this)}
+        </LeftNav>
+
+
 
         <div className="main-pages-container" style={ main_style }>
           {this.props.children}
