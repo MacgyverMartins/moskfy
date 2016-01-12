@@ -32,9 +32,6 @@ const menuItems = [{
   route: '/admin',
   text: 'Home'
 },{
-  //type: MenuItem.Types.SUBHEADER,
-  text: 'Páginas'
-}, {
   route: '/admin/pages/all',
   text: 'Todas as Páginas'
 }, {

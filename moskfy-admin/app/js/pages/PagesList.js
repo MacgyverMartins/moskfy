@@ -8,7 +8,7 @@ import PageActions from '../actions/PageActions';
 import PagesListStore from '../stores/PagesListStore';
 
 const List = require('material-ui/lib/lists/list');
-const ListDivider = require('material-ui/lib/lists/list-divider');
+import Divider from 'material-ui/lib/divider';
 const ListItem = require('material-ui/lib/lists/list-item');
 const Avatar = require('material-ui/lib/avatar');
 const FontIcon = require('material-ui/lib/font-icon');
@@ -67,7 +67,7 @@ class PagesList extends React.Component {
                   leftAvatar={Icon}
                   primaryText={page.title}
                   onTouchTap={this.handleTouch.bind(this, page)} />
-                  { i === list-1 ? '' : <ListDivider inset={true} /> }
+                  { i === list-1 ? '' : <Divider inset={true} /> }
               </div>
             );
           }, this)}
