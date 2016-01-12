@@ -12,14 +12,17 @@ import PageActions from '../actions/PageActions';
 const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
 import NavigationAdd from 'material-ui/lib/svg-icons/navigation/close';
+import FloatingActionButton from 'material-ui/lib/floating-action-button';
 const _ = require('lodash');
 
 class PagesNew extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      openSnackbar: false,
       title: '',
       content: '',
+      templateIndex: 0,
       template: 'Default',
       templates: [{name: 'Default'}],
       adds: []
@@ -41,7 +44,7 @@ class PagesNew extends React.Component {
   }
 
   onChangeTemplate(value) {
-    this.setState({template: value});
+    this.setState({templateIndex: value});
   }
 
   onChangeTitle(value) {
@@ -58,7 +61,7 @@ class PagesNew extends React.Component {
         this.setState({templates: event.data});
         break
       case 'onPageSave':
-        this.refs.snack.show();
+        this.setState({openSnackbar: true});
         setTimeout(function() {
           var url = `/admin/pages/${event.data._id}`;
           this.context.history.pushState(null, url);
@@ -81,25 +84,19 @@ class PagesNew extends React.Component {
         <PagePost ref="pagePost"
         title={this.state.title}
         content={this.state.content}
-        template={this.state.template}
+        templateIndex={this.state.templateIndex}
         templates={this.state.templates}
         onChangeTitle={this.onChangeTitle}
         onChangeContent={this.onChangeContent}
         onChangeTemplate={this.onChangeTemplate} />
-
-        <FloatingActionButton disabled={true}>
-          <NavigationAdd />
-        </FloatingActionButton>
-
-        <Form />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
           <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
         </div>
 
         <Snackbar ref="snack"
-        onDismiss={this.teste}
         autoHideDuration={1000}
+        open={this.state.openSnackbar}
         message="Página salva com sucesso" />
       </div>
       </DocumentTitle>

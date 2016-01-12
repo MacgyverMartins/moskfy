@@ -18,7 +18,7 @@ class PagesPage extends React.Component {
     this.state = {
       title: '',
       content: '',
-      template: 'Default',
+      templateIndex: 0,
       templates: [{name: 'Default'}]
     };
 
@@ -58,7 +58,7 @@ class PagesPage extends React.Component {
   }
 
   onChangeTemplate(value) {
-    this.setState({template: value});
+    this.setState({templateIndex: value});
   }
 
   onChangeTitle(value) {
@@ -87,7 +87,7 @@ class PagesPage extends React.Component {
         <PagePost ref="pagePost"
         title={this.state.title}
         content={this.state.content}
-        template={this.state.template}
+        templateIndex={this.state.templateIndex}
         templates={this.state.templates}
         onChangeTitle={this.onChangeTitle}
         onChangeContent={this.onChangeContent}

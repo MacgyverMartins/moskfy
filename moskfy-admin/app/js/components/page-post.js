@@ -8,6 +8,7 @@ const _ = require( 'lodash' );
 const Paper = require('material-ui/lib/paper');
 const TextField = require('material-ui/lib/text-field');
 const DropDownMenu = require('material-ui/lib/drop-down-menu');
+import MenuItem from 'material-ui/lib/menus/menu-item';
 
 import PageActions from '../actions/PageActions';
 
@@ -22,12 +23,13 @@ class PagePost extends React.Component {
     this.state = {
       title: '',
       content: '',
-      templates: []
+      templates: [{name: 'Default'}],
+      templateIndex: 0
     };
 
     this.changedTitle = this.changedTitle.bind(this);
     this.changedContent = this.changedContent.bind(this);
-    this.changeTemplate = this.changeTemplate.bind(this);
+    this.handleChange = this.handleChange.bind(this);
     this.handle = this.handle.bind(this);
   }
 
@@ -39,26 +41,6 @@ class PagePost extends React.Component {
         this.setState(newState);
       }
     }, this);
-    //if (nextProps.title) {
-      //this.setState({
-        //title: nextProps.title
-      //});
-    //}
-    //if(nextProps.content) {
-      //this.setState({
-        //content: nextProps.content
-      //});
-    //}
-    //if(nextProps.templates) {
-      //this.setState({
-        //templates: nextProps.templates
-      //});
-    //}
-    //if(nextProps.template) {
-      //this.setState({
-        //template: nextProps.template
-      //});
-    //}
   }
 
   changedTitle(event) {
@@ -75,11 +57,11 @@ class PagePost extends React.Component {
     this.setState({ content: event.target.value });
   }
 
-  changeTemplate(event, selectedIndex, menuItem) {
+  handleChange(e, index, value) {
     if (this.props.onChangeTemplate) {
-      return this.props.onChangeTemplate(menuItem.text);
+      return this.props.onChangeTemplate(value);
     }
-    this.setState({ template: menuItem.text });
+    this.setState({ templateIndex: value });
   }
 
   handle(event) {
@@ -104,13 +86,7 @@ class PagePost extends React.Component {
       whiteSpace: 'nowrap',
       WebkitUserSelect: 'none'
     }
-
-    let menuItems = _.map(this.state.templates, function(item) {
-      return {text: item.name};
-    });
-
-    let indexTplActive = _.indexOf(menuItems, _.findWhere(menuItems, { 'text': this.state.template}));
-    indexTplActive = (indexTplActive == -1) ? 0 : indexTplActive;
+    console.log('tempalte', this.state.templateIndex);
 
     return (
       <Paper zDepth={1}>
@@ -130,15 +106,23 @@ class PagePost extends React.Component {
             value={this.state.content}
             onChange={this.changedContent} />
 
-          <DropDownMenu
-            ref='dropdownTemplates'
+            <DropDownMenu ref='dropdownTemplates'
+            value={this.state.templateIndex}
+            onChange={this.handleChange}
             onTouchTap={this.handle}
             autoWidth={false}
             style={{ width: '400px' }}
-            menuItemStyle={menuItemStyle}
-            onChange={this.changeTemplate}
-            selectedIndex={indexTplActive}
-            menuItems={menuItems} />
+            menuItemStyle={menuItemStyle} >
+            {this.state.templates.map(function(item, i){
+              return (
+                <MenuItem key={item.name}
+                style={menuItemStyle}
+                value={i}
+                labe={item.name}
+                primaryText={item.name} />
+              );
+            }, this)}
+        </DropDownMenu>
 
         </div>
       </Paper>
