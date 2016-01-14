@@ -1,16 +1,12 @@
 'use strict';
 import React from 'react';
-import AppBar from 'material-ui/lib/app-bar';
-import IconButton from 'material-ui/lib/icon-button';
-import NavigationClose from 'material-ui/lib/svg-icons/navigation/close';
+import FormField from './form-field';
 
 import Paper from 'material-ui/lib/paper';
 import TextField from 'material-ui/lib/text-field';
-import SelectField from 'material-ui/lib/select-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
-import Card from 'material-ui/lib/card/card';
 import Divider from 'material-ui/lib/divider';
 import Toggle from 'material-ui/lib/toggle';
 
@@ -24,23 +20,29 @@ import TableRowColumn from 'material-ui/lib/table/table-row-column';
 
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import FlatButton from 'material-ui/lib/flat-button';
-import RaisedButton from 'material-ui/lib/raised-button';
 
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
 
-class FormFields extends React.Component {
+class FormBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: 0
-    }
+      inputFields: []
+    };
 
     this.handleChangeType = this.handleChangeType.bind(this);
+    this.addField = this.addField.bind(this);
   }
 
   handleChangeType(e, index, type) {
     this.setState({type});
+  }
+
+  addField(e) {
+    var arrFields = this.state.inputFields;
+    arrFields.push({type: 0, name: 'nome', placeholder: 'seu nome aqui', required: true});
+    this.setState({inputFields: arrFields});
   }
 
   render() {
@@ -56,11 +58,21 @@ class FormFields extends React.Component {
     const labelStyle = {
       fontSize: '16px'
     };
+
+    let fields = this.state.inputFields.map(function(item, i) {
+      return (
+        <FormField {...item}/>
+      );
+    });
+
     return (
       <div style={{margin: '0 30px'}}>
         <div style={{margin: '20px 0 0'}}>
-          <FlatButton label="add" style={{fontWeight: '600', color: colors.cyan500}} />
-          <FlatButton label="remove" style={{fontWeight: '600', color: colors.cyan500}} />
+          <FlatButton label="add"
+            onTouchTap={this.addField}
+            style={{fontWeight: '600', color: colors.cyan500}} />
+          <FlatButton label="remove"
+            style={{fontWeight: '600', color: colors.cyan500}} />
         </div>
         <Divider />
         <Table selectable={false}>
@@ -73,33 +85,7 @@ class FormFields extends React.Component {
             </TableRow>
           </TableHeader>
           <TableBody showRowHover={false}>
-            <TableRow selected={true}>
-              <TableRowColumn>
-                <DropDownMenu
-                  value={this.state.type}
-                  onChange={this.handleChangeType}
-                  style={{width: '150px'}}>
-                  <MenuItem value={0} primaryText="text"/>
-                  <MenuItem value={1} primaryText="number"/>
-                  <MenuItem value={2} primaryText="checkbox"/>
-                  <MenuItem value={3} primaryText="radio"/>
-                  <MenuItem value={4} primaryText="email"/>
-                  <MenuItem value={5} primaryText="tel"/>
-                  <MenuItem value={6} primaryText="file"/>
-                </DropDownMenu>
-              </TableRowColumn>
-              <TableRowColumn>
-                <TextField hintText="Nome do campo" underlineStyle={{display: 'none'}}/>
-              </TableRowColumn>
-              <TableRowColumn>
-                <TextField hintText="Texto" underlineStyle={{display: 'none'}}/>
-              </TableRowColumn>
-              <TableRowColumn>
-                <Toggle
-                  name="required"
-                  value="required" />
-              </TableRowColumn>
-            </TableRow>
+            {fields}
           </TableBody>
         </Table>
       </div>
@@ -107,4 +93,4 @@ class FormFields extends React.Component {
   }
 }
 
-export default FormFields;
+export default FormBody;

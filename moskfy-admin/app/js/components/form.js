@@ -1,6 +1,6 @@
 'use strict';
 import React from 'react';
-import FormFields from './form-fields';
+import FormBody from './form-body';
 
 import AppBar from 'material-ui/lib/app-bar';
 import IconButton from 'material-ui/lib/icon-button';
@@ -49,7 +49,7 @@ class FormContent extends React.Component {
           <TextField hintText="Nome do formulário" underlineStyle={underlineStyle} style={fieldStyle} />
           <Divider />
 
-          <FormFields />
+          <FormBody />
 
           {(this.state.action === 1) ?
             <h1>config de email</h1> : ''
