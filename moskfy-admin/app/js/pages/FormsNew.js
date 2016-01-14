@@ -2,7 +2,8 @@
 
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import AppHeader from '../components/app-header.js';
+import AppHeader from '../components/app-header';
+import Form from '../components/form';
 
 const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
@@ -23,7 +24,9 @@ class FormsNew extends React.Component {
     return (
       <DocumentTitle title="Moskfy | Novo formulário">
       <div>
-        <AppHeader parentView="Páginas" currentlyView="Nova página"/>
+        <AppHeader parentView="Formulários" currentlyView="Novo formulário"/>
+
+        <Form />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
