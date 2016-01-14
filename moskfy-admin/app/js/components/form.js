@@ -49,16 +49,18 @@ class FormContent extends React.Component {
           <TextField hintText="Nome do formulário" underlineStyle={underlineStyle} style={fieldStyle} />
           <Divider />
 
-          <DropDownMenu value={this.state.action} onChange={this.handleChangeAction}>
-            <MenuItem value={0} primaryText="Salvar contato"/>
-            <MenuItem value={1} primaryText="Enviar email de contato"/>
-          </DropDownMenu>
-
           <FormFields />
 
           {(this.state.action === 1) ?
             <h1>config de email</h1> : ''
           }
+
+          <Divider />
+
+          <DropDownMenu value={this.state.action} onChange={this.handleChangeAction}>
+            <MenuItem value={0} primaryText="Salvar contato"/>
+            <MenuItem value={1} primaryText="Enviar email de contato"/>
+          </DropDownMenu>
 
         </Paper>
       </div>

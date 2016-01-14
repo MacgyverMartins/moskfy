@@ -22,11 +22,18 @@ import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
 import TableRow from 'material-ui/lib/table/table-row';
 import TableRowColumn from 'material-ui/lib/table/table-row-column';
 
+import DropDownMenu from 'material-ui/lib/DropDownMenu';
+import FlatButton from 'material-ui/lib/flat-button';
+import RaisedButton from 'material-ui/lib/raised-button';
+
+import styles from 'material-ui/lib/styles';
+const colors = styles.Colors;
+
 class FormFields extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      type: null
+      type: 0
     }
 
     this.handleChangeType = this.handleChangeType.bind(this);
@@ -50,12 +57,14 @@ class FormFields extends React.Component {
       fontSize: '16px'
     };
     return (
-      <div>
+      <div style={{margin: '0 30px'}}>
+        <div style={{margin: '20px 0 0'}}>
+          <FlatButton label="add" style={{fontWeight: '600', color: colors.cyan500}} />
+          <FlatButton label="remove" style={{fontWeight: '600', color: colors.cyan500}} />
+        </div>
         <Divider />
-        <Table
-          selectable={false}
-          height={'300px'}>
-          <TableHeader enableSelectAll={this.state.enableSelectAll}>
+        <Table selectable={false}>
+          <TableHeader>
             <TableRow>
               <TableHeaderColumn tooltip='The Name'>Tipo</TableHeaderColumn>
               <TableHeaderColumn tooltip='The Name'>Name</TableHeaderColumn>
@@ -66,11 +75,10 @@ class FormFields extends React.Component {
           <TableBody showRowHover={false}>
             <TableRow selected={true}>
               <TableRowColumn>
-                <SelectField
+                <DropDownMenu
                   value={this.state.type}
                   onChange={this.handleChangeType}
-                  style={{width: '150px'}}
-                  floatingLabelText='Tipo' >
+                  style={{width: '150px'}}>
                   <MenuItem value={0} primaryText="text"/>
                   <MenuItem value={1} primaryText="number"/>
                   <MenuItem value={2} primaryText="checkbox"/>
@@ -78,7 +86,7 @@ class FormFields extends React.Component {
                   <MenuItem value={4} primaryText="email"/>
                   <MenuItem value={5} primaryText="tel"/>
                   <MenuItem value={6} primaryText="file"/>
-                </SelectField>
+                </DropDownMenu>
               </TableRowColumn>
               <TableRowColumn>
                 <TextField hintText="Nome do campo" underlineStyle={{display: 'none'}}/>
