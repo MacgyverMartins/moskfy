@@ -24,6 +24,8 @@ import FlatButton from 'material-ui/lib/flat-button';
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
 
+import _ from 'lodash';
+
 class FormBody extends React.Component {
   constructor(props) {
     super(props);
@@ -33,10 +35,17 @@ class FormBody extends React.Component {
 
     this.handleChangeType = this.handleChangeType.bind(this);
     this.addField = this.addField.bind(this);
+    this.handleChangeField = this.handleChangeField.bind(this);
   }
 
   handleChangeType(e, index, type) {
     this.setState({type});
+  }
+
+  handleChangeField(index, item) {
+    var arr = this.state.inputFields;
+    arr[index] = item;
+    this.setState({inputFields: arr});
   }
 
   addField(e) {
@@ -61,33 +70,21 @@ class FormBody extends React.Component {
 
     let fields = this.state.inputFields.map(function(item, i) {
       return (
-        <FormField {...item}/>
+        <FormField {...item} index={i} onChange={this.handleChangeField}/>
       );
-    });
+    }, this);
+
+    console.log('body state', this.state);
 
     return (
-      <div style={{margin: '0 30px'}}>
-        <div style={{margin: '20px 0 0'}}>
+      <div style={{padding: '0 30px', backgroundColor: '#F5F5F5'}}>
+        <Divider />
+        {fields}
+        <div style={{margin: '0 0 0'}}>
           <FlatButton label="add"
             onTouchTap={this.addField}
             style={{fontWeight: '600', color: colors.cyan500}} />
-          <FlatButton label="remove"
-            style={{fontWeight: '600', color: colors.cyan500}} />
         </div>
-        <Divider />
-        <Table selectable={false}>
-          <TableHeader>
-            <TableRow>
-              <TableHeaderColumn tooltip='The Name'>Tipo</TableHeaderColumn>
-              <TableHeaderColumn tooltip='The Name'>Name</TableHeaderColumn>
-              <TableHeaderColumn tooltip='The Name'>Placeholder</TableHeaderColumn>
-              <TableHeaderColumn tooltip='The Status'>Required</TableHeaderColumn>
-            </TableRow>
-          </TableHeader>
-          <TableBody showRowHover={false}>
-            {fields}
-          </TableBody>
-        </Table>
       </div>
     );
   }

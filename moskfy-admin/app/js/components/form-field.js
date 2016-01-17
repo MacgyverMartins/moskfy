@@ -7,14 +7,6 @@ import MenuItem from 'material-ui/lib/menus/menu-item';
 import Card from 'material-ui/lib/card/card';
 import Toggle from 'material-ui/lib/toggle';
 
-import Table from 'material-ui/lib/table/table';
-import TableBody from 'material-ui/lib/table/table-body';
-import TableFooter from 'material-ui/lib/table/table-footer';
-import TableHeader from 'material-ui/lib/table/table-header';
-import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
-import TableRow from 'material-ui/lib/table/table-row';
-import TableRowColumn from 'material-ui/lib/table/table-row-column';
-
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import FlatButton from 'material-ui/lib/flat-button';
 
@@ -46,46 +38,60 @@ class FormFields extends React.Component {
 
   handlePlaceholder(e) {
     this.setState({placeholder: e.target.value});
+    this.emitChanges()
   }
 
   render() {
+      const wrapperFieldStyle = {
+        display: 'inline-block',
+        height: '100%',
+        boxSizing: 'border-box',
+        padding: '0px 19px',
+        width: '25%'
+      }
     return (
-      <TableRow selected={true} style={{backgroundColor: '#FFF'}}>
-        <TableRowColumn style={{backgroundColor: '#FFF'}}>
+      <Paper style={{margin: '10px', paddingBottom: '24px'}} zDepth={1}>
+        <div style={wrapperFieldStyle}>
           <DropDownMenu
-            value={this.state.type}
-            onChange={this.handleChangeType}
-            style={{width: '150px'}}>
-            <MenuItem value={0} primaryText="text"/>
-            <MenuItem value={1} primaryText="number"/>
-            <MenuItem value={2} primaryText="checkbox"/>
-            <MenuItem value={3} primaryText="radio"/>
-            <MenuItem value={4} primaryText="email"/>
-            <MenuItem value={5} primaryText="tel"/>
-            <MenuItem value={6} primaryText="file"/>
+          value={this.state.type}
+          onChange={this.handleChangeType}
+          style={{width: '150px'}}>
+          <MenuItem value={0} primaryText="text"/>
+          <MenuItem value={1} primaryText="number"/>
+          <MenuItem value={2} primaryText="checkbox"/>
+          <MenuItem value={3} primaryText="radio"/>
+          <MenuItem value={4} primaryText="email"/>
+          <MenuItem value={5} primaryText="tel"/>
+          <MenuItem value={6} primaryText="file"/>
           </DropDownMenu>
-        </TableRowColumn>
-        <TableRowColumn style={{backgroundColor: '#FFF'}}>
+        </div>
+        <div style={wrapperFieldStyle}>
           <TextField
-            hintText="Nome do campo"
-            value={this.state.name}
-            onChange={this.handleName}
-            underlineStyle={{display: 'none'}}/>
-        </TableRowColumn>
-        <TableRowColumn style={{backgroundColor: '#FFF'}}>
+          fullWidth={true}
+          floatingLabelText='input name'
+          hintText='input name'
+          value={this.state.name}
+          onChange={this.handleName}
+          />
+        </div>
+        <div style={wrapperFieldStyle}>
           <TextField
-            hintText="Texto"
-            value={this.state.placeholder}
-            onChange={this.handlePlaceholder}
-            underlineStyle={{display: 'none'}}/>
-        </TableRowColumn>
-        <TableRowColumn style={{backgroundColor: '#FFF'}}>
+          fullWidth={true}
+          floatingLabelText='placeholder'
+          hintText="placeholder"
+          value={this.state.placeholder}
+          onChange={this.handlePlaceholder}
+          />
+        </div>
+        <div style={wrapperFieldStyle} >
           <Toggle
+            label='is required'
+            style={{width: 'auto', margin: '0 auto -7px'}}
             name="required"
             defaultToggled={this.state.required}
             value="required" />
-        </TableRowColumn>
-      </TableRow>
+        </div>
+      </Paper>
     );
   }
 }

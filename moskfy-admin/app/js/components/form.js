@@ -66,7 +66,6 @@ class FormContent extends React.Component {
       </div>
     );
   }
-
 }
 
 export default FormContent;
