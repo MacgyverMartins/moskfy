@@ -63,7 +63,7 @@ class FormBody extends React.Component {
 
     let fields = this.state.inputFields.map(function(item, i) {
       return (
-        <FormGroupOptions {...item} index={i} onChange={this.handleChangeField}/>
+        <FormGroupOptions {...item} index={i} key={i} />
       );
     }, this);
 

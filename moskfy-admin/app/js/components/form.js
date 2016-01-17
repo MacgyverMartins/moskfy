@@ -39,12 +39,9 @@ class FormContent extends React.Component {
       margin: '5px 0',
       width: '100%'
     };
-    const wrapper = {
-      margin: '20px'
-    };
 
     return (
-      <div style={wrapper}>
+      <div className='form_wrapper'>
         <Paper zDepth={1}>
           <TextField hintText="Nome do formulário" underlineStyle={underlineStyle} style={fieldStyle} />
           <Divider />

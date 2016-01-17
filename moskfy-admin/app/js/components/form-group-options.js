@@ -19,8 +19,6 @@ class FormGroupOptions extends React.Component {
     this.state = {
       type: this.props.type,
       name: this.props.name,
-      text: this.props.text,
-      value: this.props.value,
       inputs: []
     };
 
@@ -43,8 +41,16 @@ class FormGroupOptions extends React.Component {
     this.setState({text: e.target.value});
   }
 
-  handleValue(e) {
-    this.setState({value: e.target.value});
+  handleValue(index, e) {
+    var arr = this.state.inputs;
+    arr[index].value = e.target.value;
+    this.setState({inputs: arr});
+  }
+
+  handleText(index, e) {
+    var arr = this.state.inputs;
+    arr[index].text = e.target.value;
+    this.setState({inputs: arr});
   }
 
   handleAdd(e) {
@@ -71,22 +77,23 @@ class FormGroupOptions extends React.Component {
 
       let items = this.state.inputs.map(function(item, i) {
         return (
-          <Paper style={itemStyle} zDepth={1}>
+          <Paper key={i} style={itemStyle} zDepth={2}>
+            <div className='form-group-options__item__header'></div>
             <div style={wrapperFieldStyle}>
               <TextField
               fullWidth={true}
               floatingLabelText='value'
               hintText="value"
-              value={this.state.value}
-              onChange={this.handleValue} />
+              value={this.state.inputs[i].value}
+              onChange={this.handleValue.bind(this, i)} />
             </div>
             <div style={wrapperFieldStyle}>
               <TextField
               fullWidth={true}
               floatingLabelText='text element'
               hintText='text element'
-              value={this.state.text}
-              onChange={this.handleText} />
+              value={this.state.inputs[i].text}
+              onChange={this.handleText.bind(this, i)} />
             </div>
           </Paper>
         );
@@ -120,7 +127,7 @@ class FormGroupOptions extends React.Component {
           tooltip="add item"
           touch={true}
           tooltipPosition="bottom-right">
-          <ContentAddCircle/>
+          <ContentAddCircle color={colors.pink200}/>
         </IconButton>
       </Paper>
     );
