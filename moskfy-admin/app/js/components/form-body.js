@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
-import FormField from './form-field';
+import FormText from './form-text';
+import FormGroupOptions from './form-group-options';
 
 import Paper from 'material-ui/lib/paper';
 import TextField from 'material-ui/lib/text-field';
@@ -9,14 +10,6 @@ import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import Divider from 'material-ui/lib/divider';
 import Toggle from 'material-ui/lib/toggle';
-
-import Table from 'material-ui/lib/table/table';
-import TableBody from 'material-ui/lib/table/table-body';
-import TableFooter from 'material-ui/lib/table/table-footer';
-import TableHeader from 'material-ui/lib/table/table-header';
-import TableHeaderColumn from 'material-ui/lib/table/table-header-column';
-import TableRow from 'material-ui/lib/table/table-row';
-import TableRowColumn from 'material-ui/lib/table/table-row-column';
 
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import FlatButton from 'material-ui/lib/flat-button';
@@ -70,7 +63,7 @@ class FormBody extends React.Component {
 
     let fields = this.state.inputFields.map(function(item, i) {
       return (
-        <FormField {...item} index={i} onChange={this.handleChangeField}/>
+        <FormGroupOptions {...item} index={i} onChange={this.handleChangeField}/>
       );
     }, this);
 

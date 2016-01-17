@@ -13,19 +13,21 @@ import FlatButton from 'material-ui/lib/flat-button';
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
 
-class FormFields extends React.Component {
+class FormText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       type: this.props.type,
       name: this.props.name,
       placeholder: this.props.placeholder,
+      label: this.props.label,
       required: this.props.required
     };
 
     this.handleChangeType = this.handleChangeType.bind(this);
     this.handleName = this.handleName.bind(this);
     this.handlePlaceholder = this.handlePlaceholder.bind(this);
+    this.handleLabel = this.handleLabel.bind(this);
   }
 
   handleChangeType(e, index, type) {
@@ -38,7 +40,10 @@ class FormFields extends React.Component {
 
   handlePlaceholder(e) {
     this.setState({placeholder: e.target.value});
-    this.emitChanges()
+  }
+
+  handleLabel(e) {
+    this.setState({label: e.target.value});
   }
 
   render() {
@@ -46,7 +51,7 @@ class FormFields extends React.Component {
         display: 'inline-block',
         height: '100%',
         boxSizing: 'border-box',
-        padding: '0px 19px',
+        padding: '10px 20px 25px',
         width: '25%'
       }
     return (
@@ -58,11 +63,7 @@ class FormFields extends React.Component {
           style={{width: '150px'}}>
           <MenuItem value={0} primaryText="text"/>
           <MenuItem value={1} primaryText="number"/>
-          <MenuItem value={2} primaryText="checkbox"/>
-          <MenuItem value={3} primaryText="radio"/>
-          <MenuItem value={4} primaryText="email"/>
-          <MenuItem value={5} primaryText="tel"/>
-          <MenuItem value={6} primaryText="file"/>
+          <MenuItem value={2} primaryText="email"/>
           </DropDownMenu>
         </div>
         <div style={wrapperFieldStyle}>
@@ -77,10 +78,19 @@ class FormFields extends React.Component {
         <div style={wrapperFieldStyle}>
           <TextField
           fullWidth={true}
-          floatingLabelText='placeholder'
-          hintText="placeholder"
+          floatingLabelText='placeholder (optional)'
+          hintText="placeholder (optional)"
           value={this.state.placeholder}
           onChange={this.handlePlaceholder}
+          />
+        </div>
+        <div style={wrapperFieldStyle}>
+          <TextField
+          fullWidth={true}
+          floatingLabelText='label (optional)'
+          hintText="label (optional)"
+          value={this.state.label}
+          onChange={this.handleLabel}
           />
         </div>
         <div style={wrapperFieldStyle} >
@@ -96,4 +106,4 @@ class FormFields extends React.Component {
   }
 }
 
-export default FormFields;
+export default FormText;
