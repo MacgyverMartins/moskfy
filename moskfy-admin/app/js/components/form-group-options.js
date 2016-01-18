@@ -10,6 +10,7 @@ import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import IconButton from 'material-ui/lib/icon-button';
 import ContentAddCircle from 'material-ui/lib/svg-icons/content/add-circle';
 import ContentClear from 'material-ui/lib/svg-icons/content/clear';
+import _ from 'lodash';
 
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
@@ -32,6 +33,12 @@ class FormGroupOptions extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let newState = {}
+    _.forEach(nextProps, function(value, key){
+      if (this.state[key]) {
+        newState[key] = value;
+      }
+    }, this);
     this.setState(nextProps);
   }
 
