@@ -83,7 +83,7 @@ class FormBody extends React.Component {
         <Divider />
         {this.state.inputFields.map(function(item, i) {
             return (
-              <FormText {...item} index={i} key={i} onChange={this.handleChangeField} onDelete={this.onDelete}/>
+              <FormGroupOptions {...item} index={i} key={i} onChange={this.handleChangeField} onDelete={this.onDelete}/>
             );
         }, this)}
         <div style={{margin: '0 0 0'}}>

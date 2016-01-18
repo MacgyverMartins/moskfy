@@ -28,40 +28,45 @@ class FormGroupOptions extends React.Component {
     this.handleValue = this.handleValue.bind(this);
     this.handleText = this.handleText.bind(this);
     this.handleAdd = this.handleAdd.bind(this);
+    this.handleChanges = this.handleChanges.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(nextProps);
+  }
+
+  handleChanges() {
+    let index = this.props.index;
+    if (this.props.onChange) {
+      return this.props.onChange(index, this.state);
+    }
   }
 
   handleChangeType(e, index, type) {
-    this.setState({type: type});
+    this.setState({type: type}, this.handleChanges);
   }
 
   handleName(e) {
     let index = this.props.index;
-    this.setState({name: e.target.value}, function() {
-      let item= this.state;
-      this.props.onChange(index, item);
-    });
-  }
-
-  handleText(e) {
-    this.setState({text: e.target.value});
+    this.setState({name: e.target.value}, this.handleChanges);
   }
 
   handleValue(index, e) {
     var arr = this.state.inputs;
     arr[index].value = e.target.value;
-    this.setState({inputs: arr});
+    this.setState({inputs: arr}, this.handleChanges);
   }
 
   handleText(index, e) {
     var arr = this.state.inputs;
     arr[index].text = e.target.value;
-    this.setState({inputs: arr});
+    this.setState({inputs: arr}, this.handleChanges);
   }
 
   handleAdd(e) {
     var arr = this.state.inputs;
     arr.push({text: '', value: ''});
-    this.setState({inputs: arr});
+    this.setState({inputs: arr}, this.handleChanges);
   }
 
   deleteItem(index, e) {
@@ -111,8 +116,6 @@ class FormGroupOptions extends React.Component {
           </Paper>
         );
       }, this);
-
-      console.log('form grouos props', this.props);
 
     return (
       <Paper style={{margin: '10px', paddingBottom: '24px'}} zDepth={1}>

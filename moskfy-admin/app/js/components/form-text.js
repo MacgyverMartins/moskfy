@@ -30,30 +30,35 @@ class FormText extends React.Component {
     this.handleName = this.handleName.bind(this);
     this.handlePlaceholder = this.handlePlaceholder.bind(this);
     this.handleLabel = this.handleLabel.bind(this);
+    this.handleChanges = this.handleChanges.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
     this.setState(nextProps);
   }
 
+  handleChanges() {
+    let index = this.props.index;
+    if (this.props.onChange) {
+      return this.props.onChange(index, this.state);
+    }
+  }
+
   handleChangeType(e, index, type) {
-    this.setState({type: type});
+    this.setState({type: type}, this.handleChanges);
   }
 
   handleName(e) {
     let index = this.props.index;
-    this.setState({name: e.target.value}, function() {
-      let item= this.state;
-      this.props.onChange(index, item);
-    });
+    this.setState({name: e.target.value}, this.handleChanges);
   }
 
   handlePlaceholder(e) {
-    this.setState({placeholder: e.target.value});
+    this.setState({placeholder: e.target.value}, this.handleChanges);
   }
 
   handleLabel(e) {
-    this.setState({label: e.target.value});
+    this.setState({label: e.target.value}, this.handleChanges);
   }
 
   deleteItem(index, e) {
