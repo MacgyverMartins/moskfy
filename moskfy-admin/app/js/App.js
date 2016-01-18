@@ -17,6 +17,9 @@ import MenuItem from 'material-ui/lib/menus/menu-item';
 import SubheaderMenuItem from 'material-ui/lib/menu/subheader-menu-item';
 import LinearProgress from 'material-ui/lib/linear-progress';
 
+import styles from 'material-ui/lib/styles';
+const colors = styles.Colors;
+
 import loader from './utils/loader.js';
 
 const propTypes = {
@@ -87,6 +90,12 @@ class App extends React.Component {
       margin: '56px 0 0 256px',
       padding: '20px'
     };
+    let toolbarStyle = {
+      backgroundColor: colors.cyan500,
+      position: 'fixed',
+      top: '0',
+      zIndex: '11'
+    };
 
 
     let progressBar;
@@ -98,9 +107,9 @@ class App extends React.Component {
 
     return (
       <div className="layout-wrapper">
-        <Toolbar style={{ position: 'fixed', top: '0', zIndex: '11' }}>
+        <Toolbar style={toolbarStyle}>
           <ToolbarGroup key={0} float="left">
-            <ToolbarTitle text="Moskfy" />
+            <ToolbarTitle text="Moskfy" style={{ color: '#FFF', fontSize: '25px' }}/>
           </ToolbarGroup>
         </Toolbar>
 

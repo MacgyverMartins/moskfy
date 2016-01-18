@@ -28,7 +28,8 @@ class FormBody extends React.Component {
 
     this.handleChangeType = this.handleChangeType.bind(this);
     this.addField = this.addField.bind(this);
-    this.handleChangeField = this.handleChangeField.bind(this);
+    this.onDelete = this.onDelete.bind(this);
+    this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
   }
 
   handleChangeType(e, index, type) {
@@ -47,6 +48,12 @@ class FormBody extends React.Component {
     this.setState({inputFields: arrFields});
   }
 
+  onDelete(index, e) {
+    var arrFields = this.state.inputFields.slice();
+    arrFields.splice(index, 1);
+    this.setState({inputFields: arrFields});
+  }
+
   render() {
     const cardStyle = {
       margin: '20px',
@@ -61,18 +68,24 @@ class FormBody extends React.Component {
       fontSize: '16px'
     };
 
-    let fields = this.state.inputFields.map(function(item, i) {
-      return (
-        <FormGroupOptions {...item} index={i} key={i} />
-      );
-    }, this);
+    //let fields = this.state.inputFields.map(function(item, i) {
+      //console.log('item', item);
 
-    console.log('body state', this.state);
+      //return (
+        //<FormText {...item} index={i} key={i} onChange={this.handleChangeField} onDelete={this.onDelete}/>
+      //);
+    //}, this);
+
+    console.log('this.state', this.state.inputFields);
 
     return (
-      <div style={{padding: '0 30px', backgroundColor: '#F5F5F5'}}>
+      <div style={{padding: '0 30px', backgroundColor: '#BBBBBB'}}>
         <Divider />
-        {fields}
+        {this.state.inputFields.map(function(item, i) {
+            return (
+              <FormText {...item} index={i} key={i} onChange={this.handleChangeField} onDelete={this.onDelete}/>
+            );
+        }, this)}
         <div style={{margin: '0 0 0'}}>
           <FlatButton label="add"
             onTouchTap={this.addField}

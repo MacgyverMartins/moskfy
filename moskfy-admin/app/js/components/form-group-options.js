@@ -9,6 +9,7 @@ import Toggle from 'material-ui/lib/toggle';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import IconButton from 'material-ui/lib/icon-button';
 import ContentAddCircle from 'material-ui/lib/svg-icons/content/add-circle';
+import ContentClear from 'material-ui/lib/svg-icons/content/clear';
 
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
@@ -34,7 +35,11 @@ class FormGroupOptions extends React.Component {
   }
 
   handleName(e) {
-    this.setState({name: e.target.value});
+    let index = this.props.index;
+    this.setState({name: e.target.value}, function() {
+      let item= this.state;
+      this.props.onChange(index, item);
+    });
   }
 
   handleText(e) {
@@ -59,6 +64,12 @@ class FormGroupOptions extends React.Component {
     this.setState({inputs: arr});
   }
 
+  deleteItem(index, e) {
+    if (this.props.onDelete) {
+      return this.props.onDelete(index, e);
+    }
+  }
+
   render() {
       const wrapperFieldStyle = {
         display: 'inline-block',
@@ -70,6 +81,8 @@ class FormGroupOptions extends React.Component {
         display: 'block'
       }
       const itemStyle = {
+        boxShadow: 'none',
+        border: '2px solid #C3C3C3',
         display: 'inline-block',
         margin: '1.2%',
         width: '47.6%'
@@ -99,8 +112,17 @@ class FormGroupOptions extends React.Component {
         );
       }, this);
 
+      console.log('form grouos props', this.props);
+
     return (
       <Paper style={{margin: '10px', paddingBottom: '24px'}} zDepth={1}>
+        <IconButton
+          style={{float: 'right'}}
+          onTouchTap={this.deleteItem.bind(this, this.props.index)}
+          tooltip="remove item"
+          tooltipPosition="top-left">
+          <ContentClear />
+        </IconButton>
         <div style={typeStyle}>
           <div style={wrapperFieldStyle}>
             <DropDownMenu
@@ -124,8 +146,7 @@ class FormGroupOptions extends React.Component {
         {items}
         <IconButton
           onTouchTap={this.handleAdd}
-          tooltip="add item"
-          touch={true}
+          tooltip="add input"
           tooltipPosition="bottom-right">
           <ContentAddCircle color={colors.pink200}/>
         </IconButton>

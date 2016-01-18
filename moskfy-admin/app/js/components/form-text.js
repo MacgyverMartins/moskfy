@@ -6,9 +6,11 @@ import TextField from 'material-ui/lib/text-field';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import Card from 'material-ui/lib/card/card';
 import Toggle from 'material-ui/lib/toggle';
-
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import FlatButton from 'material-ui/lib/flat-button';
+import IconButton from 'material-ui/lib/icon-button';
+import ContentAddCircle from 'material-ui/lib/svg-icons/content/add-circle';
+import ContentClear from 'material-ui/lib/svg-icons/content/clear';
 
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
@@ -30,12 +32,20 @@ class FormText extends React.Component {
     this.handleLabel = this.handleLabel.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.setState(nextProps);
+  }
+
   handleChangeType(e, index, type) {
     this.setState({type: type});
   }
 
   handleName(e) {
-    this.setState({name: e.target.value});
+    let index = this.props.index;
+    this.setState({name: e.target.value}, function() {
+      let item= this.state;
+      this.props.onChange(index, item);
+    });
   }
 
   handlePlaceholder(e) {
@@ -44,6 +54,12 @@ class FormText extends React.Component {
 
   handleLabel(e) {
     this.setState({label: e.target.value});
+  }
+
+  deleteItem(index, e) {
+    if (this.props.onDelete) {
+      return this.props.onDelete(index, e);
+    }
   }
 
   render() {
@@ -56,6 +72,13 @@ class FormText extends React.Component {
       }
     return (
       <Paper style={{margin: '10px', paddingBottom: '24px'}} zDepth={1}>
+        <IconButton
+          style={{float: 'right'}}
+          onTouchTap={this.deleteItem.bind(this, this.props.index)}
+          tooltip="remove item"
+          tooltipPosition="top-left">
+          <ContentClear />
+        </IconButton>
         <div style={wrapperFieldStyle}>
           <DropDownMenu
           value={this.state.type}
@@ -107,3 +130,4 @@ class FormText extends React.Component {
 }
 
 export default FormText;
+
