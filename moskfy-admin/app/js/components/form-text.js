@@ -24,24 +24,25 @@ class FormText extends React.Component {
       name: this.props.name,
       placeholder: this.props.placeholder,
       label: this.props.label,
-      required: this.props.required
+      isRequired: this.props.isRequired
     };
 
     this.handleChangeType = this.handleChangeType.bind(this);
     this.handleName = this.handleName.bind(this);
     this.handlePlaceholder = this.handlePlaceholder.bind(this);
     this.handleLabel = this.handleLabel.bind(this);
+    this.handleRequired = this.handleRequired.bind(this);
     this.handleChanges = this.handleChanges.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
+    console.log('new', nextProps);
     let newState = {}
     _.forEach(nextProps, function(value, key){
       if (this.state[key]) {
         newState[key] = value;
       }
     }, this);
-    this.state = {};
     this.setState(nextProps);
   }
 
@@ -54,6 +55,10 @@ class FormText extends React.Component {
 
   handleChangeType(e, index, type) {
     this.setState({type: type}, this.handleChanges);
+  }
+
+  handleRequired(event, toggled) {
+    this.setState({isRequired: toggled}, this.handleChanges);
   }
 
   handleName(e) {
@@ -134,7 +139,8 @@ class FormText extends React.Component {
             label='is required'
             style={{width: 'auto', margin: '0 auto -7px'}}
             name="required"
-            defaultToggled={this.state.required}
+            defaultToggled={this.state.isRequired}
+            onToggle={this.handleRequired}
             value="required" />
         </div>
       </Paper>

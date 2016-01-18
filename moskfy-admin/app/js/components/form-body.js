@@ -44,7 +44,7 @@ class FormBody extends React.Component {
 
   addField(e) {
     var arrFields = this.state.inputFields;
-    arrFields.push({type: 0, name: 'nome', placeholder: 'seu nome aqui', required: true});
+    arrFields.push({type: 0, name: 'nome', placeholder: 'seu nome aqui', isRequired: true});
     this.setState({inputFields: arrFields});
   }
 
@@ -83,7 +83,7 @@ class FormBody extends React.Component {
         <Divider />
         {this.state.inputFields.map(function(item, i) {
             return (
-              <FormGroupOptions {...item} index={i} key={i} onChange={this.handleChangeField} onDelete={this.onDelete}/>
+              <FormText {...item} index={i} key={i} onChange={this.handleChangeField} onDelete={this.onDelete}/>
             );
         }, this)}
         <div style={{margin: '0 0 0'}}>
