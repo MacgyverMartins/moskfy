@@ -20,6 +20,7 @@ class FormText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      uniqueId: this.props.uniqueId,
       type: this.props.type,
       name: this.props.name,
       placeholder: this.props.placeholder,
@@ -36,14 +37,13 @@ class FormText extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log('new', nextProps);
     let newState = {}
     _.forEach(nextProps, function(value, key){
       if (this.state[key]) {
         newState[key] = value;
       }
     }, this);
-    this.setState(nextProps);
+    this.setState(newState);
   }
 
   handleChanges() {
@@ -102,9 +102,9 @@ class FormText extends React.Component {
           value={this.state.type}
           onChange={this.handleChangeType}
           style={{width: '150px'}}>
-          <MenuItem value={0} primaryText="text"/>
-          <MenuItem value={1} primaryText="number"/>
-          <MenuItem value={2} primaryText="email"/>
+          <MenuItem value='text' primaryText="text"/>
+          <MenuItem value='number' primaryText="number"/>
+          <MenuItem value='email' primaryText="email"/>
           </DropDownMenu>
         </div>
         <div style={wrapperFieldStyle}>

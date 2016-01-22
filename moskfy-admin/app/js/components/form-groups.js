@@ -15,10 +15,11 @@ import _ from 'lodash';
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
 
-class FormGroupOptions extends React.Component {
+class FormGroups extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      uniqueId: this.props.uniqueId,
       type: this.props.type,
       name: this.props.name,
       inputs: []
@@ -39,7 +40,7 @@ class FormGroupOptions extends React.Component {
         newState[key] = value;
       }
     }, this);
-    this.setState(nextProps);
+    this.setState(newState);
   }
 
   handleChanges() {
@@ -139,8 +140,8 @@ class FormGroupOptions extends React.Component {
             value={this.state.type}
             onChange={this.handleChangeType}
             style={{width: '150px'}}>
-            <MenuItem value={0} primaryText="checkbox"/>
-            <MenuItem value={1} primaryText="radio"/>
+            <MenuItem value='checkbox' primaryText="checkbox"/>
+            <MenuItem value='radio' primaryText="radio"/>
             </DropDownMenu>
           </div>
           <div style={wrapperFieldStyle}>
@@ -165,4 +166,4 @@ class FormGroupOptions extends React.Component {
   }
 }
 
-export default FormGroupOptions;
+export default FormGroups;
