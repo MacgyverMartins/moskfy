@@ -64,6 +64,7 @@
   "dependencies": {
     "eventemitter3": "^1.1.1",
     "immutable": "^3.7.6",
+    "lodash": "^4.0.0",
     "material-ui": "^0.14.2",
     "react": "^0.14.6",
     "react-addons-test-utils": "^0.14.6",

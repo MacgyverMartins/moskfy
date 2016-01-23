@@ -96,7 +96,13 @@ class FormBody extends React.Component {
     return (
       <div style={{padding: '0 30px', backgroundColor: '#BBBBBB', position: 'relative'}}>
         <Divider />
-        <div style={{margin: '0 0 0'}}>
+        <div style={{
+          margin: '0',
+          position: 'absolute',
+          bottom: '-22px',
+          right: '20px',
+          zIndex: '2',
+          }}>
           <ButtomFormAdd onToggleAddInput={this.addFieldText} onToggleAddOptions={this.addFieldGroup}/>
         </div>
         {this.state.inputFields.map(function(item, i) {

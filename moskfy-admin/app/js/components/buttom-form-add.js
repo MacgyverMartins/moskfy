@@ -39,29 +39,26 @@ class ButtomFormAdd extends React.Component {
     return (
       <div className="buttom-form-add"
         style={{
-          position: 'absolute',
-          top: '-22px',
-          right: '20px',
-          zIndex: '2',
+          display: 'flex',
+          alignItems: 'center',
           textAlign: 'center'}}>
-        <div style={{float: 'left'}}>
+        {(this.state.open) ?
+          <div style={{display: 'inline-block'}}>
+            <FloatingActionButton mini={true}
+              onTouchTap={this.handleAddInputText} style={{margin: '2px'}}>
+              <ActionInput />
+            </FloatingActionButton>
+            <FloatingActionButton mini={true}
+              onTouchTap={this.handleAddOptions} style={{margin: '2px'}}>
+              <ToggleCheckBox />
+            </FloatingActionButton>
+          </div>
+        : ''}
+        <div style={{display: 'inline-block'}}>
           <FloatingActionButton onTouchTap={this.handleTouch}>
             <ContentAdd />
           </FloatingActionButton>
         </div>
-        {(this.state.open) ?
-        <div>
-        <FloatingActionButton mini={true}
-          onTouchTap={this.handleAddInputText} style={{margin: '2px 0'}}>
-            <ActionInput />
-          </FloatingActionButton>
-          <br/>
-          <FloatingActionButton mini={true}
-            onTouchTap={this.handleAddOptions} style={{margin: '2px 0'}}>
-            <ToggleCheckBox />
-          </FloatingActionButton>
-        </div>
-        : ''}
       </div>
     );
   }

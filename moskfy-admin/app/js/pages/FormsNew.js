@@ -26,9 +26,9 @@ class FormsNew extends React.Component {
       <div>
         <AppHeader parentView="Formulários" currentlyView="Novo formulário"/>
 
-        <Form />
+        <Form ref="form"/>
 
-        <div style={{textAlign:'right', paddingTop:'50px'}}>
+      <div style={{textAlign:'right', paddingTop:'50px'}}>
         <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
       </div>
 

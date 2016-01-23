@@ -45,7 +45,7 @@ class FormContent extends React.Component {
           <TextField hintText="Nome do formulário" underlineStyle={underlineStyle} style={fieldStyle} />
           <Divider />
 
-          <FormBody />
+          <FormBody ref="formBody"/>
 
           {(this.state.action === 1) ?
             <h1>config de email</h1> : ''

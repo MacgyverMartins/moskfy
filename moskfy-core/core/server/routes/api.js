@@ -4,7 +4,6 @@ var express = require('express');
 var router = express.Router();
 
 module.exports =  function(app) {
-
   var pagesController = app.controllers.pages;
   var formsController = app.controllers.forms;
 
