@@ -68,7 +68,7 @@ class FormsNew extends React.Component {
     return (
       <DocumentTitle title="Moskfy | Novo formulário">
       <div>
-        <AppHeader parentView="Formulários" currentlyView="Novo formulário"/>
+        <AppHeader parentView="Formulários" currentlyView={this.state.name || "Novo formulário"}/>
 
         <Form ref="form" {...this.state}/>
 
