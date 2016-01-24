@@ -40,6 +40,15 @@ const menuItems = [{
 }, {
   route: '/admin/pages/page-new',
   text: 'Nova Página'
+},{
+  route: '/admin/forms/new',
+  text: 'Novo Formulário'
+},{
+  route: '/admin/forms/56a44fa6f069cde2171da00a',
+  text: 'O Fomulário'
+},{
+  route: '/admin/forms/56a3fc86e74080bcf88aaa25',
+  text: 'Outro Fomulário'
 }];
 
 const iconMenuItems = [{

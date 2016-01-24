@@ -14,6 +14,7 @@ import SearchPage from './pages/SearchPage';
 import NotFoundPage from './pages/NotFoundPage';
 
 import PageActions from './actions/PageActions';
+import FormActions from './actions/FormActions';
 
 export default (
   <Router history={CreateBrowserHistory()}>
@@ -32,7 +33,7 @@ export default (
       <Route path="forms">
         <Route path="all" component={FormsNew} />
         <Route path="new" component={FormsNew} />
-        <Route path=":id" component={FormsNew} />
+        <Route path=":id" component={FormsNew} onEnter={FormActions.get} />
       </Route>
 
       <Route path="*" component={NotFoundPage} />

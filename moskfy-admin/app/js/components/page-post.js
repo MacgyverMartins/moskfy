@@ -34,12 +34,14 @@ class PagePost extends React.Component {
   }
 
   componentWillReceiveProps(nextProps) {
+    let self = this;
     _.forEach(nextProps, function(value, key){
-      if (this.state[key] !== value) {
+      if (self.state[key] !== value) {
         let newState = {}
         newState[key] = value;
-        this.setState(newState);
+        self.setState(newState);
       }
+      console.log('this', this);
     }, this);
   }
 

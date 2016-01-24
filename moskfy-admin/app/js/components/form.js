@@ -17,14 +17,31 @@ class FormContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      name: this.props.name,
       action: 0
     }
 
     this.handleChangeAction = this.handleChangeAction.bind(this);
+    this.handleName = this.handleName.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let newState = {}
+    let self = this;
+    _.forEach(nextProps, function(value, key){
+      if (_.has(self.state, key)) {
+        newState[key] = value;
+      }
+    });
+    this.setState(newState);
   }
 
   handleChangeAction(e, index, action) {
     this.setState({action});
+  }
+
+  handleName(e) {
+    this.setState({name: e.target.value});
   }
 
   render() {
@@ -42,7 +59,12 @@ class FormContent extends React.Component {
     return (
       <div className='form_wrapper'>
         <Paper zDepth={1}>
-          <TextField hintText="Nome do formulário" underlineStyle={underlineStyle} style={fieldStyle} />
+        <TextField
+          hintText="Nome do formulário"
+          underlineStyle={underlineStyle}
+          value={this.state.name}
+          onChange={this.handleName}
+          style={fieldStyle} />
           <Divider />
 
           <FormBody ref="formBody"/>

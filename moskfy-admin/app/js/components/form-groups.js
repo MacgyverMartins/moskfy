@@ -35,11 +35,12 @@ class FormGroups extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     let newState = {}
+    let self = this;
     _.forEach(nextProps, function(value, key){
-      if (this.state[key]) {
+      if (self.state[key]) {
         newState[key] = value;
       }
-    }, this);
+    });
     this.setState(newState);
   }
 
