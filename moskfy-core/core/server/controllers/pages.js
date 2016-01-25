@@ -69,6 +69,10 @@ module.exports = function(app) {
     updatePage: function(req, res) {
       var _id = req.body._id;
 
+      if (!_id) {
+        return res.status(500);
+      }
+
       Page.findByIdAndUpdate(_id, req.body, function(err, page) {
         if (err) {
           console.error(err);

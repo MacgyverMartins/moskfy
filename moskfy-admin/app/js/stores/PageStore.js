@@ -1,15 +1,7 @@
 'use strict';
-
 import Reflux from 'reflux';
 import PageActions from '../actions/PageActions';
 import loader from '../utils/loader';
-
-//api.addRequestInterceptor(function(config) {
-  //loader.emit('loading', true);
-//});
-//api.addResponseInterceptor(function(config) {
-  //loader.emit('loading', false);
-//});
 
 const PageStore = Reflux.createStore({
 

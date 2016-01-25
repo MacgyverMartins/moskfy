@@ -4,8 +4,8 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import AppHeader from '../components/app-header';
 
-import PageActions from '../actions/PageActions';
-import PagesListStore from '../stores/PagesListStore';
+import FormActions from '../actions/FormActions';
+import FormStore from '../stores/FormStore';
 
 const List = require('material-ui/lib/lists/list');
 import Divider from 'material-ui/lib/divider';
@@ -14,15 +14,17 @@ const Avatar = require('material-ui/lib/avatar');
 const FontIcon = require('material-ui/lib/font-icon');
 const Paper = require('material-ui/lib/paper');
 const Colors = require('material-ui/lib/styles/colors');
+import _ from 'lodash';
+import ActionLabel from 'material-ui/lib/svg-icons/action/label';
 
-const Icon = <Avatar icon={<FontIcon className="material-icons">insert_drive_file</FontIcon>} />;
+const Icon = <Avatar icon={<ActionLabel/>} />;
 
-class PagesList extends React.Component {
+class FormsList extends React.Component {
   constructor(props, context) {
     super(props);
 
     this.state = {
-      pagesList: []
+      formsList: []
     };
 
     this.onChange = this.onChange.bind(this);
@@ -30,43 +32,44 @@ class PagesList extends React.Component {
   }
 
   componentWillMount() {
-    PageActions.listPages();
+    FormActions.getList();
   }
 
   componentDidMount() {
-    this.unsubscribe = PagesListStore.listen(this.onChange);
+    this.unsubscribe = FormStore.listen(this.onChange);
   }
 
   componentWillUnmount() {
     this.unsubscribe();
   }
 
-  onChange(data) {
-    this.setState({ pagesList: data });
+  onChange(event) {
+    if (event.payload === 'onGetList') {
+      this.setState({ formsList: event.data });
+    }
   }
 
-  handleTouch(page) {
-    var url = `/admin/pages/${page._id}`;
+  handleTouch(form) {
+    var url = `/admin/forms/${form._id}`;
     this.context.history.pushState(null, url);
   }
 
   render() {
-    let list = this.state.pagesList.length;
-    let mac = true;
+    let list = this.state.formsList.length;
     return (
-      <DocumentTitle title="Moskfy | Páginas">
+      <DocumentTitle title="Moskfy | Forms">
       <div>
-      <AppHeader parentView="Páginas" currentlyView="Todas as páginas"/>
+      <AppHeader parentView="Forms" currentlyView="all"/>
 
       <Paper zDepth={1}>
-        <List subheader="Páginas">
-          {this.state.pagesList.map(function(page, i){
+        <List subheader="Forms">
+          {this.state.formsList.map(function(form, i){
             return (
-              <div key={page.title + Math.random()}>
+              <div key={_.uniqueId('form_')}>
                 <ListItem
                   leftAvatar={Icon}
-                  primaryText={page.title}
-                  onTouchTap={this.handleTouch.bind(this, page)} />
+                  primaryText={form.name}
+                  onTouchTap={this.handleTouch.bind(this, form)} />
                   { i === list-1 ? '' : <Divider inset={true} /> }
               </div>
             );
@@ -79,9 +82,9 @@ class PagesList extends React.Component {
   }
 }
 
-PagesList.contextTypes = {
+FormsList.contextTypes = {
   location: React.PropTypes.object,
   history: React.PropTypes.object
 };
 
-export default PagesList;
+export default FormsList;

@@ -1,5 +1,4 @@
 'use strict';
-//TODO
 var path = require('path');
 var fs = require('fs');
 var async = require('async');
@@ -40,7 +39,6 @@ module.exports = function(app) {
                 + '<p>Page Not Found</p>'
                 + '</div>');
             }
-            console.log('stats', stats);
             return res.status(404).render('404.hbs');
           });
         }
@@ -52,6 +50,16 @@ module.exports = function(app) {
           return res.render('index.hbs', {page: page});
         });
       });
+    },
+
+    saveContact: function(req, res) {
+      console.log('contact', req.body.contact);
+      var backUrl = req.headers.referer;
+             res.writeHead(200, {
+            'content-type': 'text/plain'
+        });
+        res.write('data received');
+        res.end();
     }
 
   };

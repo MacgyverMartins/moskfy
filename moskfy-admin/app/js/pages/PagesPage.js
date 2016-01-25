@@ -111,5 +111,4 @@ PagesPage.contextTypes = {
   history: React.PropTypes.object
 };
 
-export
-default PagesPage;
+export default PagesPage;

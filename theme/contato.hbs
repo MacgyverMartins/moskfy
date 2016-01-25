@@ -1,9 +1,17 @@
-{{>navbar}}
-
 {{! templateName: Entre em Contato }}
 
-<div style="background-color: red">
+<div>
    <h1 class="contato">Contato</h1>
    <h3>{{page.title}}</h3>
    <p>{{page.content}}</p>
+
+   {{getForm}}
+
+  <!--<form action="/contact_form" method="post">-->
+    <!--<label>Nome:</label>-->
+    <!--<input type="text" name="contact[name]" placeholder="seu nome">-->
+    <!--<label>E-mail:</label>-->
+    <!--<input type="text" name="contact[email]" placeholder="seu email">-->
+    <!--<button type="submit">enviar</button>-->
+  <!--</form>-->
 </div>

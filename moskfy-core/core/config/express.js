@@ -3,11 +3,10 @@ var express = require('express');
 var consign = require('consign');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var exphbs  = require('express-handlebars');
+var exphbs = require('express-handlebars');
 var router = express.Router();
-var fs = require("fs");
+var fs = require('fs');
 //var session = require('express-session');
-//var passport = require('passport');
 
 var viewDirectory = '../theme/';
 
@@ -18,12 +17,13 @@ module.exports = function() {
   app.set('port', 3000);
 
   app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    if (process.env.NODE_ENV === 'development') {
+      res.header("Access-Control-Allow-Origin", "*");
+      res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+      res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    }
     next();
   });
-
 
   //middleware
   app.use(cookieParser());
@@ -35,21 +35,13 @@ module.exports = function() {
   //app.use(express.static('./public'));
 
   //set middleware to frontend
-  var hbs;
-  hbs = exphbs.create({
-    extname: '.hbs',
-    defaultLayout: 'layout',
-    layoutsDir: viewDirectory + 'layouts',
-    partialsDir: viewDirectory + 'partials'
-  });
-  app.engine('hbs', hbs.engine);
   app.set('view engine', 'hbs');
   app.set('views', viewDirectory);
   app.use(express.static(viewDirectory));
 
   app.use(bodyParser.json()); // for parsing application/json
-  app.use(bodyParser.urlencoded({ extended: true })); // for parsing application/x-www-form-urlencoded
-  //app.use(require('method-override')());
+  app.use(bodyParser.urlencoded({extended: true})); // for parsing application/x-www-form-urlencoded
+  app.use(require('method-override')());
 
   function sendToAdmin (req, res) {
     if (process.env.NODE_ENV === 'development') {
@@ -70,6 +62,7 @@ module.exports = function() {
 
   app.use('/js', express.static('../moskfy-admin/build/js'));
   app.use('/css', express.static('../moskfy-admin/build/css'));
+  app.use('/fonts', express.static('../moskfy-admin/build/fonts'));
 
   app.get('/admin', function(req, res) {
     sendToAdmin(req, res);
@@ -87,7 +80,18 @@ module.exports = function() {
     .then('utils')
     .then('controllers')
     .then('routes')
+    .then('helpers')
     .into(app);
+
+  var hbs;
+  hbs = exphbs.create({
+    extname: '.hbs',
+    defaultLayout: 'layout',
+    layoutsDir: viewDirectory + 'layouts',
+    partialsDir: viewDirectory + 'partials',
+    helpers: app.helpers.index
+  });
+  app.engine('hbs', hbs.engine);
 
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 
