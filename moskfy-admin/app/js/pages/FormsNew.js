@@ -6,9 +6,9 @@ import AppHeader from '../components/app-header';
 import Form from '../components/form';
 
 const RaisedButton = require('material-ui/lib/raised-button');
-const Snackbar = require('material-ui/lib/snackbar');
 const _ = require('lodash');
 
+import AppActions from '../actions/AppActions';
 import FormActions from '../actions/FormActions';
 import FormStore from '../stores/FormStore';
 
@@ -50,6 +50,10 @@ class FormsNew extends React.Component {
   onChange(event) {
     switch(event.payload){
       case 'onSave':
+        AppActions.showSnackbar('Saved form');
+        let url = `/admin/forms/${event.data._id}`;
+        this.context.history.pushState(null, url);
+        break;
       case 'onGet':
         this.setState(event.data);
         break;
@@ -92,9 +96,6 @@ class FormsNew extends React.Component {
         <RaisedButton label="Excluir" primary={true} onTouchTap={this.handleDelete}/> : ''}
           <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
         </div>
-
-        <Snackbar ref="snack" open={this.state.open} autoHideDuration={1000} message="Formulário salvo com sucesso" />
-
       </div>
       </DocumentTitle>
     );

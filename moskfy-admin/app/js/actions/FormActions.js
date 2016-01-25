@@ -16,6 +16,7 @@ FormActions.save.listen(function(data) {
     url = '/forms/' + data._id;
     type = 'put';
   } else {
+    delete data._id;
     url = '/forms';
     type = 'post';
   }
@@ -58,13 +59,5 @@ FormActions.delete.listen(function(id) {
     this.failed(err)
   });
 });
-
-//PageActions.getTemplates.listen(function(id) {
-  //APIUtils.get('/templates').then(res => {
-    //this.completed(res);
-  //}).catch(err => {
-    //this.failed(err)
-  //});
-//});
 
 export default FormActions;

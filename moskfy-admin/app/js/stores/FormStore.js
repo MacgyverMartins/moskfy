@@ -1,18 +1,10 @@
 'use strict';
-
 import Reflux from 'reflux';
 import FormActions from '../actions/FormActions';
 import loader from '../utils/loader';
 
-//api.addRequestInterceptor(function(config) {
-  //loader.emit('loading', true);
-//});
-//api.addResponseInterceptor(function(config) {
-  //loader.emit('loading', false);
-//});
-
 const FormStore = Reflux.createStore({
-  init() {},
+  init() { },
 
     listenables: FormActions,
 

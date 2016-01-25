@@ -8,6 +8,7 @@ import Form from '../components/form';
 
 import PageStore from '../stores/PageStore';
 import PageActions from '../actions/PageActions';
+import AppActions from '../actions/AppActions';
 
 const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
@@ -19,7 +20,6 @@ class PagesNew extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openSnackbar: false,
       title: '',
       content: '',
       template: 'Default',
@@ -60,11 +60,9 @@ class PagesNew extends React.Component {
         this.setState({templates: event.data});
         break
       case 'onPageSave':
-        this.setState({openSnackbar: true});
-        setTimeout(function() {
-          var url = `/admin/pages/${event.data._id}`;
-          this.context.history.pushState(null, url);
-        }.bind(this), 1001);
+        AppActions.showSnackbar('saved page');
+        var url = `/admin/pages/${event.data._id}`;
+        this.context.history.pushState(null, url);
         break;
     }
   }

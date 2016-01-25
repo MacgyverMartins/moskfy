@@ -2,6 +2,8 @@
 
 import React from 'react';
 import { Link } from 'react-router';
+import AppActions from './actions/AppActions';
+import AppStore from './stores/AppStore';
 
 import RaisedButton from 'material-ui/lib/raised-button';
 import Toolbar from 'material-ui/lib/toolbar/toolbar';
@@ -16,6 +18,7 @@ import Menu from 'material-ui/lib/menus/menu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import SubheaderMenuItem from 'material-ui/lib/menu/subheader-menu-item';
 import LinearProgress from 'material-ui/lib/linear-progress';
+import Snackbar from 'material-ui/lib/snackbar';
 
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
@@ -56,20 +59,44 @@ const iconMenuItems = [{
   text: 'More Info'
 }];
 
+const resetSnackbar = {
+  open: false,
+  msg: 'some text here'
+}
+
 class App extends React.Component {
 
   constructor(props, context) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
+      snackbar: resetSnackbar
     };
     this.handleSelect = this.handleSelect.bind(this);
+    this.onChange = this.onChange.bind(this);
+    this.closeSnackbar = this.closeSnackbar.bind(this);
     this._getSelectedIndex = this._getSelectedIndex.bind(this);
     this._showProgress = this._showProgress.bind(this);
   }
 
   componentDidMount() {
-    loader.on('loading', this._showProgress);
+    this.unsubscribe = AppStore.listen(this.onChange);
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  onChange(event) {
+    switch(event.payload){
+      case 'showSnackbar':
+        this.setState({snackbar: {open: true, msg: event.msg}});
+        break;
+    }
+  }
+
+  closeSnackbar() {
+    this.setState({snackbar: resetSnackbar});
   }
 
   _showProgress(data) {
@@ -92,6 +119,7 @@ class App extends React.Component {
   }
 
   render() {
+    console.log('app state', this.state);
     let main_style = {
       margin: '56px 0 0 256px',
       padding: '20px'
@@ -134,6 +162,11 @@ class App extends React.Component {
 
         <div className="main-pages-container" style={ main_style }>
           {this.props.children}
+          <Snackbar ref="snack"
+          open={this.state.snackbar.open}
+          autoHideDuration={1500}
+          onRequestClose={this.closeSnackbar}
+          message={this.state.snackbar.msg} />
         </div>
       </div>
     );
