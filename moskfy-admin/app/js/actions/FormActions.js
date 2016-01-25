@@ -6,7 +6,8 @@ import _ from 'lodash';
 const FormActions = Reflux.createActions({
   'save': { asyncResult: true },
   'get': { asyncResult: true },
-  'getList': { asyncResult: true }
+  'getList': { asyncResult: true },
+  'delete': { asyncResult: true }
 });
 
 FormActions.save.listen(function(data) {
@@ -49,14 +50,14 @@ FormActions.getList.listen(function() {
   });
 });
 
-//PageActions.deletePage.listen(function(id) {
-  //let url = '/pages/' + id;
-  //APIUtils.del(url).then(data => {
-    //this.completed(data);
-  //}).catch(err => {
-    //this.failed(err)
-  //});
-//});
+FormActions.delete.listen(function(id) {
+  let url = '/forms/' + id;
+  APIUtils.del(url).then(data => {
+    this.completed(data);
+  }).catch(err => {
+    this.failed(err)
+  });
+});
 
 //PageActions.getTemplates.listen(function(id) {
   //APIUtils.get('/templates').then(res => {

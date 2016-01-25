@@ -13,7 +13,9 @@ import FormActions from '../actions/FormActions';
 import FormStore from '../stores/FormStore';
 
 const resetState = {
-  name: ''
+  _id: '',
+  name: '',
+  open: false
 }
 
 class FormsNew extends React.Component {
@@ -22,6 +24,7 @@ class FormsNew extends React.Component {
     this.state = resetState;
 
     this.handleSave = this.handleSave.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
     this.onChange = this.onChange.bind(this);
   }
 
@@ -34,7 +37,6 @@ class FormsNew extends React.Component {
     } else {
       this.setState(resetState);
     }
-
   }
 
   componentDidMount() {
@@ -46,25 +48,38 @@ class FormsNew extends React.Component {
   }
 
   onChange(event) {
-    if (event.payload === 'onSave' || event.payload === 'onGet') {
-      this.setState(event.data);
+    switch(event.payload){
+      case 'onSave':
+      case 'onGet':
+        this.setState(event.data);
+        break;
+      case 'onDelete':
+        var url = '/admin/forms/all';
+        this.context.history.pushState(null, url);
+        break;
     }
   }
 
   handleSave() {
-    let form = this.refs.form;
-    let body = form.refs.formBody;
-    let obj = {
+    let formObj = {
+      _id: this.state._id,
       body: []
     };
-    _.assignIn(obj, form.state);
-    obj.body = body.state.inputFields;
 
-    FormActions.save(obj);
+    let form = this.refs.form;
+    let body = form.refs.formBody;
+
+    _.assignIn(formObj, form.state);
+    formObj.body = body.state.inputFields;
+    FormActions.save(formObj);
+  }
+
+  handleDelete() {
+    FormActions.delete(this.state._id);
   }
 
   render() {
-    console.log('form page state', this.state);
+    console.log('form state', this.state);
     return (
       <DocumentTitle title="Moskfy | Novo formulário">
       <div>
@@ -73,10 +88,12 @@ class FormsNew extends React.Component {
         <Form ref="form" {...this.state}/>
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
+        {this.props.params.id ?
+        <RaisedButton label="Excluir" primary={true} onTouchTap={this.handleDelete}/> : ''}
           <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
         </div>
 
-        <Snackbar ref="snack" autoHideDuration={1000} message="Formulário salvo com sucesso" />
+        <Snackbar ref="snack" open={this.state.open} autoHideDuration={1000} message="Formulário salvo com sucesso" />
 
       </div>
       </DocumentTitle>

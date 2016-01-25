@@ -12,7 +12,6 @@ import loader from '../utils/loader';
 //});
 
 const FormStore = Reflux.createStore({
-
   init() {},
 
     listenables: FormActions,
@@ -41,6 +40,14 @@ const FormStore = Reflux.createStore({
     },
 
     onGetListFailed(err) {
+      console.error(err);
+    },
+
+    onDeleteCompleted(res) {
+      this.trigger({payload: 'onDelete'});
+    },
+
+    onDeleteFailed(err) {
       console.error(err);
     },
 });

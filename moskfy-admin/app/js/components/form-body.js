@@ -28,8 +28,8 @@ class FormBody extends React.Component {
     };
 
     this.handleChangeType = this.handleChangeType.bind(this);
-    this.onDelete = this.onDelete.bind(this);
     this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
+    this.onDelete = this.onDelete.bind(this);
     this.addFieldText = this.addFieldText.bind(this);
     this.addFieldGroup = this.addFieldGroup.bind(this);
   }
