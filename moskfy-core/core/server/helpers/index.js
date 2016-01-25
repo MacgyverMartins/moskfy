@@ -2,7 +2,6 @@
 var handlebars = require('handlebars');
 
 module.exports = function(app) {
-
   var helpers = {
     getForm: function(context) {
       var form = '<form action="/contact_form" method="post">'

@@ -15,6 +15,7 @@ import FormStore from '../stores/FormStore';
 const resetState = {
   _id: '',
   name: '',
+  body: [],
   open: false
 }
 
@@ -83,7 +84,6 @@ class FormsNew extends React.Component {
   }
 
   render() {
-    console.log('form state', this.state);
     return (
       <DocumentTitle title="Moskfy | Novo formulário">
       <div>

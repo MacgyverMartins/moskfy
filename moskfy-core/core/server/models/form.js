@@ -10,7 +10,7 @@ module.exports = function() {
     description: String,
     body: [{
       type: {type: String, required: true},
-      isRequired: {type: Boolean, required: true},
+      isRequired: Boolean,
       name: {type: String, required: true},
       label: String,
       placeholder: String,

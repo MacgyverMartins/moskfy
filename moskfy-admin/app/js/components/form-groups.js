@@ -22,7 +22,7 @@ class FormGroups extends React.Component {
       uniqueId: this.props.uniqueId,
       type: this.props.type,
       name: this.props.name,
-      inputs: []
+      choices: this.props.choices || []
     };
 
     this.handleChangeType = this.handleChangeType.bind(this);
@@ -61,21 +61,21 @@ class FormGroups extends React.Component {
   }
 
   handleValue(index, e) {
-    var arr = this.state.inputs;
+    var arr = this.state.choices;
     arr[index].value = e.target.value;
-    this.setState({inputs: arr}, this.handleChanges);
+    this.setState({choices: arr}, this.handleChanges);
   }
 
   handleText(index, e) {
-    var arr = this.state.inputs;
+    var arr = this.state.choices;
     arr[index].text = e.target.value;
-    this.setState({inputs: arr}, this.handleChanges);
+    this.setState({choices: arr}, this.handleChanges);
   }
 
   handleAdd(e) {
-    var arr = this.state.inputs;
+    var arr = this.state.choices;
     arr.push({text: '', value: ''});
-    this.setState({inputs: arr}, this.handleChanges);
+    this.setState({choices: arr}, this.handleChanges);
   }
 
   deleteItem(index, e) {
@@ -102,7 +102,7 @@ class FormGroups extends React.Component {
         width: '47.6%'
       }
 
-      let items = this.state.inputs.map(function(item, i) {
+      let items = this.state.choices.map(function(item, i) {
         return (
           <Paper key={i} style={itemStyle} zDepth={2}>
             <div className='form-group-options__item__header'></div>
@@ -111,7 +111,7 @@ class FormGroups extends React.Component {
               fullWidth={true}
               floatingLabelText='value'
               hintText="value"
-              value={this.state.inputs[i].value}
+              value={this.state.choices[i].value}
               onChange={this.handleValue.bind(this, i)} />
             </div>
             <div style={wrapperFieldStyle}>
@@ -119,7 +119,7 @@ class FormGroups extends React.Component {
               fullWidth={true}
               floatingLabelText='text element'
               hintText='text element'
-              value={this.state.inputs[i].text}
+              value={this.state.choices[i].text}
               onChange={this.handleText.bind(this, i)} />
             </div>
           </Paper>

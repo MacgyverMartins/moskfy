@@ -67,7 +67,7 @@ class FormContent extends React.Component {
           style={fieldStyle} />
           <Divider />
 
-          <FormBody ref="formBody"/>
+          <FormBody ref="formBody" inputFields={this.props.body}/>
 
           {(this.state.action === 1) ?
             <h1>config de email</h1> : ''

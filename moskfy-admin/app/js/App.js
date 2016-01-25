@@ -119,7 +119,6 @@ class App extends React.Component {
   }
 
   render() {
-    console.log('app state', this.state);
     let main_style = {
       margin: '56px 0 0 256px',
       padding: '20px'

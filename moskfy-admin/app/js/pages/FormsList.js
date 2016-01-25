@@ -64,7 +64,6 @@ class FormsList extends React.Component {
       <Paper zDepth={1}>
         <List subheader="Forms">
           {this.state.formsList.map(function(form, i){
-            console.log('form', form);
             return (
               <div key={_.uniqueId('form_')}>
                 <ListItem

@@ -24,7 +24,7 @@ class FormBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputFields: []
+      inputFields: this.props.inputFields || []
     };
 
     this.handleChangeType = this.handleChangeType.bind(this);
@@ -32,6 +32,17 @@ class FormBody extends React.Component {
     this.onDelete = this.onDelete.bind(this);
     this.addFieldText = this.addFieldText.bind(this);
     this.addFieldGroup = this.addFieldGroup.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let newState = {}
+    let self = this;
+    _.forEach(nextProps, function(value, key){
+      if (_.has(self.state, key)) {
+        newState[key] = value;
+      }
+    });
+    this.setState(newState);
   }
 
   handleChangeType(e, index, type) {
@@ -77,25 +88,39 @@ class FormBody extends React.Component {
     const labelStyle = {
       fontSize: '16px'
     };
+    const noItemsStyle = {
+      textAlign:'center',
+      fontStyle:'italic',
+      margin:0,
+      padding:0,
+      color: '#666'
+    };
 
-    //let fields = this.state.inputFields.map(function(item, i) {
-      //console.log('item', item);
-      //switch(item.type){
-        //case 'text':
-        //case 'number':
-        //case 'email':
-          //return (<FormText {...item} index={i} key={i} onChange={this.handleChangeField} onDelete={this.onDelete}/>)
-          //break;
-        //case 'checkbox':
-        //case 'radio':
-          //return (<FormGroups {...item} index={i} key={i} onChange={this.handleChangeField} onDelete={this.onDelete}/>)
-          //break;
-      //}
-    //}, this);
+    let fields = this.state.inputFields.map(function(item, i) {
+      let uniqueId;
+      switch(item.type){
+        case 'text':
+        case 'number':
+        case 'email':
+          uniqueId = item.uniqueId || _.uniqueId('text_');
+          return (
+            <FormText {...item} index={i} key={uniqueId} uniqueId={uniqueId}
+            onChange={this.handleChangeField} onDelete={this.onDelete}/>
+            )
+          break;
+        case 'checkbox':
+        case 'radio':
+          uniqueId = item.uniqueId || _.uniqueId('group_');
+          return (
+            <FormGroups {...item} index={i} key={uniqueId} uniqueId={uniqueId}
+            onChange={this.handleChangeField} onDelete={this.onDelete}/>
+          )
+          break;
+      }
+    }, this);
 
     return (
-      <div style={{padding: '0 30px', backgroundColor: '#BBBBBB', position: 'relative'}}>
-        <Divider />
+      <div style={{padding: '30px', backgroundColor: '#BBBBBB', position: 'relative'}}>
         <div style={{
           margin: '0',
           position: 'absolute',
@@ -105,19 +130,7 @@ class FormBody extends React.Component {
           }}>
           <ButtomFormAdd onToggleAddInput={this.addFieldText} onToggleAddOptions={this.addFieldGroup}/>
         </div>
-        {this.state.inputFields.map(function(item, i) {
-          switch(item.type){
-            case 'text':
-            case 'number':
-            case 'email':
-              return (<FormText {...item} index={i} key={item.uniqueId} onChange={this.handleChangeField} onDelete={this.onDelete}/>)
-              break;
-            case 'checkbox':
-            case 'radio':
-              return (<FormGroups {...item} index={i} key={item.uniqueId} onChange={this.handleChangeField} onDelete={this.onDelete}/>)
-              break;
-          }
-        }, this)}
+        {(_.isEmpty(fields)) ? <p style={noItemsStyle}>no items added</p> : fields}
       </div>
     );
   }
