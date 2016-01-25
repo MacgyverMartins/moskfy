@@ -5,7 +5,8 @@ import _ from 'lodash';
 
 const FormActions = Reflux.createActions({
   'save': { asyncResult: true },
-  'get': { asyncResult: true }
+  'get': { asyncResult: true },
+  'getList': { asyncResult: true }
 });
 
 FormActions.save.listen(function(data) {
@@ -40,13 +41,13 @@ FormActions.get.listen(function(data) {
   });
 });
 
-//PageActions.listPages.listen(function() {
-  //APIUtils.get('/pages').then(pages => {
-    //this.completed(pages);
-  //}).catch(err => {
-    //this.failed(err)
-  //});
-//});
+FormActions.getList.listen(function() {
+  APIUtils.get('/forms').then(forms => {
+    this.completed(forms);
+  }).catch(err => {
+    this.failed(err)
+  });
+});
 
 //PageActions.deletePage.listen(function(id) {
   //let url = '/pages/' + id;

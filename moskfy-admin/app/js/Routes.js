@@ -10,6 +10,7 @@ import PagesPage from './pages/PagesPage';
 import PagesNew from './pages/PagesNew';
 import PagesList from './pages/PagesList';
 import FormsNew from './pages/FormsNew';
+import FormsList from './pages/FormsList';
 import SearchPage from './pages/SearchPage';
 import NotFoundPage from './pages/NotFoundPage';
 
@@ -31,7 +32,7 @@ export default (
       </Route>
 
       <Route path="forms">
-        <Route path="all" component={FormsNew} />
+        <Route path="all" component={FormsList} />
         <Route path="new" component={FormsNew} />
         <Route path=":id" component={FormsNew} onEnter={FormActions.get} />
       </Route>

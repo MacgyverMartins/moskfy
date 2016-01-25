@@ -35,6 +35,14 @@ const FormStore = Reflux.createStore({
       console.error(err);
     },
 
+    onGetListCompleted(res) {
+      let forms = res.body;
+      this.trigger({ payload: 'onGetList', data: forms });
+    },
+
+    onGetListFailed(err) {
+      console.error(err);
+    },
 });
 
 export default FormStore;
