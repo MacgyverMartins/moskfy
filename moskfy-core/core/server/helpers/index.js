@@ -1,5 +1,6 @@
 'use strict';
 var hbs = require('express-hbs');
+var fs = require('fs');
 var _ = require('lodash');
 var Q = require('q');
 
@@ -22,6 +23,14 @@ module.exports = function(app) {
     setTimeout(function() {
       cb(new hbs.SafeString('<h1>macgyver</h1>'));
     }.bind(this), 3000);
+  });
+
+  hbs.registerAsyncHelper('getFormByName', function(formName, cb) {
+    formsController.getFormByName().then(function(form) {
+      var formFile = fs.readFileSync(__dirname + '/html/' + 'form', 'utf8');
+      var template = hbs.compile(formFile);
+      cb(new hbs.handlebars.SafeString(template(form)));
+    });
   });
 
   return;

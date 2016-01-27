@@ -74,16 +74,15 @@ module.exports = function(app) {
           });
     },
 
-    getFormByName: function(name, callback) {
-      //var deferred = Q.defer();
+    getFormByName: function(name) {
+      var deferred = Q.defer();
       Form.findOne({'name': 'teste 1'}, function(err, form) {
         if (err) {
-          //deferred.reject(new Error(error));
+          deferred.reject(new Error(error));
         }
-        callback(form);
-        //deferred.resolve(form);
+        deferred.resolve(form);
       });
-      //return deferred.promise;
+      return deferred.promise;
     }
   }
 
