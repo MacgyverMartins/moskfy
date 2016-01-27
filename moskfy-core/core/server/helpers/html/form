@@ -1,4 +1,0 @@
-<form action="" method="get" accept-charset="utf-8">
-  <h1>{{name}}</h1>
-  <p><input type="submit" value="Continue →"></p>
-</form>

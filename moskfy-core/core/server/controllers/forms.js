@@ -76,7 +76,7 @@ module.exports = function(app) {
 
     getFormByName: function(name) {
       var deferred = Q.defer();
-      Form.findOne({'name': 'teste 1'}, function(err, form) {
+      Form.findOne({'name': name}, function(err, form) {
         if (err) {
           deferred.reject(new Error(error));
         }

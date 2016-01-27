@@ -26,10 +26,16 @@ module.exports = function(app) {
   });
 
   hbs.registerAsyncHelper('getFormByName', function(formName, cb) {
-    formsController.getFormByName().then(function(form) {
-      var formFile = fs.readFileSync(__dirname + '/html/' + 'form', 'utf8');
+    formsController.getFormByName(formName).then(function(form) {
+      var formFile = fs.readFileSync(__dirname + '/html/' + 'form.html', 'utf8');
       var template = hbs.compile(formFile);
-      cb(new hbs.handlebars.SafeString(template(form)));
+      try {
+        var template = new hbs.SafeString(template(form));
+      }
+      catch (err) {
+        console.log('erro', err);
+      }
+      cb(template);
     });
   });
 

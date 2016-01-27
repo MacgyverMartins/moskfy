@@ -1,0 +1,9 @@
+<form action="" method="post" accept-charset="utf-8">
+  {{#each body}}
+  {{#if label}}
+  <label for="{{name}}">{{label}}</label>
+  {{/if}}
+  <input type="{{type}}" name="{{name}}" placeholder="{{placeholder}}" {{#if isRequired}}required{{/if}}>
+  {{/each}}
+  <p><input type="submit" value="Submit →"></p>
+</form>
