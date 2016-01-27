@@ -1,5 +1,6 @@
 'use strict';
 var _ = require('lodash');
+var Q = require('q');
 
 module.exports = function(app) {
   var Form = app.models.form;
@@ -71,6 +72,18 @@ module.exports = function(app) {
             return console.error(err);
             res.status(500).json(err);
           });
+    },
+
+    getFormByName: function(name, callback) {
+      //var deferred = Q.defer();
+      Form.findOne({'name': 'teste 1'}, function(err, form) {
+        if (err) {
+          //deferred.reject(new Error(error));
+        }
+        callback(form);
+        //deferred.resolve(form);
+      });
+      //return deferred.promise;
     }
   }
 

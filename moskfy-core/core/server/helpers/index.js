@@ -1,20 +1,28 @@
 'use strict';
-var handlebars = require('handlebars');
+var hbs = require('express-hbs');
+var _ = require('lodash');
+var Q = require('q');
 
 module.exports = function(app) {
-  var helpers = {
-    getForm: function(context) {
-      var form = '<form action="/contact_form" method="post">'
-      +'<label>Nome:</label>'
-      +'<input type="text" name="contact[name]" placeholder="seu nome">'
-      +'<label>E-mail:</label>'
-      +'<input type="text" name="contact[email]" placeholder="seu email">'
-      +'<button type="submit">enviar</button>'
-    +'</form>';
+  var formsController = app.controllers.forms;
 
-      return new handlebars.SafeString(form);
+  hbs.registerHelper('link', function(text, options) {
+    var attrs = [];
+    for(var prop in options.hash) {
+      attrs.push(prop + '="' + options.hash[prop] + '"');
     }
-  };
+    return new hbs.SafeString(
+      "<a " + attrs.join(" ") + ">" + text + "</a>"
+    );
+  });
 
-  return helpers;
+  hbs.registerAsyncHelper('readFile', function(filename, cb) {
+    console.log('filename', filename);
+    console.log('cb', cb);
+    setTimeout(function() {
+      cb(new hbs.SafeString('<h1>macgyver</h1>'));
+    }.bind(this), 3000);
+  });
+
+  return;
 };
