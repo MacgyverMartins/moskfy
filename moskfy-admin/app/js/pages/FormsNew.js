@@ -1,5 +1,4 @@
 'use strict';
-
 import React from 'react';
 import DocumentTitle from 'react-document-title';
 import AppHeader from '../components/app-header';

@@ -3,10 +3,12 @@ var express = require('express');
 var consign = require('consign');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
-var exphbs = require('express-handlebars');
+var hbs = require('express-hbs');
+var Q = require('q');
+//var exphbs  = require('express-handlebars');
 var router = express.Router();
 var fs = require('fs');
-//var session = require('express-session');
+//var hbsHelpers = require('handlebars-helpers');
 
 var viewDirectory = '../theme/';
 
@@ -32,11 +34,7 @@ module.exports = function() {
   //resave: true,
   //saveUnitialized: true
   //}));
-  //app.use(express.static('./public'));
 
-  //set middleware to frontend
-  app.set('view engine', 'hbs');
-  app.set('views', viewDirectory);
   app.use(express.static(viewDirectory));
 
   app.use(bodyParser.json()); // for parsing application/json
@@ -83,15 +81,67 @@ module.exports = function() {
     .then('helpers')
     .into(app);
 
-  var hbs;
-  hbs = exphbs.create({
-    extname: '.hbs',
-    defaultLayout: 'layout',
+  //set middleware to frontend
+  app.engine('hbs', hbs.express4({
+    defaultLayout: viewDirectory + 'layouts/layout.hbs',
     layoutsDir: viewDirectory + 'layouts',
-    partialsDir: viewDirectory + 'partials',
-    helpers: app.helpers.index
-  });
-  app.engine('hbs', hbs.engine);
+    partialsDir: viewDirectory + 'partials'
+  }));
+
+  //var hbs;
+  //hbs = exphbs.create({
+    //extname: '.hbs',
+    //defaultLayout: 'layout',
+    //layoutsDir: viewDirectory + 'layouts',
+    //partialsDir: viewDirectory + 'partials',
+
+    //helpers: {
+      //getFormByName: function () {
+        //var deferred = Q.defer();
+        //var formsController = app.controllers.forms;
+        //formsController.getFormByName().then(function(form) {
+          //var formFile = fs.readFileSync('/Users/macgyvermartins/Development/Moskfy/moskfy-core/core/server/helpers/html/form.html', 'utf8');
+          //console.log('aqui', formFile);
+          //var template = hbs.compile(formFile);
+          //console.log('aqui2', template);
+          //try {
+            //var teste = new hbs.SafeString(template(form));
+          //}
+          //catch(err) {
+            //console.log('erro', err);
+          //}
+          //console.log('teste', teste);
+          //deferred.resolve(teste);
+        //});
+        //return deferred.promise;
+      //}
+    //}
+  //});
+
+  //hbsHelpers.register(hbs.handlebars, {});
+
+  //hbs.registerAsyncHelper('getFormByName', function(formName, cb) {
+    //var formsController = app.controllers.forms;
+    //formsController.getFormByName().then(function(form) {
+      //var formFile = fs.readFileSync('/Users/macgyvermartins/Development/Moskfy/moskfy-core/core/server/helpers/html/form.html', 'utf8');
+      //console.log('aqui', formFile);
+      //var template = hbs.compile(formFile);
+      //console.log('aqui2', template);
+      //try {
+        //var teste = new hbs.SafeString(template(form));
+      //}
+      //catch(err) {
+        //console.log('erro', err);
+      //}
+      //console.log('teste', teste);
+      //cb(teste);
+    //});
+  //});
+
+  //app.engine('hbs', hbs.engine);
+  app.set('view engine', 'hbs');
+  app.set('views', viewDirectory);
+  //var hbsHelpers = app.helpers.index(hbs);
 
   process.env.NODE_ENV = process.env.NODE_ENV || 'development';
 

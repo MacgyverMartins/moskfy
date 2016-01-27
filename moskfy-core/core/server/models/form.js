@@ -5,7 +5,10 @@ module.exports = function() {
   var schema = mongoose.Schema({
     name: {
       type: String,
-      required: true
+      required: true,
+      index: {
+        unique: true
+      }
     },
     description: String,
     body: [{
