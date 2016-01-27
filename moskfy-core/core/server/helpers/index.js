@@ -7,22 +7,42 @@ var Q = require('q');
 module.exports = function(app) {
   var formsController = app.controllers.forms;
 
-  hbs.registerHelper('link', function(text, options) {
-    var attrs = [];
-    for(var prop in options.hash) {
-      attrs.push(prop + '="' + options.hash[prop] + '"');
-    }
-    return new hbs.SafeString(
-      "<a " + attrs.join(" ") + ">" + text + "</a>"
-    );
-  });
+  hbs.registerHelper('compare', function(left, operator, right, options) {
+    /*jshint eqeqeq: false*/
 
-  hbs.registerAsyncHelper('readFile', function(filename, cb) {
-    console.log('filename', filename);
-    console.log('cb', cb);
-    setTimeout(function() {
-      cb(new hbs.SafeString('<h1>macgyver</h1>'));
-    }.bind(this), 3000);
+    if (arguments.length < 3) {
+      throw new Error('Handlebars Helper "compare" needs 2 parameters');
+    }
+
+    if (options === undefined) {
+      options = right;
+      right = operator;
+      operator = '===';
+    }
+
+    var operators = {
+      '==':     function(l, r) {return l == r; },
+      '===':    function(l, r) {return l === r; },
+      '!=':     function(l, r) {return l != r; },
+      '!==':    function(l, r) {return l !== r; },
+      '<':      function(l, r) {return l < r; },
+      '>':      function(l, r) {return l > r; },
+      '<=':     function(l, r) {return l <= r; },
+      '>=':     function(l, r) {return l >= r; },
+      'typeof': function(l, r) {return typeof l == r; }
+    };
+
+    if (!operators[operator]) {
+      throw new Error('Handlebars Helper "compare" doesn\'t know the operator ' + operator);
+    }
+
+    var result = operators[operator](left, right);
+
+    if (result) {
+      return options.fn(this);
+    } else {
+      return options.inverse(this);
+    }
   });
 
   hbs.registerAsyncHelper('getFormByName', function(formName, cb) {
