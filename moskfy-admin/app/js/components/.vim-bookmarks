@@ -1,0 +1,3 @@
+let l:bm_file_version = 1
+let l:bm_sessions = {'default': {'/Users/macgyvermartins/Development/Moskfy/moskfy-admin/app/js/components/form-body.js': [{'sign_idx': 9503, 'line_nr': 126, 'content': ''},],}}
+let l:bm_current_session = 'default'

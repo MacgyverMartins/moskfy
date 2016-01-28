@@ -12,17 +12,31 @@ import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
+import CodeMirror from 'react-code-mirror';
+import 'codemirror/mode/htmlmixed/htmlmixed';
+import 'codemirror/mode/handlebars/handlebars';
+import 'codemirror/addon/hint/html-hint';
 
 class FormContent extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       name: this.props.name,
-      action: 0
+      action: 0,
+      //code: 'var component = {\n\tname: "react-codemirror",\n\tauthor: "Jed Watson",\n\trepo: "https://github.com/JedWatson/react-codemirror"\n};'
+      code2: '',
+      code: '<form action="/contact_form" method="post">'
+        +'\n\t<label>Nome:</label>\n'
+        +'\t<input type="text" name="contact[name]" placeholder="seu nome">\n'
+        +'\t<label>E-mail:</label>\n'
+        +'\t<input type="text" name="contact[email]" placeholder="seu email">\n'
+        +'\t<button type="submit">enviar</button>\n'
+      +'</form>'
     }
 
     this.handleChangeAction = this.handleChangeAction.bind(this);
     this.handleName = this.handleName.bind(this);
+    this.updateCode = this.updateCode.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -42,6 +56,16 @@ class FormContent extends React.Component {
 
   handleName(e) {
     this.setState({name: e.target.value});
+  }
+
+  updateCode(e) {
+    let newCode = e.target.value;
+    console.log('newCode', newCode);
+    this.setState({
+        code: newCode
+        }, function() {
+          this.setState({code2: newCode})
+        });
   }
 
   render() {
@@ -67,8 +91,18 @@ class FormContent extends React.Component {
           style={fieldStyle} />
           <Divider />
 
+        <div style={{display: 'flex', padding: '10px 0', backgroundColor: 'rgb(218, 218, 218)'}}>
+          <CodeMirror
+            style= {{width: '60%', margin: '5px', fontSize: '14px', lineHeight: '21px' }}
+            mode={{name: "handlebars", base: "text/html"}}
+            theme='monokai'
+            defaultValue={this.state.code}
+            textAreaStyle={{ minHeight: '10em' }}
+            lineNumbers={true}
+            value={this.state.code}
+            onChange={this.updateCode}/>
           <FormBody ref="formBody" inputFields={this.props.body}/>
-
+        </div>
           {(this.state.action === 1) ?
             <h1>config de email</h1> : ''
           }
@@ -87,3 +121,4 @@ class FormContent extends React.Component {
 }
 
 export default FormContent;
+
