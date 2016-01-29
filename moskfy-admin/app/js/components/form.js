@@ -22,16 +22,49 @@ class FormContent extends React.Component {
     super(props);
     this.state = {
       name: this.props.name,
-      action: 0,
-      //code: 'var component = {\n\tname: "react-codemirror",\n\tauthor: "Jed Watson",\n\trepo: "https://github.com/JedWatson/react-codemirror"\n};'
-      code2: '',
-      code: '<form action="/contact_form" method="post">'
-        +'\n\t<label>Nome:</label>\n'
-        +'\t<input type="text" name="contact[name]" placeholder="seu nome">\n'
-        +'\t<label>E-mail:</label>\n'
-        +'\t<input type="text" name="contact[email]" placeholder="seu email">\n'
-        +'\t<button type="submit">enviar</button>\n'
-      +'</form>'
+      dist: 0,
+      //tags: this.props.tags || [],
+      tags: [{
+        type: 'text',
+        name: 'Nome',
+        placeholder: 'seu nome',
+        choices: []
+      },{
+        type: 'email',
+        name: 'Email',
+        placeholder: 'deixe seu email',
+        choices: []
+      },{
+        type: 'radio',
+        name: 'sexo',
+        placeholder: '',
+        choices: [{
+          text: 'masculino',
+          value: 'homem'
+        }, {
+          text: 'feminino',
+          value: 'mulher'
+        }]
+      }, {
+        type: 'select',
+        name: 'carro',
+        placeholder: '',
+        choices: [{
+          text: 'camaro',
+          value: 'camaro de rico'
+        }, {
+          text: 'belina',
+          value: 'belina de pobre'
+        }]
+      }],
+
+      codeExample: '<form action="/contact_form" method="post">',
+      codeExampleEnd: '</form>',
+      code: '<label>Nome:</label>\n'
+        +'<input type="text" name="contact[name]" placeholder="seu nome">\n'
+        +'<label>E-mail:</label>\n'
+        +'<input type="text" name="contact[email]" placeholder="seu email">\n'
+        +'<button type="submit">enviar</button>\n'
     }
 
     this.handleChangeAction = this.handleChangeAction.bind(this);
@@ -50,8 +83,8 @@ class FormContent extends React.Component {
     this.setState(newState);
   }
 
-  handleChangeAction(e, index, action) {
-    this.setState({action});
+  handleChangeAction(e, index, dist) {
+    this.setState({dist});
   }
 
   handleName(e) {
@@ -60,7 +93,6 @@ class FormContent extends React.Component {
 
   updateCode(e) {
     let newCode = e.target.value;
-    console.log('newCode', newCode);
     this.setState({
         code: newCode
         }, function() {
@@ -79,41 +111,60 @@ class FormContent extends React.Component {
       margin: '5px 0',
       width: '100%'
     };
+    const codeExampleStyle = {
+      background: 'rgb(60, 60, 60)',
+      fontFamily: 'monospace',
+      padding: '16px 13px',
+      color: '#ADADAD',
+      fontSize: '16px',
+      borderTopRightRadius: '3px'
+    }
+    const codeExampleEndStyle = {
+      background: 'rgb(60, 60, 60)',
+      fontFamily: 'monospace',
+      padding: '16px 13px',
+      color: '#ADADAD',
+      fontSize: '16px',
+      borderBottomRightRadius: '3px'
+    }
 
     return (
       <div className='form_wrapper'>
         <Paper zDepth={1}>
-        <TextField
-          hintText="Nome do formulário"
-          underlineStyle={underlineStyle}
-          value={this.state.name}
-          onChange={this.handleName}
-          style={fieldStyle} />
-          <Divider />
+          <TextField
+            hintText="Nome do formulário"
+            underlineStyle={underlineStyle}
+            value={this.state.name}
+            onChange={this.handleName}
+            style={fieldStyle} />
+            <Divider />
 
-        <div style={{display: 'flex', padding: '10px 0', backgroundColor: 'rgb(218, 218, 218)'}}>
-          <CodeMirror
-            style= {{width: '60%', margin: '5px', fontSize: '14px', lineHeight: '21px' }}
-            mode={{name: "handlebars", base: "text/html"}}
-            theme='monokai'
-            defaultValue={this.state.code}
-            textAreaStyle={{ minHeight: '10em' }}
-            lineNumbers={true}
-            value={this.state.code}
-            onChange={this.updateCode}/>
-          <FormBody ref="formBody" inputFields={this.props.body}/>
-        </div>
-          {(this.state.action === 1) ?
+          <div style={{display: 'flex', padding: '10px 0', backgroundColor: 'rgb(218, 218, 218)'}}>
+            <div style={{width: '60%'}}>
+              <div style={codeExampleStyle}>{this.state.codeExample}</div>
+              <CodeMirror
+                style= {{fontSize: '14px', lineHeight: '21px' }}
+                mode={{name: "handlebars", base: "text/html"}}
+                theme='monokai'
+                defaultValue={this.state.code}
+                textAreaStyle={{ minHeight: '10em' }}
+                lineNumbers={true}
+                value={this.state.code}
+                onChange={this.updateCode}/>
+              <div style={codeExampleEndStyle}>{this.state.codeExampleEnd}</div>
+            </div>
+            <FormBody ref="formBody" tagsList={this.state.tags}/>
+          </div>
+          {(this.state.dist === 1) ?
             <h1>config de email</h1> : ''
           }
 
           <Divider />
 
-          <DropDownMenu value={this.state.action} onChange={this.handleChangeAction}>
+          <DropDownMenu value={this.state.dist} onChange={this.handleChangeAction}>
             <MenuItem value={0} primaryText="Salvar contato"/>
             <MenuItem value={1} primaryText="Enviar email de contato"/>
           </DropDownMenu>
-
         </Paper>
       </div>
     );
@@ -121,4 +172,3 @@ class FormContent extends React.Component {
 }
 
 export default FormContent;
-

@@ -29,6 +29,17 @@ class InputText extends React.Component {
     this.handleToggle = this.handleToggle.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    let newState = {}
+    let self = this;
+    _.forEach(nextProps, function(value, key){
+      if (_.has(self.state, key)) {
+        newState[key] = value;
+      }
+    });
+    this.setState(newState);
+  }
+
   handleFields(field, e) {
     this.setState({[field]: e.target.value});
   }
@@ -198,7 +209,6 @@ class InputRadio extends React.Component {
       </div>
     );
   }
-
 }
 
 class InputSelect extends React.Component {
@@ -206,18 +216,104 @@ class InputSelect extends React.Component {
     super(props);
     this.state = {
       uniqueId: this.props.uniqueId,
-      type: this.props.type,
       name: this.props.name,
-      placeholder: this.props.placeholder,
-      label: this.props.label,
-      isRequired: this.props.isRequired
+      choices: this.props.choices || []
     };
+
+    this.handleName = this.handleName.bind(this);
+    this.handleValue = this.handleValue.bind(this);
+    this.handleText = this.handleText.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
+  }
+
+  handleName(e) {
+    let index = this.props.index;
+    this.setState({name: e.target.value});
+  }
+
+  handleValue(index, e) {
+    var arr = this.state.choices;
+    arr[index].value = e.target.value;
+    this.setState({choices: arr});
+  }
+
+  handleText(index, e) {
+    var arr = this.state.choices;
+    arr[index].text = e.target.value;
+    this.setState({choices: arr});
+  }
+
+  handleAdd(e) {
+    var arr = this.state.choices;
+    arr.push({text: '', value: ''});
+    this.setState({choices: arr});
+  }
+
+  deleteItem(index, e) {
+    if (this.props.onDelete) {
+      return this.props.onDelete(index, e);
+    }
   }
 
   render() {
+      const wrapperFieldStyle = {
+        display: 'inline-block',
+        height: '100%',
+        boxSizing: 'border-box',
+        margin: '0 5px',
+        width: '150px'
+      }
+      const itemStyle = {
+        boxShadow: 'none',
+        border: '2px solid #C3C3C3',
+        display: 'block',
+        marginTop: '5px'
+      }
+
+      let items = this.state.choices.map(function(item, i) {
+        return (
+          <Paper key={i} style={itemStyle} zDepth={2}>
+            <div className='form-group-options__item__header'></div>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+              <div style={wrapperFieldStyle}>
+                <TextField
+                  fullWidth={true}
+                  floatingLabelText='value'
+                  hintText="value"
+                  value={this.state.choices[i].value}
+                  onChange={this.handleValue.bind(this, i)}
+                />
+              </div>
+              <div style={wrapperFieldStyle}>
+                <TextField
+                  fullWidth={true}
+                  floatingLabelText='text element'
+                  hintText='text element'
+                  value={this.state.choices[i].text}
+                  onChange={this.handleText.bind(this, i)}
+                />
+              </div>
+            </div>
+          </Paper>
+        );
+      }, this);
+
     return (
       <div>
-      sou um select
+        <TextField
+          value={this.state.name}
+          floatingLabelText='input name'
+          onChange={this.handleName}
+          fullWidth={true}
+        />
+
+        {items}
+        <IconButton
+          onTouchTap={this.handleAdd}
+          tooltip="add input"
+          tooltipPosition="bottom-right">
+          <ContentAddCircle color={colors.pink200}/>
+        </IconButton>
       </div>
     );
   }
@@ -228,38 +324,55 @@ class FormTagEdit extends React.Component {
     super(props);
     this.state = {
       uniqueId: this.props.uniqueId,
-      type: this.props.type || 'radio',
+      type: this.props.type || 'text',
+      name: this.props.name,
+      placeholder: this.props.placeholder,
+      choices: this.props.choices || []
     };
 
     this.handleChangeType = this.handleChangeType.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    let newState = {}
+    let self = this;
+    _.forEach(nextProps, function(value, key){
+      if (_.has(self.state, key)) {
+        newState[key] = value;
+      }
+    });
+    this.setState(newState);
   }
 
   handleChangeType(e, index, type) {
     this.setState({type: type}, this.handleChanges);
   }
 
-  render() {
+  getTagComponent(type) {
     const tags = {
-      text: function() {
-        return ( <InputText /> );
+      text: function(props) {
+        return ( <InputText {...props} /> );
       },
-      email: function() {
-        return ( <InputText /> );
+      email: function(props) {
+        return ( <InputText  {...props}/> );
       },
-      number: function() {
-        return ( <InputText /> );
+      number: function(props) {
+        return ( <InputText  {...props}/> );
       },
-      checkbox: function() {
-        return ( <InputCheckbox /> );
+      checkbox: function(props) {
+        return ( <InputCheckbox  {...props}/> );
       },
-      radio: function() {
-        return ( <InputRadio /> );
+      radio: function(props) {
+        return ( <InputRadio  {...props}/> );
       },
-      select: function() {
-        return ( <InputSelect /> );
+      select: function(props) {
+        return ( <InputSelect  {...props}/> );
       },
-    }
-    console.log('tag state', this.state);
+    };
+    return tags[type](this.state);
+  }
+
+  render() {
     return (
       <div style={{boxSizing: 'border-box', padding: '5px'}}>
         <div>
@@ -276,7 +389,7 @@ class FormTagEdit extends React.Component {
           </DropDownMenu>
         </div>
         <div>
-          {tags[this.state.type]()}
+          {this.getTagComponent(this.state.type)}
         </div>
       </div>
     );
@@ -284,41 +397,3 @@ class FormTagEdit extends React.Component {
 }
 
 export default FormTagEdit;
-
-        //<div>
-          //<TextField
-          //fullWidth={true}
-          //floatingLabelText='input name'
-          //hintText='input name'
-          //value={this.state.name}
-          //onChange={this.handleName}
-          ///>
-        //</div>
-        //<div>
-          //<TextField
-          //fullWidth={true}
-          //floatingLabelText='placeholder (optional)'
-          //hintText="placeholder (optional)"
-          //value={this.state.placeholder}
-          //onChange={this.handlePlaceholder}
-          ///>
-        //</div>
-        //<div>
-          //<TextField
-          //fullWidth={true}
-          //floatingLabelText='label (optional)'
-          //hintText="label (optional)"
-          //value={this.state.label}
-          //onChange={this.handleLabel}
-          ///>
-        //</div>
-        //<div>
-          //<Toggle
-            //label='is required'
-            //style={{width: 'auto', margin: '0 auto -7px'}}
-            //name="required"
-            //defaultToggled={this.state.isRequired}
-            //onToggle={this.handleRequired}
-            //value="required" />
-        //</div>
-

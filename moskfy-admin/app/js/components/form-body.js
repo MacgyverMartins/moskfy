@@ -21,16 +21,15 @@ class FormBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      tagsList: this.props.tagsList || [{name: 'nome', type: 'text'}],
-      showEdit: true
+      tagsList: this.props.tagsList || [],
+      currentTag: {},
+      showEdit: false
     };
 
-    this.handleChangeType = this.handleChangeType.bind(this);
-    this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
+    //this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
     this.onDelete = this.onDelete.bind(this);
-    this.addFieldText = this.addFieldText.bind(this);
-    this.addFieldGroup = this.addFieldGroup.bind(this);
     this.showEdit = this.showEdit.bind(this);
+    this. openTagEditor = this.openTagEditor.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -44,34 +43,18 @@ class FormBody extends React.Component {
     this.setState(newState);
   }
 
-  handleChangeType(e, index, type) {
-    this.setState({type});
-  }
-
-  handleChangeField(index, item) {
-    var arr = this.state.inputFields;
-    arr[index] = item;
-    this.setState({inputFields: arr});
-  }
-
-  addFieldText(e) {
-    var arrFields = this.state.inputFields;
-    let uniqueId = _.uniqueId('text_');
-    arrFields.push({type: 'text', name: '', placeholder: '', isRequired: true, uniqueId: uniqueId});
-    this.setState({inputFields: arrFields});
-  }
-
-  addFieldGroup(e) {
-    var arrFields = this.state.inputFields;
-    let uniqueId = _.uniqueId('group_');
-    arrFields.push({type: 'checkbox', name: '', placeholder: '', isRequired: true, uniqueId: uniqueId});
-    this.setState({inputFields: arrFields});
-  }
-
   onDelete(index, e) {
     var arrFields = this.state.inputFields.slice();
     arrFields.splice(index, 1);
     this.setState({inputFields: arrFields});
+  }
+
+  openTagEditor(index, e) {
+    let tagsList = this.state.tagsList;
+    this.setState({
+      currentTag: tagsList[index],
+      showEdit: true
+    });
   }
 
   showEdit() {
@@ -124,35 +107,13 @@ class FormBody extends React.Component {
       borderRadius: '3px',
     }
 
-    //let fields = this.state.inputFields.map(function(item, i) {
-      //let uniqueId;
-      //switch(item.type){
-        //case 'text':
-        //case 'number':
-        //case 'email':
-          //uniqueId = item.uniqueId || _.uniqueId('text_');
-          //return (
-            //<FormText {...item} index={i} key={uniqueId} uniqueId={uniqueId}
-            //onChange={this.handleChangeField} onDelete={this.onDelete}/>
-            //)
-          //break;
-        //case 'checkbox':
-        //case 'radio':
-          //uniqueId = item.uniqueId || _.uniqueId('group_');
-          //return (
-            //<FormGroups {...item} index={i} key={uniqueId} uniqueId={uniqueId}
-            //onChange={this.handleChangeField} onDelete={this.onDelete}/>
-          //)
-          //break;
-      //}
-    //}, this);
-
     let tagsList = this.state.tagsList.map(function(item, i) {
       let uniqueId;
       uniqueId = item.uniqueId || _.uniqueId('tag_');
       return (
         <div key={uniqueId} uniqueId={uniqueId}>
           <ListItem
+            onTouchTap={this.openTagEditor.bind(this, i)}
             primaryText={item.name}
             secondaryText={'input type: ' + item.type} />
           <Divider />
@@ -168,7 +129,7 @@ class FormBody extends React.Component {
           </List>
         </div>
         <div style={editStyle}>
-          <FormTagEdit />
+          <FormTagEdit {...this.state.currentTag}/>
         </div>
         <FloatingActionButton style={floatButtomStyle} onTouchTap={this.showEdit}>
           <ContentAdd />
