@@ -11,7 +11,8 @@ module.exports = function() {
       }
     },
     description: String,
-    body: [{
+    code: String,
+    tags: [{
       type: {type: String, required: true},
       name: {type: String, required: true},
       isRequired: Boolean,

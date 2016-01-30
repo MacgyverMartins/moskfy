@@ -26,12 +26,12 @@ class FormBody extends React.Component {
       showEditor: false
     };
 
-    //this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
     this.addNewTag = this.addNewTag.bind(this);
     this.openTagEditor = this.openTagEditor.bind(this);
     this.cancelEditor = this.cancelEditor.bind(this);
     this.saveEditor = this.saveEditor.bind(this);
     this.handleDelete = this.handleDelete.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,6 +45,12 @@ class FormBody extends React.Component {
     this.setState(newState);
   }
 
+  handleChange() {
+    if (this.props.onChange) {
+      return this.props.onChange(this.state.tagsList);
+    }
+  }
+
   addNewTag(e) {
     this.setState({
       currentTag: {},
@@ -54,9 +60,14 @@ class FormBody extends React.Component {
   }
 
   handleDelete(index, e) {
-    let tagsList = this.state.tagsList.slice();
-    tagsList.splice(index, 1);
-    this.setState({tagsList: tagsList});
+    let arr = this.state.tagsList.slice();
+    arr.splice(index, 1);
+    this.setState({
+      tagsList: arr
+    }, function() {
+      this.handleChange();
+    });
+
   }
 
   openTagEditor(index, e) {
@@ -65,7 +76,7 @@ class FormBody extends React.Component {
       currentTag: tagsList[index],
       currentTagIndex: index,
       showEditor: true
-    }, console.log('current', this.state.currentTag));
+    });
   }
 
   cancelEditor(e) {
@@ -85,10 +96,14 @@ class FormBody extends React.Component {
     }
     this.setState({
       tagsList: tagsList
-    }, this.cancelEditor());
+    }, function() {
+      this.handleChange();
+      this.cancelEditor();
+    });
   }
 
   render() {
+    console.log('TESTE', this.state.tagsList);
     const cardStyle = {
       margin: '20px',
     };
@@ -158,7 +173,7 @@ class FormBody extends React.Component {
         </div>
         )
     }, this);
-
+    console.log('formbody state', this.state);
     return (
       <Paper style={paperStyle} zDepth={1}>
         <div style={listStyle}>
@@ -192,5 +207,3 @@ class FormBody extends React.Component {
 }
 
 export default FormBody;
-        //{(_.isEmpty(fields)) ? <p style={noItemsStyle}>no items added</p> : fields}
-

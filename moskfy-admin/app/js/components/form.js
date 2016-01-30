@@ -23,56 +23,23 @@ class FormContent extends React.Component {
     this.state = {
       name: this.props.name,
       dist: 0,
-      //tags: this.props.tags || [],
-      tags: [{
-        type: 'text',
-        name: 'Nome',
-        placeholder: 'seu nome',
-        isRequired: false,
-        choices: []
-      },{
-        type: 'email',
-        name: 'Email',
-        placeholder: 'deixe seu email',
-        isRequired: false,
-        choices: []
-      },{
-        type: 'radio',
-        name: 'sexo',
-        placeholder: '',
-        choices: [{
-          text: 'masculino',
-          value: 'homem'
-        }, {
-          text: 'feminino',
-          value: 'mulher'
-        }]
-      }, {
-        type: 'select',
-        name: 'carro',
-        placeholder: '',
-        isRequired: false,
-        choices: [{
-          text: 'camaro',
-          value: 'camaro de rico'
-        }, {
-          text: 'belina',
-          value: 'belina de pobre'
-        }]
-      }],
+      tags: this.props.tags || [],
 
       codeExample: '<form action="/contact_form" method="post">',
       codeExampleEnd: '</form>',
-      code: '<label>Nome:</label>\n'
-        +'<input type="text" name="contact[name]" placeholder="seu nome">\n'
-        +'<label>E-mail:</label>\n'
-        +'<input type="text" name="contact[email]" placeholder="seu email">\n'
-        +'<button type="submit">enviar</button>\n'
+      code: this.props.code,
+      //code: '<label>Nome:</label>\n'
+        //+'<input type="text" name="contact[name]" placeholder="seu nome">\n'
+        //+'<label>E-mail:</label>\n'
+        //+'<input type="text" name="contact[email]" placeholder="seu email">\n'
+        //+'<button type="submit">enviar</button>\n'
     }
 
+    //this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
     this.handleChangeAction = this.handleChangeAction.bind(this);
-    this.handleName = this.handleName.bind(this);
-    this.updateCode = this.updateCode.bind(this);
+    this.handleName = _.debounce(this.handleName.bind(this), 300);
+    this.updateCode =  this.updateCode.bind(this);
+    this.updateTags = this.updateTags.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -97,10 +64,15 @@ class FormContent extends React.Component {
   updateCode(e) {
     let newCode = e.target.value;
     this.setState({
-        code: newCode
-        }, function() {
-          this.setState({code2: newCode})
-        });
+      code: newCode
+    });
+  }
+
+  updateTags(arrayTags) {
+    console.log('arrayTags');
+    this.setState({
+      tags: arrayTags
+    });
   }
 
   render() {
@@ -131,6 +103,7 @@ class FormContent extends React.Component {
       borderBottomRightRadius: '3px'
     }
 
+    console.log('form state', this.state.tags);
     return (
       <div className='form_wrapper'>
         <Paper zDepth={1}>
@@ -146,6 +119,7 @@ class FormContent extends React.Component {
             <div style={{width: '60%'}}>
               <div style={codeExampleStyle}>{this.state.codeExample}</div>
               <CodeMirror
+                ref='formCode'
                 style= {{fontSize: '14px', lineHeight: '21px' }}
                 mode={{name: "handlebars", base: "text/html"}}
                 theme='monokai'
@@ -156,7 +130,7 @@ class FormContent extends React.Component {
                 onChange={this.updateCode}/>
               <div style={codeExampleEndStyle}>{this.state.codeExampleEnd}</div>
             </div>
-            <FormBody ref="formBody" tagsList={this.state.tags}/>
+            <FormBody ref="formBody" tagsList={this.state.tags} onChange={this.updateTags}/>
           </div>
           {(this.state.dist === 1) ?
             <h1>config de email</h1> : ''

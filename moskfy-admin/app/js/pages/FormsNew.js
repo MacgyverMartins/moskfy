@@ -3,10 +3,8 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import AppHeader from '../components/app-header';
 import Form from '../components/form';
-
 const RaisedButton = require('material-ui/lib/raised-button');
 const _ = require('lodash');
-
 import AppActions from '../actions/AppActions';
 import FormActions from '../actions/FormActions';
 import FormStore from '../stores/FormStore';
@@ -14,8 +12,44 @@ import FormStore from '../stores/FormStore';
 const resetState = {
   _id: '',
   name: '',
-  body: [],
-  open: false
+  code: '<!-- your code here -->',
+  tags: []
+  //tags: [{
+    //type: 'text',
+    //name: 'Nome',
+    //placeholder: 'seu nome',
+    //isRequired: false,
+    //choices: []
+  //},{
+    //type: 'email',
+    //name: 'Email',
+    //placeholder: 'deixe seu email',
+    //isRequired: false,
+    //choices: []
+  //},{
+    //type: 'radio',
+    //name: 'sexo',
+    //placeholder: '',
+    //choices: [{
+      //text: 'masculino',
+      //value: 'homem'
+    //}, {
+      //text: 'feminino',
+      //value: 'mulher'
+    //}]
+  //}, {
+    //type: 'select',
+    //name: 'carro',
+    //placeholder: '',
+    //isRequired: false,
+    //choices: [{
+      //text: 'camaro',
+      //value: 'camaro de rico'
+    //}, {
+      //text: 'belina',
+      //value: 'belina de pobre'
+    //}]
+  //}]
 }
 
 class FormsNew extends React.Component {
@@ -65,16 +99,19 @@ class FormsNew extends React.Component {
   }
 
   handleSave() {
+    let form = this.refs.form.state;
     let formObj = {
       _id: this.state._id,
-      body: []
+      name: form.name,
+      tags: form.tags,
+      code: form.code
     };
 
-    let form = this.refs.form;
-    let body = form.refs.formBody;
+    //let form = this.refs.form;
+    //let body = form.refs.formBody;
 
-    _.assignIn(formObj, form.state);
-    formObj.body = body.state.inputFields;
+    //_.assignIn(formObj, form.state);
+    //formObj.body = body.state.inputFields;
     FormActions.save(formObj);
   }
 
@@ -83,12 +120,13 @@ class FormsNew extends React.Component {
   }
 
   render() {
+    console.log('formnew state', this.state);
     return (
       <DocumentTitle title="Moskfy | Novo formulário">
       <div>
         <AppHeader parentView="Formulários" currentlyView={this.state.name || "Novo formulário"}/>
 
-        <Form ref="form" {...this.state}/>
+        <Form ref="form" {...this.state} />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         {this.props.params.id ?
