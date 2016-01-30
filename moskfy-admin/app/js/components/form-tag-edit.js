@@ -9,6 +9,7 @@ import IconButton from 'material-ui/lib/icon-button';
 import ContentAddCircle from 'material-ui/lib/svg-icons/content/add-circle';
 import ContentClear from 'material-ui/lib/svg-icons/content/clear';
 import Paper from 'material-ui/lib/paper';
+import FlatButton from 'material-ui/lib/flat-button';
 import _ from 'lodash';
 
 import styles from 'material-ui/lib/styles';
@@ -159,6 +160,7 @@ class InputRadio extends React.Component {
         boxShadow: 'none',
         border: '2px solid #C3C3C3',
         display: 'block',
+        overflow: 'hidden',
         marginTop: '5px'
       }
 
@@ -267,6 +269,7 @@ class InputSelect extends React.Component {
         boxShadow: 'none',
         border: '2px solid #C3C3C3',
         display: 'block',
+        overflow: 'hidden',
         marginTop: '5px'
       }
 
@@ -319,6 +322,14 @@ class InputSelect extends React.Component {
   }
 }
 
+const resetState ={
+  uniqueId: null,
+  type: 'text',
+  name: null,
+  placeholder: null,
+  choices: []
+}
+
 class FormTagEdit extends React.Component {
   constructor(props) {
     super(props);
@@ -331,50 +342,79 @@ class FormTagEdit extends React.Component {
     };
 
     this.handleChangeType = this.handleChangeType.bind(this);
+    this.handleCancel = this.handleCancel.bind(this);
+    this.handleSave = this.handleSave.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
-    let newState = {}
-    let self = this;
-    _.forEach(nextProps, function(value, key){
-      if (_.has(self.state, key)) {
-        newState[key] = value;
-      }
-    });
-    this.setState(newState);
+    if (!nextProps.name && !nextProps.index) {
+      this.setState(resetState);
+    } else {
+      let newState = {}
+      let self = this;
+      _.forEach(nextProps, function(value, key){
+        if (_.has(self.state, key)) {
+          newState[key] = value;
+        }
+      });
+      this.setState(newState);
+    }
   }
 
   handleChangeType(e, index, type) {
-    this.setState({type: type}, this.handleChanges);
+    this.setState({type: type});
+  }
+
+  handleCancel(e) {
+    if (this.props.onCancel) {
+      return this.props.onCancel(e);
+    }
+  }
+
+  handleSave(e) {
+    console.log('props', this.props);
+    let tag = this.refs.inputTag.state;
+    let type = this.state.type;
+    let newTag = _.assign({}, tag, {type: type});
+    if (this.props.onSave) {
+      return this.props.onSave(this.props.index, newTag);
+    }
   }
 
   getTagComponent(type) {
+    let ref = 'inputTag'
     const tags = {
       text: function(props) {
-        return ( <InputText {...props} /> );
+        return ( <InputText {...props} ref={ref} /> );
       },
       email: function(props) {
-        return ( <InputText  {...props}/> );
+        return ( <InputText  {...props} ref={ref}/> );
       },
       number: function(props) {
-        return ( <InputText  {...props}/> );
+        return ( <InputText  {...props} ref={ref}/> );
       },
       checkbox: function(props) {
-        return ( <InputCheckbox  {...props}/> );
+        return ( <InputCheckbox  {...props} ref={ref}/> );
       },
       radio: function(props) {
-        return ( <InputRadio  {...props}/> );
+        return ( <InputRadio  {...props} ref={ref}/> );
       },
       select: function(props) {
-        return ( <InputSelect  {...props}/> );
+        return ( <InputSelect  {...props} ref={ref}/> );
       },
     };
-    return tags[type](this.state);
+
+    let component = tags[type](this.state);
+    return component;
   }
 
   render() {
     return (
       <div style={{boxSizing: 'border-box', padding: '5px'}}>
+        <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+          <FlatButton label="cancelar" onTouchTap={this.handleCancel}/>
+          <FlatButton label="salvar" primary={true} onTouchTap={this.handleSave}/>
+        </div>
         <div>
           <DropDownMenu
           value={this.state.type}

@@ -11,11 +11,9 @@ import FloatingActionButton from 'material-ui/lib/floating-action-button';
 import ContentAdd from 'material-ui/lib/svg-icons/content/add';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import FlatButton from 'material-ui/lib/flat-button';
-
+import _ from 'lodash';
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
-
-import _ from 'lodash';
 
 class FormBody extends React.Component {
   constructor(props) {
@@ -23,13 +21,15 @@ class FormBody extends React.Component {
     this.state = {
       tagsList: this.props.tagsList || [],
       currentTag: {},
-      showEdit: false
+      showEditor: false
     };
 
     //this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
     this.onDelete = this.onDelete.bind(this);
-    this.showEdit = this.showEdit.bind(this);
-    this. openTagEditor = this.openTagEditor.bind(this);
+    this.addNewTag = this.addNewTag.bind(this);
+    this.openTagEditor = this.openTagEditor.bind(this);
+    this.cancelEditor = this.cancelEditor.bind(this);
+    this.saveEditor = this.saveEditor.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -43,6 +43,14 @@ class FormBody extends React.Component {
     this.setState(newState);
   }
 
+  addNewTag(e) {
+    this.setState({
+      currentTag: {},
+      currentTagIndex: null,
+      showEditor: true
+    });
+  }
+
   onDelete(index, e) {
     var arrFields = this.state.inputFields.slice();
     arrFields.splice(index, 1);
@@ -53,12 +61,29 @@ class FormBody extends React.Component {
     let tagsList = this.state.tagsList;
     this.setState({
       currentTag: tagsList[index],
-      showEdit: true
+      currentTagIndex: index,
+      showEditor: true
     });
   }
 
-  showEdit() {
-    this.setState({showEdit: !this.state.showEdit});
+  cancelEditor(e) {
+    this.setState({
+      currentTag: {},
+      currentTagIndex: null,
+      showEditor: false
+    });
+  }
+
+  saveEditor(index, item)  {
+    let tagsList = this.state.tagsList;
+    if (index) {
+      tagsList[index] = item;
+    } else {
+      tagsList.push(item);
+    }
+    this.setState({
+      tagsList: tagsList
+    }, this.cancelEditor());
   }
 
   render() {
@@ -89,12 +114,12 @@ class FormBody extends React.Component {
       zIndex: '2'
     }
     const listStyle = {
-      display: (!this.state.showEdit) ? 'block' : 'none',
+      display: (!this.state.showEditor) ? 'block' : 'none',
       height: '400px',
       overflow: 'scroll'
     }
     const editStyle = {
-      display: (this.state.showEdit) ? 'block' : 'none',
+      display: (this.state.showEditor) ? 'block' : 'none',
       height: '400px',
       overflow: 'scroll'
     }
@@ -129,11 +154,17 @@ class FormBody extends React.Component {
           </List>
         </div>
         <div style={editStyle}>
-          <FormTagEdit {...this.state.currentTag}/>
+          <FormTagEdit {...this.state.currentTag}
+            index={this.state.currentTagIndex}
+            onSave={this.saveEditor}
+            onCancel={this.cancelEditor}
+          />
         </div>
-        <FloatingActionButton style={floatButtomStyle} onTouchTap={this.showEdit}>
-          <ContentAdd />
-        </FloatingActionButton>
+        {(this.state.showEditor === false) ?
+          <FloatingActionButton style={floatButtomStyle} onTouchTap={this.addNewTag}>
+            <ContentAdd />
+          </FloatingActionButton>
+          : ''}
       </Paper>
     );
   }

@@ -92,8 +92,8 @@ class FormsNew extends React.Component {
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         {this.props.params.id ?
-        <RaisedButton label="Excluir" primary={true} onTouchTap={this.handleDelete}/> : ''}
-          <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
+        <RaisedButton label="Excluir" onTouchTap={this.handleDelete}/> : ''}
+          <RaisedButton label="Salvar" primary={true} onTouchTap={this.handleSave} />
         </div>
       </div>
       </DocumentTitle>
