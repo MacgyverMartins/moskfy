@@ -84,9 +84,14 @@ class FormsNew extends React.Component {
   onChange(event) {
     switch(event.payload){
       case 'onSave':
+      debugger;
         AppActions.showSnackbar('Saved form');
         let url = `/admin/forms/${event.data._id}`;
-        this.context.history.pushState(null, url);
+        if (url === this.context.location.pathname) {
+          this.forceUpdate();
+        } else {
+          this.context.history.pushState(null, url);
+        }
         break;
       case 'onGet':
         this.setState(event.data);
@@ -100,18 +105,14 @@ class FormsNew extends React.Component {
 
   handleSave() {
     let form = this.refs.form.state;
+    let code = this.refs.form.refs.code.state;
     let formObj = {
       _id: this.state._id,
       name: form.name,
       tags: form.tags,
-      code: form.code
+      code: code.code
     };
 
-    //let form = this.refs.form;
-    //let body = form.refs.formBody;
-
-    //_.assignIn(formObj, form.state);
-    //formObj.body = body.state.inputFields;
     FormActions.save(formObj);
   }
 
@@ -120,7 +121,6 @@ class FormsNew extends React.Component {
   }
 
   render() {
-    console.log('formnew state', this.state);
     return (
       <DocumentTitle title="Moskfy | Novo formulário">
       <div>

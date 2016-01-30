@@ -103,7 +103,6 @@ class FormBody extends React.Component {
   }
 
   render() {
-    console.log('TESTE', this.state.tagsList);
     const cardStyle = {
       margin: '20px',
     };
@@ -173,7 +172,7 @@ class FormBody extends React.Component {
         </div>
         )
     }, this);
-    console.log('formbody state', this.state);
+
     return (
       <Paper style={paperStyle} zDepth={1}>
         <div style={listStyle}>

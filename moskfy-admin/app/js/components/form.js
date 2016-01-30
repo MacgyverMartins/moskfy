@@ -1,6 +1,7 @@
 'use strict';
 import React from 'react';
 import FormBody from './form-body';
+import FormCode from './form-code';
 
 import AppBar from 'material-ui/lib/app-bar';
 import IconButton from 'material-ui/lib/icon-button';
@@ -12,10 +13,6 @@ import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import MenuItem from 'material-ui/lib/menus/menu-item';
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
-import CodeMirror from 'react-code-mirror';
-import 'codemirror/mode/htmlmixed/htmlmixed';
-import 'codemirror/mode/handlebars/handlebars';
-import 'codemirror/addon/hint/html-hint';
 
 class FormContent extends React.Component {
   constructor(props) {
@@ -24,10 +21,7 @@ class FormContent extends React.Component {
       name: this.props.name,
       dist: 0,
       tags: this.props.tags || [],
-
-      codeExample: '<form action="/contact_form" method="post">',
-      codeExampleEnd: '</form>',
-      code: this.props.code,
+      code: this.props.code
       //code: '<label>Nome:</label>\n'
         //+'<input type="text" name="contact[name]" placeholder="seu nome">\n'
         //+'<label>E-mail:</label>\n'
@@ -37,8 +31,8 @@ class FormContent extends React.Component {
 
     //this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
     this.handleChangeAction = this.handleChangeAction.bind(this);
-    this.handleName = _.debounce(this.handleName.bind(this), 300);
-    this.updateCode =  this.updateCode.bind(this);
+    //this.handleName = _.debounce(this.handleName.bind(this), 300);
+    this.handleName = this.handleName.bind(this);
     this.updateTags = this.updateTags.bind(this);
   }
 
@@ -61,15 +55,7 @@ class FormContent extends React.Component {
     this.setState({name: e.target.value});
   }
 
-  updateCode(e) {
-    let newCode = e.target.value;
-    this.setState({
-      code: newCode
-    });
-  }
-
   updateTags(arrayTags) {
-    console.log('arrayTags');
     this.setState({
       tags: arrayTags
     });
@@ -86,24 +72,7 @@ class FormContent extends React.Component {
       margin: '5px 0',
       width: '100%'
     };
-    const codeExampleStyle = {
-      background: 'rgb(60, 60, 60)',
-      fontFamily: 'monospace',
-      padding: '16px 13px',
-      color: '#ADADAD',
-      fontSize: '16px',
-      borderTopRightRadius: '3px'
-    }
-    const codeExampleEndStyle = {
-      background: 'rgb(60, 60, 60)',
-      fontFamily: 'monospace',
-      padding: '16px 13px',
-      color: '#ADADAD',
-      fontSize: '16px',
-      borderBottomRightRadius: '3px'
-    }
 
-    console.log('form state', this.state.tags);
     return (
       <div className='form_wrapper'>
         <Paper zDepth={1}>
@@ -117,18 +86,7 @@ class FormContent extends React.Component {
 
           <div style={{display: 'flex', padding: '10px 0', backgroundColor: 'rgb(218, 218, 218)'}}>
             <div style={{width: '60%'}}>
-              <div style={codeExampleStyle}>{this.state.codeExample}</div>
-              <CodeMirror
-                ref='formCode'
-                style= {{fontSize: '14px', lineHeight: '21px' }}
-                mode={{name: "handlebars", base: "text/html"}}
-                theme='monokai'
-                defaultValue={this.state.code}
-                textAreaStyle={{ minHeight: '10em' }}
-                lineNumbers={true}
-                value={this.state.code}
-                onChange={this.updateCode}/>
-              <div style={codeExampleEndStyle}>{this.state.codeExampleEnd}</div>
+              <FormCode ref='code' code={this.state.code}/>
             </div>
             <FormBody ref="formBody" tagsList={this.state.tags} onChange={this.updateTags}/>
           </div>
