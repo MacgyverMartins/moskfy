@@ -11,6 +11,8 @@ import FloatingActionButton from 'material-ui/lib/floating-action-button';
 import ContentAdd from 'material-ui/lib/svg-icons/content/add';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import FlatButton from 'material-ui/lib/flat-button';
+import IconButton from 'material-ui/lib/icon-button';
+import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
 import _ from 'lodash';
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
@@ -25,11 +27,11 @@ class FormBody extends React.Component {
     };
 
     //this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
-    this.onDelete = this.onDelete.bind(this);
     this.addNewTag = this.addNewTag.bind(this);
     this.openTagEditor = this.openTagEditor.bind(this);
     this.cancelEditor = this.cancelEditor.bind(this);
     this.saveEditor = this.saveEditor.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -51,10 +53,10 @@ class FormBody extends React.Component {
     });
   }
 
-  onDelete(index, e) {
-    var arrFields = this.state.inputFields.slice();
-    arrFields.splice(index, 1);
-    this.setState({inputFields: arrFields});
+  handleDelete(index, e) {
+    let tagsList = this.state.tagsList.slice();
+    tagsList.splice(index, 1);
+    this.setState({tagsList: tagsList});
   }
 
   openTagEditor(index, e) {
@@ -63,7 +65,7 @@ class FormBody extends React.Component {
       currentTag: tagsList[index],
       currentTagIndex: index,
       showEditor: true
-    });
+    }, console.log('current', this.state.currentTag));
   }
 
   cancelEditor(e) {
@@ -76,10 +78,10 @@ class FormBody extends React.Component {
 
   saveEditor(index, item)  {
     let tagsList = this.state.tagsList;
-    if (index) {
-      tagsList[index] = item;
-    } else {
+    if (!index && index !== 0) {
       tagsList.push(item);
+    } else {
+      tagsList[index] = item;
     }
     this.setState({
       tagsList: tagsList
@@ -136,11 +138,22 @@ class FormBody extends React.Component {
       let uniqueId;
       uniqueId = item.uniqueId || _.uniqueId('tag_');
       return (
-        <div key={uniqueId} uniqueId={uniqueId}>
+        <div style={{position: 'relative'}}key={uniqueId} uniqueId={uniqueId}>
           <ListItem
             onTouchTap={this.openTagEditor.bind(this, i)}
-            primaryText={item.name}
+            primaryText={(item.isRequired) ? item.name+' *' : item.name}
             secondaryText={'input type: ' + item.type} />
+          <IconButton
+            style={{
+              position: 'absolute',
+              top: '0',
+              right: '0'
+            }}
+            onTouchTap={this.handleDelete.bind(this, i)}
+            tooltip="delete"
+            tooltipPosition="bottom-left">
+            <ActionDelete color='#D4D4D4' />
+          </IconButton>
           <Divider />
         </div>
         )
@@ -149,8 +162,16 @@ class FormBody extends React.Component {
     return (
       <Paper style={paperStyle} zDepth={1}>
         <div style={listStyle}>
-          <List subheader="General">
-          {tagsList}
+          <List subheader="Tags">
+          {(_.isEmpty(tagsList)) ?
+          <p style={{
+            textAlign: 'center',
+            fontStyle: 'italic',
+            color: '#B9B9B9',
+            fontWeight: '300',
+            marginTop: '25%'
+            }}>no tag added</p> :
+          tagsList}
           </List>
         </div>
         <div style={editStyle}>

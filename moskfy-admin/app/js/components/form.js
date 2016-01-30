@@ -28,11 +28,13 @@ class FormContent extends React.Component {
         type: 'text',
         name: 'Nome',
         placeholder: 'seu nome',
+        isRequired: false,
         choices: []
       },{
         type: 'email',
         name: 'Email',
         placeholder: 'deixe seu email',
+        isRequired: false,
         choices: []
       },{
         type: 'radio',
@@ -49,6 +51,7 @@ class FormContent extends React.Component {
         type: 'select',
         name: 'carro',
         placeholder: '',
+        isRequired: false,
         choices: [{
           text: 'camaro',
           value: 'camaro de rico'

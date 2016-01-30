@@ -19,7 +19,6 @@ class InputText extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uniqueId: this.props.uniqueId,
       name: this.props.name,
       placeholder: this.props.placeholder,
       label: this.props.label,
@@ -88,17 +87,106 @@ class InputCheckbox extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uniqueId: this.props.uniqueId,
       name: this.props.name,
-      label: this.props.label,
+      choices: this.props.choices || [],
       isRequired: this.props.isRequired
     };
+
+    this.handleName = this.handleName.bind(this);
+    this.handleValue = this.handleValue.bind(this);
+    this.handleText = this.handleText.bind(this);
+    this.handleAdd = this.handleAdd.bind(this);
+  }
+
+  handleName(e) {
+    let index = this.props.index;
+    this.setState({name: e.target.value});
+  }
+
+  handleValue(index, e) {
+    var arr = this.state.choices;
+    arr[index].value = e.target.value;
+    this.setState({choices: arr});
+  }
+
+  handleText(index, e) {
+    var arr = this.state.choices;
+    arr[index].text = e.target.value;
+    this.setState({choices: arr});
+  }
+
+  handleAdd(e) {
+    var arr = this.state.choices;
+    arr.push({text: '', value: ''});
+    this.setState({choices: arr});
+  }
+
+  deleteItem(index, e) {
+    if (this.props.onDelete) {
+      return this.props.onDelete(index, e);
+    }
   }
 
   render() {
+      const wrapperFieldStyle = {
+        display: 'inline-block',
+        height: '100%',
+        boxSizing: 'border-box',
+        margin: '0 5px',
+        width: '150px'
+      }
+      const itemStyle = {
+        boxShadow: 'none',
+        border: '2px solid #C3C3C3',
+        display: 'block',
+        overflow: 'hidden',
+        marginTop: '5px'
+      }
+
+      let items = this.state.choices.map(function(item, i) {
+        return (
+          <Paper key={i} style={itemStyle} zDepth={2}>
+            <div className='form-group-options__item__header'></div>
+            <div style={{display: 'flex', justifyContent: 'center'}}>
+              <div style={wrapperFieldStyle}>
+                <TextField
+                  fullWidth={true}
+                  floatingLabelText='value'
+                  hintText="value"
+                  value={this.state.choices[i].value}
+                  onChange={this.handleValue.bind(this, i)}
+                />
+              </div>
+              <div style={wrapperFieldStyle}>
+                <TextField
+                  fullWidth={true}
+                  floatingLabelText='text element'
+                  hintText='text element'
+                  value={this.state.choices[i].text}
+                  onChange={this.handleText.bind(this, i)}
+                />
+              </div>
+            </div>
+          </Paper>
+        );
+      }, this);
+
     return (
       <div>
-      sou um checkbox
+        <TextField
+          value={this.state.name}
+          floatingLabelText='input name'
+          onChange={this.handleName}
+          fullWidth={true}
+        />
+
+        {items}
+        <IconButton
+          onTouchTap={this.handleAdd}
+          tooltip="add input"
+          tooltipPosition="bottom-right">
+          <ContentAddCircle color={colors.pink200}/>
+        </IconButton>
       </div>
     );
   }
@@ -108,9 +196,9 @@ class InputRadio extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uniqueId: this.props.uniqueId,
       name: this.props.name,
-      choices: this.props.choices || []
+      choices: this.props.choices || [],
+      isRequired: this.props.isRequired
     };
 
     this.handleName = this.handleName.bind(this);
@@ -217,9 +305,9 @@ class InputSelect extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uniqueId: this.props.uniqueId,
       name: this.props.name,
-      choices: this.props.choices || []
+      choices: this.props.choices || [],
+      isRequired: this.props.isRequired
     };
 
     this.handleName = this.handleName.bind(this);
@@ -323,7 +411,6 @@ class InputSelect extends React.Component {
 }
 
 const resetState ={
-  uniqueId: null,
   type: 'text',
   name: null,
   placeholder: null,
@@ -334,10 +421,10 @@ class FormTagEdit extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      uniqueId: this.props.uniqueId,
       type: this.props.type || 'text',
       name: this.props.name,
       placeholder: this.props.placeholder,
+      isRequired: this.props.isRequired,
       choices: this.props.choices || []
     };
 
@@ -372,7 +459,6 @@ class FormTagEdit extends React.Component {
   }
 
   handleSave(e) {
-    console.log('props', this.props);
     let tag = this.refs.inputTag.state;
     let type = this.state.type;
     let newTag = _.assign({}, tag, {type: type});
