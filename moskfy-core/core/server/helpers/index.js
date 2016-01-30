@@ -7,6 +7,17 @@ var Q = require('q');
 module.exports = function(app) {
   var formsController = app.controllers.forms;
 
+  function getTag (type) {
+    var tag = {
+      text: '<input type="text" name="[[name]]" placeholder="[[placeholder]]">',
+      email: '<input type="email" name="[[name]]" placeholder="[[placeholder]]">',
+      number: '<input type="number" name="[[name]]" placeholder="[[placeholder]]">',
+      radio: '<input type="radio" name="[[name]]" value="[[value]]">[[text]]',
+      checkbox: '<input type="checkbox" name="[[name]]" value="[[value]]">[[text]]'
+    };
+    return tag[type];
+  }
+
   hbs.registerHelper('compare', function(left, operator, right, options) {
     /*jshint eqeqeq: false*/
 
@@ -45,12 +56,44 @@ module.exports = function(app) {
     }
   });
 
+  hbs.registerHelper('get', function(name, options) {
+    var form = options.data.root;
+
+    var item = _.findWhere(form.tags, {'name': name});
+    var tag = '';
+    var str = '';
+
+    if (item.type === 'text' || item.type === 'email' || item.type === 'number') {
+      tag = getTag(item.type);
+      tag = tag.replace(/\[\[name\]\]/g, item.name);
+      tag = tag.replace(/\[\[placeholder\]\]/g, item.placeholder);
+      return new hbs.SafeString(tag)
+    } else if (item.type === 'radio' || item.type === 'checkbox') {
+      _.forEach(item.choices, function(field) {
+        str = getTag(item.type);
+        str = str.replace(/\[\[name\]\]/g, item.name);
+        str = str.replace(/\[\[value\]\]/g, field.value);
+        str = str.replace(/\[\[text\]\]/g, field.text);
+        tag += str;
+      });
+      return new hbs.SafeString(tag)
+    }
+  });
+
   hbs.registerAsyncHelper('getFormByName', function(formName, cb) {
     formsController.getFormByName(formName).then(function(form) {
-      var formFile = fs.readFileSync(__dirname + '/html/' + 'form.html', 'utf8');
-      var template = hbs.compile(formFile);
+      if (!form) {
+        return cb(new hbs.SafeString(''));
+      }
+      var formStart = '<form action="/contact_form" method="post">';
+      var formEnd = '</form>';
+
+      var formHTML = formStart + form.code + formEnd;
+
+      //var formFile = fs.readFileSync(__dirname + '/html/' + 'form.html', 'utf8');
       try {
-        var template = new hbs.SafeString(template(form));
+        var template = hbs.compile(formHTML);
+        template = new hbs.SafeString(template(form));
       }
       catch (err) {
         console.log('erro', err);
