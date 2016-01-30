@@ -77,7 +77,17 @@ module.exports = function(app) {
         tag += str;
       });
       return new hbs.SafeString(tag)
-    }
+      } else if (item.type === 'select') {
+        tag = '<select name="[[name]]">';
+        tag = tag.replace(/\[\[name\]\]/g, item.name);
+        _.forEach(item.choices, function(field) {
+          str = '<option value="[[value]]">[[text]]</option>'
+          str = str.replace(/\[\[value\]\]/g, field.value);
+          str = str.replace(/\[\[text\]\]/g, field.text);
+          tag += str;
+        });
+        return new hbs.SafeString(tag)
+      }
   });
 
   hbs.registerAsyncHelper('getFormByName', function(formName, cb) {

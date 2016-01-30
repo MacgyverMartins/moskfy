@@ -435,6 +435,7 @@ class FormTagEdit extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (!nextProps.name && !nextProps.index) {
+      resetState.choices = [];
       this.setState(resetState);
     } else {
       let newState = {}

@@ -29,9 +29,7 @@ class FormContent extends React.Component {
         //+'<button type="submit">enviar</button>\n'
     }
 
-    //this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
     this.handleChangeAction = this.handleChangeAction.bind(this);
-    //this.handleName = _.debounce(this.handleName.bind(this), 300);
     this.handleName = this.handleName.bind(this);
     this.updateTags = this.updateTags.bind(this);
   }
