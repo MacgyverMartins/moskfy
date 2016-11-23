@@ -14,42 +14,6 @@ const resetState = {
   name: '',
   code: '<!-- your code here -->',
   tags: []
-  //tags: [{
-    //type: 'text',
-    //name: 'Nome',
-    //placeholder: 'seu nome',
-    //isRequired: false,
-    //choices: []
-  //},{
-    //type: 'email',
-    //name: 'Email',
-    //placeholder: 'deixe seu email',
-    //isRequired: false,
-    //choices: []
-  //},{
-    //type: 'radio',
-    //name: 'sexo',
-    //placeholder: '',
-    //choices: [{
-      //text: 'masculino',
-      //value: 'homem'
-    //}, {
-      //text: 'feminino',
-      //value: 'mulher'
-    //}]
-  //}, {
-    //type: 'select',
-    //name: 'carro',
-    //placeholder: '',
-    //isRequired: false,
-    //choices: [{
-      //text: 'camaro',
-      //value: 'camaro de rico'
-    //}, {
-      //text: 'belina',
-      //value: 'belina de pobre'
-    //}]
-  //}]
 }
 
 class FormsNew extends React.Component {
@@ -84,7 +48,6 @@ class FormsNew extends React.Component {
   onChange(event) {
     switch(event.payload){
       case 'onSave':
-      debugger;
         AppActions.showSnackbar('Saved form');
         let url = `/admin/forms/${event.data._id}`;
         if (url === this.context.location.pathname) {
