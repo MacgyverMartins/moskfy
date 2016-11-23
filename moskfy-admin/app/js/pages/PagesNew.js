@@ -2,14 +2,18 @@
 
 import React from 'react';
 import DocumentTitle from 'react-document-title';
-import AppHeader from '../components/app-header.js';
-import PagePost from '../components/page-post.js';
+import AppHeader from '../components/app-header';
+import PagePost from '../components/page-post';
+import Form from '../components/form';
 
 import PageStore from '../stores/PageStore';
 import PageActions from '../actions/PageActions';
+import AppActions from '../actions/AppActions';
 
 const RaisedButton = require('material-ui/lib/raised-button');
 const Snackbar = require('material-ui/lib/snackbar');
+import NavigationAdd from 'material-ui/lib/svg-icons/navigation/close';
+import FloatingActionButton from 'material-ui/lib/floating-action-button';
 const _ = require('lodash');
 
 class PagesNew extends React.Component {
@@ -19,7 +23,8 @@ class PagesNew extends React.Component {
       title: '',
       content: '',
       template: 'Default',
-      templates: [{name: 'Default'}]
+      templates: [{name: 'Default'}],
+      adds: []
     };
 
     this.handleSave = this.handleSave.bind(this);
@@ -51,17 +56,13 @@ class PagesNew extends React.Component {
 
   onChange(event) {
     switch (event.payload) {
-      case 'onGetNewPage':
-        break;
       case 'onGetTemplates':
         this.setState({templates: event.data});
         break
       case 'onPageSave':
-        this.refs.snack.show();
-        setTimeout(function() {
-          var url = `/pages/${event.data._id}`;
-          this.context.history.pushState(null, url);
-        }.bind(this), 1001);
+        AppActions.showSnackbar('saved page');
+        var url = `/admin/pages/${event.data._id}`;
+        this.context.history.pushState(null, url);
         break;
     }
   }
@@ -87,11 +88,13 @@ class PagesNew extends React.Component {
         onChangeTemplate={this.onChangeTemplate} />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
-        <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
-      </div>
+          <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
+        </div>
 
-      <Snackbar ref="snack" onDismiss={this.teste} autoHideDuration={1000} message="Página salva com sucesso" />
-
+        <Snackbar ref="snack"
+        autoHideDuration={1000}
+        open={this.state.openSnackbar}
+        message="Página salva com sucesso" />
       </div>
       </DocumentTitle>
     );

@@ -1,25 +1,26 @@
 'use strict';
 
-import {camelizeKeys} from 'humps';
+//import {camelizeKeys} from 'humps';
 import request        from 'superagent';
+const prefix = require('superagent-prefix')('http://localhost:3000/api');
 
 const APIUtils = {
 
-  root: '//localhost:3000/api/',
+  root: '//localhost:3000/api',
 
-  normalizeResponse(response) {
-    return camelizeKeys(response.body);
-  },
+  //normalizeResponse(response) {
+    //return camelizeKeys(response.body);
+  //},
 
   get(path) {
     return new Promise((resolve, reject) => {
-      request.get(this.root + path)
-      .withCredentials()
+      request.get(path)
+      .use(prefix)
       .end((err, res) => {
         if ( err || !res.ok ) {
-          reject(this.normalizeResponse(err || res));
+          reject(err);
         } else {
-          resolve(this.normalizeResponse(res));
+          resolve(res);
         }
       });
     });
@@ -27,13 +28,14 @@ const APIUtils = {
 
   post(path, body) {
     return new Promise((resolve, reject) => {
-      request.post(this.root + path, body)
-      .withCredentials()
+      request.post(path)
+      .send(body)
+      .use(prefix)
       .end((err, res) => {
         if ( err || !res.ok ) {
-          reject(this.normalizeResponse(err || res));
+          reject(err);
         } else {
-          resolve(this.normalizeResponse(res));
+          resolve(res);
         }
       });
     });
@@ -55,13 +57,14 @@ const APIUtils = {
 
   put(path, body) {
     return new Promise((resolve, reject) => {
-      request.put(this.root + path, body)
-      .withCredentials()
+      request.put(path)
+      .use(prefix)
+      .send(body)
       .end((err, res) => {
         if ( err || !res.ok ) {
-          reject(this.normalizeResponse(err || res));
+          reject(err);
         } else {
-          resolve(this.normalizeResponse(res));
+          resolve(res);
         }
       });
     });
@@ -70,12 +73,11 @@ const APIUtils = {
   del(path) {
     return new Promise((resolve, reject) => {
       request.del(this.root + path)
-      .withCredentials()
       .end((err, res) => {
         if ( err || !res.ok ) {
-          reject(this.normalizeResponse(err || res));
+          reject(err);
         } else {
-          resolve(this.normalizeResponse(res));
+          resolve(res);
         }
       });
     });

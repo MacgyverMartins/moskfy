@@ -48,7 +48,7 @@ class PagesPage extends React.Component {
         this.refs.snack.show();
         break;
       case 'onDeletePage':
-        var url = '/pages/all';
+        var url = '/admin/pages/all';
         this.context.history.pushState(null, url);
         break;
       case 'onGetTemplates':
@@ -111,5 +111,4 @@ PagesPage.contextTypes = {
   history: React.PropTypes.object
 };
 
-export
-default PagesPage;
+export default PagesPage;

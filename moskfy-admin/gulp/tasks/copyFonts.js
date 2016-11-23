@@ -5,7 +5,7 @@ import config from '../config';
 
 gulp.task('copyFonts', function() {
 
-  return gulp.src([config.sourceDir + 'fonts/**/*'])
+  return gulp.src([config.sourceDir + 'fonts/**/*', config.sourceDir + 'vendor/material-design-icons/iconfont/*'])
     .pipe(gulp.dest(config.buildDir + 'fonts/'));
 
 });

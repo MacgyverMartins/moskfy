@@ -27,3 +27,4 @@ build
 __coverage__
 
 .elasticbeanstalk/
+app/vendor

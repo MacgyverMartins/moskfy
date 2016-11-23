@@ -10,4 +10,6 @@ module.exports = function(app) {
   app.route('/:slug')
     .get(frontend.getPage);
 
+  app.route('/contact_form')
+    .post(frontend.saveContact);
 };
