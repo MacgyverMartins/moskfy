@@ -2,36 +2,36 @@
 import React from 'react';
 import FormText from './form-text';
 import FormGroups from './form-groups';
-import ButtomFormAdd from './buttom-form-add';
-
-import Paper from 'material-ui/lib/paper';
-import TextField from 'material-ui/lib/text-field';
-import MenuItem from 'material-ui/lib/menus/menu-item';
+import FormTagEdit from './form-tag-edit'
 import List from 'material-ui/lib/lists/list';
 import ListItem from 'material-ui/lib/lists/list-item';
 import Divider from 'material-ui/lib/divider';
-import Toggle from 'material-ui/lib/toggle';
-
+import Paper from 'material-ui/lib/paper';
+import FloatingActionButton from 'material-ui/lib/floating-action-button';
+import ContentAdd from 'material-ui/lib/svg-icons/content/add';
 import DropDownMenu from 'material-ui/lib/DropDownMenu';
 import FlatButton from 'material-ui/lib/flat-button';
-
+import IconButton from 'material-ui/lib/icon-button';
+import ActionDelete from 'material-ui/lib/svg-icons/action/delete';
+import _ from 'lodash';
 import styles from 'material-ui/lib/styles';
 const colors = styles.Colors;
-
-import _ from 'lodash';
 
 class FormBody extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      inputFields: this.props.inputFields || []
+      tagsList: this.props.tagsList || [],
+      currentTag: {},
+      showEditor: false
     };
 
-    this.handleChangeType = this.handleChangeType.bind(this);
-    this.handleChangeField =  _.debounce(this.handleChangeField.bind(this),300);
-    this.onDelete = this.onDelete.bind(this);
-    this.addFieldText = this.addFieldText.bind(this);
-    this.addFieldGroup = this.addFieldGroup.bind(this);
+    this.addNewTag = this.addNewTag.bind(this);
+    this.openTagEditor = this.openTagEditor.bind(this);
+    this.cancelEditor = this.cancelEditor.bind(this);
+    this.saveEditor = this.saveEditor.bind(this);
+    this.handleDelete = this.handleDelete.bind(this);
+    this.handleChange = this.handleChange.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -45,34 +45,61 @@ class FormBody extends React.Component {
     this.setState(newState);
   }
 
-  handleChangeType(e, index, type) {
-    this.setState({type});
+  handleChange() {
+    if (this.props.onChange) {
+      return this.props.onChange(this.state.tagsList);
+    }
   }
 
-  handleChangeField(index, item) {
-    var arr = this.state.inputFields;
-    arr[index] = item;
-    this.setState({inputFields: arr});
+  addNewTag(e) {
+    this.setState({
+      currentTag: {},
+      currentTagIndex: null,
+      showEditor: true
+    });
   }
 
-  addFieldText(e) {
-    var arrFields = this.state.inputFields;
-    let uniqueId = _.uniqueId('text_');
-    arrFields.push({type: 'text', name: '', placeholder: '', isRequired: true, uniqueId: uniqueId});
-    this.setState({inputFields: arrFields});
+  handleDelete(index, e) {
+    let arr = this.state.tagsList.slice();
+    arr.splice(index, 1);
+    this.setState({
+      tagsList: arr
+    }, function() {
+      this.handleChange();
+    });
+
   }
 
-  addFieldGroup(e) {
-    var arrFields = this.state.inputFields;
-    let uniqueId = _.uniqueId('group_');
-    arrFields.push({type: 'checkbox', name: '', placeholder: '', isRequired: true, uniqueId: uniqueId});
-    this.setState({inputFields: arrFields});
+  openTagEditor(index, e) {
+    let tagsList = this.state.tagsList;
+    this.setState({
+      currentTag: tagsList[index],
+      currentTagIndex: index,
+      showEditor: true
+    });
   }
 
-  onDelete(index, e) {
-    var arrFields = this.state.inputFields.slice();
-    arrFields.splice(index, 1);
-    this.setState({inputFields: arrFields});
+  cancelEditor(e) {
+    this.setState({
+      currentTag: {},
+      currentTagIndex: null,
+      showEditor: false
+    });
+  }
+
+  saveEditor(index, item)  {
+    let tagsList = this.state.tagsList;
+    if (!index && index !== 0) {
+      tagsList.push(item);
+    } else {
+      tagsList[index] = item;
+    }
+    this.setState({
+      tagsList: tagsList
+    }, function() {
+      this.handleChange();
+      this.cancelEditor();
+    });
   }
 
   render() {
@@ -95,43 +122,85 @@ class FormBody extends React.Component {
       padding:0,
       color: '#666'
     };
+    const floatButtomStyle = {
+      margin: '0',
+      position: 'absolute',
+      bottom: '-22px',
+      right: '20px',
+      zIndex: '2'
+    }
+    const listStyle = {
+      display: (!this.state.showEditor) ? 'block' : 'none',
+      height: '400px',
+      overflow: 'scroll'
+    }
+    const editStyle = {
+      display: (this.state.showEditor) ? 'block' : 'none',
+      height: '400px',
+      overflow: 'scroll'
+    }
+    const paperStyle = {
+      width: '40%',
+      height: '400px',
+      position: 'relative',
+      border: '1px solid #DADADA',
+      margin: '5px',
+      borderRadius: '3px',
+    }
 
-    let fields = this.state.inputFields.map(function(item, i) {
+    let tagsList = this.state.tagsList.map(function(item, i) {
       let uniqueId;
-      switch(item.type){
-        case 'text':
-        case 'number':
-        case 'email':
-          uniqueId = item.uniqueId || _.uniqueId('text_');
-          return (
-            <FormText {...item} index={i} key={uniqueId} uniqueId={uniqueId}
-            onChange={this.handleChangeField} onDelete={this.onDelete}/>
-            )
-          break;
-        case 'checkbox':
-        case 'radio':
-          uniqueId = item.uniqueId || _.uniqueId('group_');
-          return (
-            <FormGroups {...item} index={i} key={uniqueId} uniqueId={uniqueId}
-            onChange={this.handleChangeField} onDelete={this.onDelete}/>
-          )
-          break;
-      }
+      uniqueId = item.uniqueId || _.uniqueId('tag_');
+      return (
+        <div style={{position: 'relative'}}key={uniqueId} uniqueId={uniqueId}>
+          <ListItem
+            onTouchTap={this.openTagEditor.bind(this, i)}
+            primaryText={(item.isRequired) ? item.name+' *' : item.name}
+            secondaryText={'input type: ' + item.type} />
+          <IconButton
+            style={{
+              position: 'absolute',
+              top: '0',
+              right: '0'
+            }}
+            onTouchTap={this.handleDelete.bind(this, i)}
+            tooltip="delete"
+            tooltipPosition="bottom-left">
+            <ActionDelete color='#D4D4D4' />
+          </IconButton>
+          <Divider />
+        </div>
+        )
     }, this);
 
     return (
-      <div style={{padding: '30px', backgroundColor: '#BBBBBB', position: 'relative'}}>
-        <div style={{
-          margin: '0',
-          position: 'absolute',
-          bottom: '-22px',
-          right: '20px',
-          zIndex: '2',
-          }}>
-          <ButtomFormAdd onToggleAddInput={this.addFieldText} onToggleAddOptions={this.addFieldGroup}/>
+      <Paper style={paperStyle} zDepth={1}>
+        <div style={listStyle}>
+          <List subheader="Tags">
+          {(_.isEmpty(tagsList)) ?
+          <p style={{
+            textAlign: 'center',
+            fontStyle: 'italic',
+            color: '#B9B9B9',
+            fontWeight: '300',
+            marginTop: '25%'
+            }}>no tag added</p> :
+          tagsList}
+          </List>
         </div>
-        {(_.isEmpty(fields)) ? <p style={noItemsStyle}>no items added</p> : fields}
-      </div>
+        <div style={editStyle}>
+          <FormTagEdit {...this.state.currentTag}
+            index={this.state.currentTagIndex}
+            onSave={this.saveEditor}
+            onCancel={this.cancelEditor}
+          />
+        </div>
+        {(this.state.showEditor === false) ?
+          <FloatingActionButton style={floatButtomStyle} onTouchTap={this.addNewTag}>
+            <ContentAdd />
+          </FloatingActionButton>
+          : ''}
+      </Paper>
     );
   }
 }

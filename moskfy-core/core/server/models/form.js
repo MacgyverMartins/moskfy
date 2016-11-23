@@ -11,15 +11,15 @@ module.exports = function() {
       }
     },
     description: String,
-    body: [{
+    code: String,
+    tags: [{
       type: {type: String, required: true},
-      isRequired: Boolean,
       name: {type: String, required: true},
-      label: String,
+      isRequired: Boolean,
       placeholder: String,
       choices: [{
-        value: {type: String, required: true},
-        text: {type: String, required: true}
+        value: String,
+        text:  String
       }]
     }]
   });

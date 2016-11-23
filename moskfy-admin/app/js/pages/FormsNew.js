@@ -3,10 +3,8 @@ import React from 'react';
 import DocumentTitle from 'react-document-title';
 import AppHeader from '../components/app-header';
 import Form from '../components/form';
-
 const RaisedButton = require('material-ui/lib/raised-button');
 const _ = require('lodash');
-
 import AppActions from '../actions/AppActions';
 import FormActions from '../actions/FormActions';
 import FormStore from '../stores/FormStore';
@@ -14,8 +12,8 @@ import FormStore from '../stores/FormStore';
 const resetState = {
   _id: '',
   name: '',
-  body: [],
-  open: false
+  code: '<!-- your code here -->',
+  tags: []
 }
 
 class FormsNew extends React.Component {
@@ -52,7 +50,11 @@ class FormsNew extends React.Component {
       case 'onSave':
         AppActions.showSnackbar('Saved form');
         let url = `/admin/forms/${event.data._id}`;
-        this.context.history.pushState(null, url);
+        if (url === this.context.location.pathname) {
+          this.forceUpdate();
+        } else {
+          this.context.history.pushState(null, url);
+        }
         break;
       case 'onGet':
         this.setState(event.data);
@@ -65,16 +67,15 @@ class FormsNew extends React.Component {
   }
 
   handleSave() {
+    let form = this.refs.form.state;
+    let code = this.refs.form.refs.code.state;
     let formObj = {
       _id: this.state._id,
-      body: []
+      name: form.name,
+      tags: form.tags,
+      code: code.code
     };
 
-    let form = this.refs.form;
-    let body = form.refs.formBody;
-
-    _.assignIn(formObj, form.state);
-    formObj.body = body.state.inputFields;
     FormActions.save(formObj);
   }
 
@@ -88,12 +89,12 @@ class FormsNew extends React.Component {
       <div>
         <AppHeader parentView="Formulários" currentlyView={this.state.name || "Novo formulário"}/>
 
-        <Form ref="form" {...this.state}/>
+        <Form ref="form" {...this.state} />
 
         <div style={{textAlign:'right', paddingTop:'50px'}}>
         {this.props.params.id ?
-        <RaisedButton label="Excluir" primary={true} onTouchTap={this.handleDelete}/> : ''}
-          <RaisedButton label="Salvar" secondary={true} onTouchTap={this.handleSave} />
+        <RaisedButton label="Excluir" onTouchTap={this.handleDelete}/> : ''}
+          <RaisedButton label="Salvar" primary={true} onTouchTap={this.handleSave} />
         </div>
       </div>
       </DocumentTitle>
